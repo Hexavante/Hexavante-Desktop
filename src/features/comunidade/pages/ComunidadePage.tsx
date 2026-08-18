@@ -8,6 +8,7 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { useFeed, useTrendingTags, useSuggestedUsers } from '@/api/community/queries'
 import { useCreateDiscussion, useToggleLike, useAddComment } from '@/api/community/mutations'
 import { useAuth } from '@/app/hooks/use-auth'
+import { Heart, MessageCircle } from 'lucide-react'
 
 export default function ComunidadePage() {
   const { user } = useAuth()
@@ -159,7 +160,7 @@ export default function ComunidadePage() {
                             activity.likedByViewer ? 'text-rose-300' : 'text-slate-500 hover:text-rose-200'
                           }`}
                         >
-                          <span className={activity.likedByViewer ? 'fill-current' : ''}>❤</span>
+                          <Heart className={`h-4 w-4 ${activity.likedByViewer ? 'fill-current' : ''}`} />
                           {activity.likes}
                         </button>
 
@@ -170,7 +171,7 @@ export default function ComunidadePage() {
                           }
                           className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-200 transition"
                         >
-                          💬 {activity.comments}
+                          <MessageCircle className="h-4 w-4" /> {activity.comments}
                         </button>
                       </div>
 

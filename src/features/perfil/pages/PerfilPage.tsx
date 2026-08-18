@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Star } from 'lucide-react'
 import { toast } from 'sonner'
 
 const profileFormSchema = z.object({
@@ -100,7 +101,7 @@ export default function PerfilPage() {
             <p className="text-sm text-slate-400">@{userProfile.username}</p>
 
             <div className="mt-4 flex gap-2">
-              {userProfile.isPremium && <Badge>⭐ Premium</Badge>}
+              {userProfile.isPremium && <Badge><Star className="h-3 w-3" /> Premium</Badge>}
               {userProfile.isVerified && <Badge variant="secondary">✓ Verificado</Badge>}
             </div>
 

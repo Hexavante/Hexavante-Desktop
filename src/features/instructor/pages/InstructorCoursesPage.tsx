@@ -6,6 +6,7 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { GraduationCap, BookOpen } from 'lucide-react'
 import {
   APPLICATION_STATUS_LABELS,
   COURSE_STATUS_LABELS,
@@ -46,7 +47,7 @@ export default function InstructorCoursesPage() {
         ) : (
           <>
             <EmptyState
-              icon={<span className="text-5xl">🎓</span>}
+              icon={<GraduationCap className="h-12 w-12" />}
               title="Você ainda não é instrutor"
               description="Solicite acesso para criar cursos na plataforma."
               action={{ label: 'Solicitar perfil de instrutor', onClick: () => navigate('/instrutor/solicitar') }}
@@ -73,7 +74,7 @@ export default function InstructorCoursesPage() {
 
       {!courses || courses.length === 0 ? (
         <EmptyState
-          icon={<span className="text-5xl">📚</span>}
+          icon={<BookOpen className="h-12 w-12" />}
           title="Você ainda não criou nenhum curso"
           description="Comece criando seu primeiro curso."
           action={{ label: 'Criar primeiro curso', onClick: () => navigate('/instrutor/cursos/novo') }}

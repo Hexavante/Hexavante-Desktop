@@ -4,18 +4,27 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { Button } from '@/components/ui/button'
+import { Medal } from 'lucide-react'
 import { useAuth } from '@/app/hooks/use-auth'
 
+const MEDAL_COLORS: Record<number, string> = {
+  1: 'text-amber-400',
+  2: 'text-slate-400',
+  3: 'text-orange-400',
+}
+
 function RankBadge({ rank }: { rank: number }) {
-  if (rank === 1) return <span className="text-lg">🥇</span>
-  if (rank === 2) return <span className="text-lg">🥈</span>
-  if (rank === 3) return <span className="text-lg">🥉</span>
+  if (rank <= 3) return <Medal className={`h-5 w-5 ${MEDAL_COLORS[rank]}`} />
   return <span className="w-6 text-center text-sm font-bold text-slate-500">#{rank}</span>
 }
 
 function LeagueIcon({ league }: { league: string }) {
-  const icons: Record<string, string> = { BRONZE: '🥉', SILVER: '🥈', GOLD: '🥇' }
-  return <span className="text-sm">{icons[league] || '🥉'}</span>
+  const colors: Record<string, string> = {
+    BRONZE: 'text-orange-400',
+    SILVER: 'text-slate-400',
+    GOLD: 'text-amber-400',
+  }
+  return <Medal className={`h-4 w-4 ${colors[league] || colors.BRONZE}`} />
 }
 
 export default function RankingPage() {
@@ -33,7 +42,13 @@ export default function RankingPage() {
 
       {myRanking && (
         <div className="hx-card mb-6 flex items-center gap-4 p-4">
-          <span className="text-2xl">{myRanking.rank <= 3 ? ['🥇', '🥈', '🥉'][myRanking.rank - 1] : `#${myRanking.rank}`}</span>
+          <span className="text-2xl">
+            {myRanking.rank <= 3 ? (
+              <Medal className={`h-6 w-6 ${MEDAL_COLORS[myRanking.rank]}`} />
+            ) : (
+              `#${myRanking.rank}`
+            )}
+          </span>
           <div className="flex-1">
             <p className="text-sm font-semibold text-white">Sua posição</p>
             <div className="mt-1 flex items-center gap-2">

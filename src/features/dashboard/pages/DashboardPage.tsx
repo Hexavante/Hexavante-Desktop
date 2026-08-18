@@ -8,6 +8,18 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Star,
+  Trophy,
+  Globe,
+  Coins,
+  BookOpen,
+  Medal,
+  Award,
+  ClipboardList,
+  User,
+  type LucideIcon,
+} from 'lucide-react'
 
 function StatCard({
   label,
@@ -18,15 +30,16 @@ function StatCard({
 }: {
   label: string
   value: string | number
-  icon: string
+  icon: LucideIcon
   subtitle?: string
   onClick?: () => void
 }) {
+  const Icon = icon
   const content = (
     <div className="hx-card-interactive p-5" onClick={onClick} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined} onKeyDown={e => e.key === 'Enter' && onClick?.()}>
       <div className="flex items-center justify-between">
         <span className="truncate text-sm font-semibold text-slate-400">{label}</span>
-        <span className="text-xl">{icon}</span>
+        <Icon className="h-5 w-5" />
       </div>
       <p className="mt-1 text-2xl font-black tracking-tight text-white">{value}</p>
       {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
@@ -56,9 +69,14 @@ function LeagueBadge({ league }: { league: string }) {
     SILVER: 'border-slate-400 bg-slate-400/10 text-slate-300',
     GOLD: 'border-yellow-500 bg-yellow-500/10 text-yellow-400',
   }
+  const medalColors: Record<string, string> = {
+    GOLD: 'text-yellow-400',
+    SILVER: 'text-slate-300',
+    BRONZE: 'text-amber-400',
+  }
   return (
     <span className={`inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-semibold ${colors[league] || colors.BRONZE}`}>
-      {league === 'GOLD' ? '🥇' : league === 'SILVER' ? '🥈' : '🥉'} {league}
+      <Medal className={`h-3.5 w-3.5 ${medalColors[league] || medalColors.BRONZE}`} /> {league}
     </span>
   )
 }
@@ -90,24 +108,24 @@ export default function DashboardPage() {
         <StatCard
           label="Nível"
           value={ranking?.level ?? '-'}
-          icon="⭐"
+          icon={Star}
           subtitle={ranking?.totalXp ? `${ranking.totalXp} XP total` : undefined}
         />
         <StatCard
           label="Liga"
           value={ranking?.league ?? '-'}
-          icon="🏆"
+          icon={Trophy}
           subtitle={ranking?.seasonKey ? `Temporada ${ranking.seasonKey}` : undefined}
         />
         <StatCard
           label="Ranking Global"
           value={ranking?.rank ? `#${ranking.rank}` : '-'}
-          icon="🌍"
+          icon={Globe}
         />
         <StatCard
           label="Moedas"
           value={profile?.coins ?? 0}
-          icon="🪙"
+          icon={Coins}
           onClick={() => navigate('/loja')}
         />
       </div>
@@ -143,7 +161,7 @@ export default function DashboardPage() {
                   onKeyDown={e => e.key === 'Enter' && navigate(`/cursos/${course.id}`)}
                 >
                   <div className="mb-2 flex items-start justify-between">
-                    <span className="text-2xl">📚</span>
+                    <BookOpen className="h-6 w-6" />
                     <Badge variant="outline" className="text-[10px]">{course.level}</Badge>
                   </div>
                   <h3 className="truncate text-sm font-bold text-white">{course.title}</h3>
@@ -170,7 +188,7 @@ export default function DashboardPage() {
             <div className="space-y-2">
               {unlockedAchievements.slice(0, 5).map(achievement => (
                 <div key={achievement.key} className="hx-card flex items-center gap-3 p-3">
-                  <span className="text-xl">🏅</span>
+                  <Award className="h-5 w-5 shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-white">{achievement.name}</p>
                     <p className="truncate text-xs text-slate-400">{achievement.description}</p>
@@ -187,10 +205,22 @@ export default function DashboardPage() {
           <h2 className="text-lg font-bold text-white">Acesso Rápido</h2>
           <p className="mt-1 text-sm text-slate-400">Navegue pelas seções da plataforma</p>
           <div className="mt-4 flex flex-wrap gap-3">
-            <Button onClick={() => navigate('/cursos')}>📚 Explorar Cursos</Button>
-            <Button variant="outline" onClick={() => navigate('/simulados')}>📝 Simulados</Button>
-            <Button variant="outline" onClick={() => navigate('/ranking')}>🏆 Ranking</Button>
-            <Button variant="outline" onClick={() => navigate('/perfil')}>👤 Meu Perfil</Button>
+            <Button onClick={() => navigate('/cursos')}>
+              <BookOpen className="h-4 w-4" />
+              Explorar Cursos
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/simulados')}>
+              <ClipboardList className="h-4 w-4" />
+              Simulados
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/ranking')}>
+              <Trophy className="h-4 w-4" />
+              Ranking
+            </Button>
+            <Button variant="outline" onClick={() => navigate('/perfil')}>
+              <User className="h-4 w-4" />
+              Meu Perfil
+            </Button>
           </div>
         </div>
       </div>

@@ -6,6 +6,17 @@ import { Badge } from '@/components/ui/badge'
 import { useInventory } from '@/api/shop/queries'
 import { useEquipItem } from '@/api/shop/mutations'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import {
+  Backpack,
+  Rocket,
+  BookOpen,
+  Trophy,
+  Frame,
+  Palette,
+  Sparkles,
+  Ticket,
+  type LucideIcon,
+} from 'lucide-react'
 
 const CATEGORY_LABELS: Record<string, string> = {
   TITLE: 'Títulos',
@@ -17,14 +28,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   REVIEW_PACK: 'Pacotes de Revisão',
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  TITLE: '🏆',
-  AVATAR_BORDER: '🖼️',
-  THEME: '🎨',
-  COSMETIC: '✨',
-  BOOSTER: '🚀',
-  PASS: '🎫',
-  REVIEW_PACK: '📚',
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  TITLE: Trophy,
+  AVATAR_BORDER: Frame,
+  THEME: Palette,
+  COSMETIC: Sparkles,
+  BOOSTER: Rocket,
+  PASS: Ticket,
+  REVIEW_PACK: BookOpen,
 }
 
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
@@ -61,6 +72,7 @@ export default function InventarioPage() {
         {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
           const count = inventory.filter((i) => i.item.category === key).length
           if (count === 0) return null
+          const Icon = CATEGORY_ICONS[key]
           return (
             <button
               key={key}
@@ -72,7 +84,9 @@ export default function InventarioPage() {
                   : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
               }`}
             >
-              {CATEGORY_ICONS[key]} {label} ({count})
+              <span className="inline-flex items-center gap-1.5">
+                <Icon className="h-4 w-4" /> {label} ({count})
+              </span>
             </button>
           )
         })}
@@ -81,11 +95,13 @@ export default function InventarioPage() {
       {categories.map((category) => {
         const items = inventory.filter((i) => i.item.category === category)
         if (items.length === 0) return null
+        const Icon = CATEGORY_ICONS[category]
 
         return (
           <div key={category} className="mb-8">
-            <h3 className="mb-4 text-lg font-bold text-white">
-              {CATEGORY_ICONS[category]} {CATEGORY_LABELS[category]}
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+              <Icon className="h-5 w-5" />
+              {CATEGORY_LABELS[category]}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((entry) => (
@@ -132,7 +148,7 @@ export default function InventarioPage() {
       {inventory.length === 0 && (
         <div className="hx-card flex min-h-[300px] items-center justify-center">
           <div className="text-center">
-            <span className="text-5xl">🎒</span>
+            <Backpack className="mx-auto h-12 w-12" />
             <h2 className="mt-4 text-lg font-bold text-white">Inventário vazio</h2>
             <p className="mt-2 text-sm text-slate-400">
               Compre itens na loja para vê-los aqui.

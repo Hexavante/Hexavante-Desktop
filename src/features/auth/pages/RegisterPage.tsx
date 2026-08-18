@@ -35,7 +35,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#06080f] px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(37,99,235,0.12),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_10%,rgba(20,184,166,0.08),transparent_40%)]" />
@@ -86,8 +86,9 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="hx-label">Nome de usuário</label>
+            <label htmlFor="username" className="hx-label">Nome de usuário</label>
             <input
+              id="username"
               className="hx-input"
               placeholder="joaosilva"
               {...register('username')}
@@ -98,8 +99,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="hx-label">Nome completo</label>
+            <label htmlFor="fullName" className="hx-label">Nome completo</label>
             <input
+              id="fullName"
               className="hx-input"
               placeholder="João Silva"
               {...register('fullName')}
@@ -110,8 +112,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="hx-label">Email</label>
+            <label htmlFor="email" className="hx-label">Email</label>
             <input
+              id="email"
               className="hx-input"
               type="email"
               placeholder="seu@email.com"
@@ -123,8 +126,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="hx-label">Data de nascimento</label>
+            <label htmlFor="birthDate" className="hx-label">Data de nascimento</label>
             <input
+              id="birthDate"
               className="hx-input"
               type="date"
               {...register('birthDate')}
@@ -135,8 +139,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="hx-label">Senha</label>
+            <label htmlFor="password" className="hx-label">Senha</label>
             <input
+              id="password"
               className="hx-input"
               type="password"
               placeholder="Mínimo 8 caracteres"
@@ -148,8 +153,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="hx-label">Confirmar senha</label>
+            <label htmlFor="confirmPassword" className="hx-label">Confirmar senha</label>
             <input
+              id="confirmPassword"
               className="hx-input"
               type="password"
               placeholder="••••••"

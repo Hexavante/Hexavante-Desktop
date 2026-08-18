@@ -35,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#06080f] px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(37,99,235,0.12),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_10%,rgba(20,184,166,0.08),transparent_40%)]" />
@@ -86,8 +86,9 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="hx-label">Email</label>
+            <label htmlFor="email" className="hx-label">Email</label>
             <input
+              id="email"
               type="email"
               placeholder="seu@email.com"
               className="hx-input"
@@ -99,8 +100,9 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="hx-label">Senha</label>
+            <label htmlFor="password" className="hx-label">Senha</label>
             <input
+              id="password"
               type="password"
               placeholder="••••••"
               className="hx-input"

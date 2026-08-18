@@ -1,28 +1,43 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
+import {
+  BookOpen,
+  ClipboardList,
+  BarChart3,
+  Trophy,
+  MessageCircle,
+  ShoppingCart,
+  Backpack,
+  User,
+  Settings,
+  ShieldCheck,
+  LayoutDashboard,
+  CornerDownLeft,
+  type LucideIcon,
+} from 'lucide-react'
 
 interface CommandItem {
   id: string
   label: string
   description?: string
-  icon: string
+  icon: LucideIcon
   href: string
   keywords: string[]
 }
 
 const COMMANDS: CommandItem[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: '⊞', href: '/', keywords: ['inicio', 'home', 'início'] },
-  { id: 'cursos', label: 'Cursos', icon: '📚', href: '/cursos', keywords: ['curso', 'aulas', 'classes'] },
-  { id: 'simulados', label: 'Simulados', icon: '📝', href: '/simulados', keywords: ['prova', 'exame', 'teste'] },
-  { id: 'estatisticas', label: 'Estatísticas', icon: '📊', href: '/estatisticas', keywords: ['stats', 'desempenho'] },
-  { id: 'ranking', label: 'Ranking', icon: '🏆', href: '/ranking', keywords: ['leaderboard', 'classificacao'] },
-  { id: 'comunidade', label: 'Comunidade', icon: '💬', href: '/comunidade', keywords: ['forum', 'discussao'] },
-  { id: 'loja', label: 'Loja', icon: '🛒', href: '/loja', keywords: ['store', 'comprar'] },
-  { id: 'inventario', label: 'Inventário', icon: '🎒', href: '/inventario', keywords: ['itens', 'mochila'] },
-  { id: 'perfil', label: 'Perfil', icon: '👤', href: '/perfil', keywords: ['profile', 'conta', 'usuario'] },
-  { id: 'config', label: 'Configurações', icon: '⚙️', href: '/configuracoes', keywords: ['settings', 'preferencias'] },
-  { id: 'admin', label: 'Administração', icon: '🔐', href: '/admin', keywords: ['admin', 'permissoes', 'roles'] },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/', keywords: ['inicio', 'home', 'início'] },
+  { id: 'cursos', label: 'Cursos', icon: BookOpen, href: '/cursos', keywords: ['curso', 'aulas', 'classes'] },
+  { id: 'simulados', label: 'Simulados', icon: ClipboardList, href: '/simulados', keywords: ['prova', 'exame', 'teste'] },
+  { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3, href: '/estatisticas', keywords: ['stats', 'desempenho'] },
+  { id: 'ranking', label: 'Ranking', icon: Trophy, href: '/ranking', keywords: ['leaderboard', 'classificacao'] },
+  { id: 'comunidade', label: 'Comunidade', icon: MessageCircle, href: '/comunidade', keywords: ['forum', 'discussao'] },
+  { id: 'loja', label: 'Loja', icon: ShoppingCart, href: '/loja', keywords: ['store', 'comprar'] },
+  { id: 'inventario', label: 'Inventário', icon: Backpack, href: '/inventario', keywords: ['itens', 'mochila'] },
+  { id: 'perfil', label: 'Perfil', icon: User, href: '/perfil', keywords: ['profile', 'conta', 'usuario'] },
+  { id: 'config', label: 'Configurações', icon: Settings, href: '/configuracoes', keywords: ['settings', 'preferencias'] },
+  { id: 'admin', label: 'Administração', icon: ShieldCheck, href: '/admin', keywords: ['admin', 'permissoes', 'roles'] },
 ]
 
 export function CommandPalette({ open, onOpenChange }: {
@@ -106,11 +121,13 @@ export function CommandPalette({ open, onOpenChange }: {
                   onClick={() => execute(item)}
                   onMouseEnter={() => setSelectedIdx(idx)}
                 >
-                  <span className="w-5 text-center">{item.icon}</span>
+                  <span className="flex w-5 items-center justify-center">
+                    <item.icon className="h-4 w-4" />
+                  </span>
                   <div className="min-w-0 flex-1">
                     <span className="block truncate">{item.label}</span>
                   </div>
-                  {idx === selectedIdx && <span className="text-xs text-cyan-400">↵</span>}
+                  {idx === selectedIdx && <CornerDownLeft className="h-3.5 w-3.5 text-cyan-400" />}
                 </button>
               ))}
             </div>

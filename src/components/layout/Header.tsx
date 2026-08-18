@@ -11,12 +11,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Link, useNavigate } from 'react-router-dom'
-import { Bell, LogOut, Settings, User, Sun, Moon } from 'lucide-react'
+import { Bell, LogOut, Settings, User, Sun, Moon, Search } from 'lucide-react'
 
 export function Header() {
   const { user, logout, isLoggingOut } = useAuth()
   const { toggle, resolvedTheme } = useTheme()
   const navigate = useNavigate()
+
+  const openCommandPalette = () => {
+    window.dispatchEvent(new CustomEvent('open-command-palette'))
+  }
 
   return (
     <header className="hx-header-bar sticky top-0 z-20">
@@ -38,22 +42,20 @@ export function Header() {
           </Link>
 
           <div className="min-w-0 flex-1">
-            <div className="navbar-search">
-              <svg
-                className="h-4 w-4 shrink-0 text-slate-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                />
-              </svg>
-              <input placeholder="Buscar cursos, produtos..." />
-            </div>
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              className="navbar-search w-full text-left"
+              aria-label="Abrir busca (Ctrl+K)"
+            >
+              <Search className="h-4 w-4 shrink-0 text-slate-500" />
+              <span className="pointer-events-none flex-1 text-sm text-slate-500">
+                Buscar cursos, produtos...
+              </span>
+              <kbd className="hidden shrink-0 rounded border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-500 sm:inline">
+                Ctrl K
+              </kbd>
+            </button>
           </div>
         </div>
 
@@ -66,7 +68,13 @@ export function Header() {
 
           {user ? (
             <>
-              <Button variant="ghost" size="icon" className="relative">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative"
+                onClick={() => navigate('/notificacoes')}
+                aria-label="Notificações"
+              >
                 <Bell className="h-4 w-4" />
               </Button>
 

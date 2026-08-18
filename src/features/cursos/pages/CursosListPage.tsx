@@ -6,6 +6,7 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { BookOpen } from 'lucide-react'
 import type { CourseLevel, CourseType } from '@/domain/types/course.types'
 
 const LEVELS = [
@@ -92,7 +93,7 @@ export default function CursosListPage() {
                 onKeyDown={e => e.key === 'Enter' && navigate(`/cursos/${course.id}`)}
               >
                 <div className="flex h-32 items-center justify-center bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
-                  <span className="text-4xl">📚</span>
+                  <BookOpen className="h-12 w-12" />
                 </div>
                 <div className="p-4">
                   <div className="mb-2 flex items-center gap-2">

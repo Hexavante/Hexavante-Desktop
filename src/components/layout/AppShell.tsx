@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
@@ -25,6 +25,12 @@ export function AppShell({ children }: AppShellProps) {
   const useBareLayout = BARE_LAYOUT_PREFIXES.some(prefix => pathname.startsWith(prefix))
 
   const handleCtrlK = useCallback(() => setPaletteOpen(true), [])
+
+  useEffect(() => {
+    const openPalette = () => setPaletteOpen(true)
+    window.addEventListener('open-command-palette', openPalette)
+    return () => window.removeEventListener('open-command-palette', openPalette)
+  }, [])
 
   if (useBareLayout) {
     return <>{children}</>

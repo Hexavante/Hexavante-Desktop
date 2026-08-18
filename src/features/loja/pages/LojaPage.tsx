@@ -6,6 +6,18 @@ import { Badge } from '@/components/ui/badge'
 import { useShopState } from '@/api/shop/queries'
 import { usePurchaseItem, useEquipItem } from '@/api/shop/mutations'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import {
+  Coins,
+  Rocket,
+  BookOpen,
+  Trophy,
+  Star,
+  Frame,
+  Palette,
+  Sparkles,
+  Ticket,
+  type LucideIcon,
+} from 'lucide-react'
 
 const CATEGORY_LABELS: Record<string, string> = {
   TITLE: 'Títulos',
@@ -17,14 +29,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   REVIEW_PACK: 'Pacotes de Revisão',
 }
 
-const CATEGORY_ICONS: Record<string, string> = {
-  TITLE: '🏆',
-  AVATAR_BORDER: '🖼️',
-  THEME: '🎨',
-  COSMETIC: '✨',
-  BOOSTER: '🚀',
-  PASS: '🎫',
-  REVIEW_PACK: '📚',
+const CATEGORY_ICONS: Record<string, LucideIcon> = {
+  TITLE: Trophy,
+  AVATAR_BORDER: Frame,
+  THEME: Palette,
+  COSMETIC: Sparkles,
+  BOOSTER: Rocket,
+  PASS: Ticket,
+  REVIEW_PACK: BookOpen,
 }
 
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
@@ -45,7 +57,7 @@ export default function LojaPage() {
     <div className="hx-page">
       <PageHeader title="Loja" description="Gaste suas moedas com itens exclusivos">
         <div className="flex items-center gap-2 rounded-lg bg-amber-500/10 px-3 py-1.5">
-          <span className="text-sm">🪙</span>
+          <Coins className="h-4 w-4 text-amber-400" />
           <span className="text-sm font-bold text-amber-400">{shopState?.coins ?? 0}</span>
         </div>
       </PageHeader>
@@ -62,30 +74,37 @@ export default function LojaPage() {
         >
           Todas
         </button>
-        {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => setSelectedCategory(key)}
-            className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-              selectedCategory === key
-                ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-                : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
-            }`}
-          >
-            {CATEGORY_ICONS[key]} {label}
-          </button>
-        ))}
+        {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
+          const Icon = CATEGORY_ICONS[key]
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setSelectedCategory(key)}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                selectedCategory === key
+                  ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
+                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+              }`}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <Icon className="h-4 w-4" /> {label}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       {categories.map((category) => {
         const items = shopState?.items.filter((i) => i.category === category) ?? []
         if (items.length === 0) return null
+        const Icon = CATEGORY_ICONS[category]
 
         return (
           <div key={category} className="mb-8">
-            <h3 className="mb-4 text-lg font-bold text-white">
-              {CATEGORY_ICONS[category]} {CATEGORY_LABELS[category]}
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+              <Icon className="h-5 w-5" />
+              {CATEGORY_LABELS[category]}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((item) => (
@@ -93,7 +112,13 @@ export default function LojaPage() {
                   <div className="flex h-full flex-col">
                     <div className="mb-3 flex items-start justify-between">
                       <Badge variant={item.isPremiumOnly ? 'violet' : 'default'}>
-                        {item.isPremiumOnly ? '⭐ Premium' : item.category}
+                        {item.isPremiumOnly ? (
+                          <>
+                            <Star className="h-3 w-3" /> Premium
+                          </>
+                        ) : (
+                          item.category
+                        )}
                       </Badge>
                       {item.ownershipStatus !== 'available' && (
                         <Badge variant="emerald">
@@ -110,8 +135,9 @@ export default function LojaPage() {
                     <p className="mt-1 flex-1 text-sm text-slate-400">{item.description}</p>
 
                     <div className="mt-4 flex items-center justify-between">
-                      <span className="text-sm font-bold text-amber-400">
-                        🪙 {item.cost}
+                      <span className="inline-flex items-center gap-1 text-sm font-bold text-amber-400">
+                        <Coins className="h-4 w-4" />
+                        {item.cost}
                       </span>
 
                       {item.ownershipStatus === 'available' || item.ownershipStatus === 'expired_temporary' ? (

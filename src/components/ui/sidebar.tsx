@@ -49,6 +49,25 @@ const SidebarProvider = React.forwardRef<
 
   const toggleSidebar = React.useCallback(() => setOpen(v => !v), [setOpen])
 
+  const [isMobile, setIsMobile] = React.useState(false)
+
+  React.useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767.98px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  React.useEffect(() => {
+    if (!openMobile) return
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenMobile(false)
+    }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [openMobile])
+
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -60,7 +79,6 @@ const SidebarProvider = React.forwardRef<
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [toggleSidebar])
 
-  const isMobile = false
   const state = open ? 'expanded' : 'collapsed'
 
   const contextValue = React.useMemo<SidebarContextProps>(
@@ -105,7 +123,7 @@ const Sidebar = React.forwardRef<
 
   if (isMobile) {
     return (
-      <div className="fixed inset-0 z-50">
+      <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Menu de navegação">
         <div className="fixed inset-0 bg-black/80" onClick={() => setOpenMobile(false)} />
         <div
           className="fixed inset-y-0 left-0 w-[var(--sidebar-width)] border-r border-cyan-400/10 bg-sidebar p-0 text-sidebar-foreground shadow-2xl shadow-black/40"
@@ -163,7 +181,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, isMobile, setOpenMobile, openMobile } = useSidebar()
   return (
     <Button
       ref={ref}
@@ -171,9 +189,11 @@ const SidebarTrigger = React.forwardRef<
       variant="ghost"
       size="icon"
       className={cn('h-8 w-8', className)}
+      aria-label={openMobile ? 'Fechar menu' : 'Abrir menu'}
       onClick={event => {
         onClick?.(event)
-        toggleSidebar()
+        if (isMobile) setOpenMobile(!openMobile)
+        else toggleSidebar()
       }}
       {...props}
     >

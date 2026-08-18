@@ -5,6 +5,7 @@ import { useLogout } from '@/api/auth/mutations'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { ThemeSelector } from '@/components/cosmetics/ThemeSelector'
 import { Button } from '@/components/ui/button'
+import { Moon, Sun, Monitor } from 'lucide-react'
 
 export default function ConfiguracoesPage() {
   const navigate = useNavigate()
@@ -24,21 +25,21 @@ export default function ConfiguracoesPage() {
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'dark' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
               onClick={() => setTheme('dark')}
             >
-              <span className="text-2xl">🌙</span>
+              <Moon className="h-6 w-6" />
               <span className="text-sm font-medium text-white">Escuro</span>
             </button>
             <button
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'light' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
               onClick={() => setTheme('light')}
             >
-              <span className="text-2xl">☀️</span>
+              <Sun className="h-6 w-6" />
               <span className="text-sm font-medium text-white">Claro</span>
             </button>
             <button
               className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${mode === 'system' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
               onClick={() => setTheme('system')}
             >
-              <span className="text-2xl">💻</span>
+              <Monitor className="h-6 w-6" />
               <span className="text-sm font-medium text-white">Sistema</span>
             </button>
           </div>

@@ -14,6 +14,7 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Clapperboard, FileText } from 'lucide-react'
 
 function VideoPlayer({ url, provider }: { url: string; provider: string | null }) {
   if (provider === 'VIMEO' || provider === 'YOUTUBE') {
@@ -28,7 +29,7 @@ function VideoPlayer({ url, provider }: { url: string; provider: string | null }
   }
   return (
     <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
-      <span className="text-5xl">🎬</span>
+      <Clapperboard className="h-12 w-12" />
     </div>
   )
 }
@@ -159,7 +160,7 @@ export default function LessonLearnPage() {
                     rel="noreferrer"
                     className="flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-sm text-cyan-400 hover:bg-white/10"
                   >
-                    <span>📄</span> {m.title}
+                    <FileText className="h-4 w-4 shrink-0" /> {m.title}
                   </a>
                 ))}
               </div>

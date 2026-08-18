@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/shared/EmptyState'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Clapperboard, ClipboardList, CheckCircle2 } from 'lucide-react'
 import type { LessonDto } from '@/domain/types/course.types'
 
 function LessonDialog({ lesson, open, onOpenChange }: {
@@ -26,7 +27,7 @@ function LessonDialog({ lesson, open, onOpenChange }: {
         <div className="space-y-4">
           <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
             <div className="text-center">
-              <span className="text-5xl">🎬</span>
+              <Clapperboard className="mx-auto h-12 w-12" />
               <p className="mt-2 text-sm text-slate-400">Player de vídeo</p>
             </div>
           </div>
@@ -159,7 +160,8 @@ export default function CursoDetailPage() {
             <h3 className="mb-3 text-sm font-bold text-white">Ações</h3>
             {isEnrolled ? (
               <Button className="w-full" disabled>
-                ✅ Matriculado
+                <CheckCircle2 className="h-4 w-4" />
+                Matriculado
               </Button>
             ) : (
               <Button
@@ -169,7 +171,12 @@ export default function CursoDetailPage() {
                   onSuccess: () => navigate(`/cursos/${id}`),
                 })}
               >
-                {enrollMutation.isPending ? 'Matriculando...' : '📝 Matricular-se'}
+                {enrollMutation.isPending ? 'Matriculando...' : (
+                  <>
+                    <ClipboardList className="h-4 w-4" />
+                    Matricular-se
+                  </>
+                )}
               </Button>
             )}
             {!isAuthenticated && (
