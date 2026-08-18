@@ -1,0 +1,43 @@
+appId: com.hexavante.desktop
+productName: Hexavante
+copyright: Copyright © 2024 Hexavante
+
+directories:
+  buildResources: resources
+  output: dist
+
+files:
+  - out/**/*
+  - "!out/renderer/src/**"
+  - package.json
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: resources/icon.ico
+  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  createDesktopShortcut: true
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  icon: resources/icon.png
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  category: Office
+
+publish:
+  provider: github
+  owner: hexavante
+  repo: hexavante-desktop
+  private: false
+  releaseType: draft

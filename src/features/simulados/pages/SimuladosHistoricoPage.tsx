@@ -1,0 +1,145 @@
+import { Link } from 'react-router-dom'
+import { PageHeader } from '@/components/shared/PageHeader'
+import { Card } from '@/components/ui/card'
+import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { useExamHistory, useExamStats, useExamEvolution, useExamSubjectStats } from '@/api/exams/queries'
+
+const EXAM_PASS_SCORE = 60
+
+export default function SimuladosHistoricoPage() {
+  const { data: history, isLoading: historyLoading } = useExamHistory()
+  const { data: stats, isLoading: statsLoading } = useExamStats()
+  const { data: evolution } = useExamEvolution()
+  const { data: subjectStats } = useExamSubjectStats()
+
+  if (historyLoading || statsLoading) return <LoadingScreen />
+
+  return (
+    <div className="hx-page">
+      <PageHeader
+        title="Meu histórico"
+        description="Acompanhe tentativas, médias e evolução nos simulados."
+      />
+
+      {stats && (
+        <div className="mb-6 grid gap-4 sm:grid-cols-3">
+          <Card >
+            <p className="text-sm text-slate-400">Tentativas</p>
+            <p className="text-2xl font-bold text-white">{stats.totalAttempts}</p>
+          </Card>
+          <Card >
+            <p className="text-sm text-slate-400">Média</p>
+            <p className="text-2xl font-bold text-white">{stats.averageScore}%</p>
+          </Card>
+          <Card >
+            <p className="text-sm text-slate-400">Melhor nota</p>
+            <p className="text-2xl font-bold text-emerald-400">{stats.bestScore}%</p>
+          </Card>
+        </div>
+      )}
+
+      {evolution && evolution.length > 0 && (
+        <Card  className="mb-6">
+          <h3 className="mb-3 text-sm font-bold text-slate-200">Evolução</h3>
+          <div className="flex items-end gap-2">
+            {evolution.map((point, i) => (
+              <div key={i} className="flex flex-1 flex-col items-center gap-1">
+                <div
+                  className="w-full rounded-t bg-teal-500/30"
+                  style={{ height: `${point.score}px`, minHeight: '4px' }}
+                />
+                <span className="text-[10px] text-slate-500">
+                  {new Date(point.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {subjectStats && subjectStats.length > 0 && (
+        <Card  className="mb-6">
+          <h3 className="mb-3 text-sm font-bold text-slate-200">Desempenho por assunto</h3>
+          <div className="space-y-3">
+            {subjectStats.map((s) => (
+              <div key={s.subject}>
+                <div className="mb-1 flex justify-between text-xs">
+                  <span className="text-slate-300">{s.subject}</span>
+                  <span className="text-slate-400">
+                    {s.correct}/{s.total} ({s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0}%)
+                  </span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-teal-500/50 transition-all"
+                    style={{ width: `${s.total > 0 ? (s.correct / s.total) * 100 : 0}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {!history || history.attempts.length === 0 ? (
+        <div className="flex min-h-[200px] flex-col items-center justify-center gap-4">
+          <p className="text-sm text-slate-400">Nenhuma tentativa encontrada.</p>
+          <Link to="/simulados" className="hx-btn-primary px-4 py-2 text-sm font-semibold">
+            Ver simulados
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {history.attempts.map((attempt) => (
+            <Link
+              key={attempt.id}
+              to={`/simulados/${attempt.examSlug}/resultado/${attempt.id}`}
+              className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] p-4 transition hover:border-sky-400/35"
+            >
+              <div>
+                <p className="font-semibold text-white">{attempt.examTitle}</p>
+                <p className="text-sm text-slate-400">
+                  {attempt.examType} · {attempt.correctAnswers}/{attempt.totalQuestions} acertos ·{' '}
+                  {attempt.finishedAt
+                    ? new Date(attempt.finishedAt).toLocaleDateString('pt-BR')
+                    : '—'}
+                </p>
+              </div>
+              <span
+                className={`text-lg font-bold ${
+                  attempt.score >= EXAM_PASS_SCORE ? 'text-emerald-400' : 'text-amber-400'
+                }`}
+              >
+                {Math.round(attempt.score)}%
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {history && history.totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-center gap-3">
+          {history.page > 1 && (
+            <Link
+              to={`/simulados/historico?page=${history.page - 1}`}
+              className="hx-btn-secondary min-h-9 px-3 py-1.5 text-sm"
+            >
+              ← Anterior
+            </Link>
+          )}
+          <span className="text-sm text-slate-400">
+            Página {history.page} de {history.totalPages}
+          </span>
+          {history.page < history.totalPages && (
+            <Link
+              to={`/simulados/historico?page=${history.page + 1}`}
+              className="hx-btn-secondary min-h-9 px-3 py-1.5 text-sm"
+            >
+              Próxima →
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
