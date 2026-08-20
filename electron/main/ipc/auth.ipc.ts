@@ -29,6 +29,10 @@ export function registerAuthIpc(): void {
     const successPath = '/api/v1/auth/oauth/success'
     const callbackUrl = `${baseUrl}${successPath}`
     const oauthUrl = `${baseUrl}/oauth/${provider}?callbackURL=${encodeURIComponent(callbackUrl)}`
+    const sessionCookieNames = [
+      'hexavante.session_token',
+      '__Secure-hexavante.session_token',
+    ]
 
     const authWindow = new BrowserWindow({
       width: 800,
@@ -40,44 +44,61 @@ export function registerAuthIpc(): void {
         contextIsolation: true,
       },
     })
+    const session = authWindow.webContents.session
 
     let resolved = false
+    let resolve: (value: string | PromiseLike<string>) => void = () => {}
+    let reject: (reason: unknown) => void = () => {}
 
-    function checkCookie() {
+    const finish = (cookieValue: string) => {
       if (resolved) return
-      authWindow.webContents.session.cookies
+      resolved = true
+      clearInterval(pollInterval)
+      session.cookies.removeListener('changed', onCookieChanged)
+      authWindow.close()
+      resolve(cookieValue)
+    }
+
+    const checkCookies = () => {
+      if (resolved) return
+      session.cookies
         .get({ url: baseUrl })
         .then((cookies) => {
           if (resolved) return
-          const sessionCookie =
-            cookies.find((c) => c.name === 'hexavante.session_token') ||
-            cookies.find((c) => c.name === '__Secure-hexavante.session_token')
-          if (sessionCookie?.value) {
-            resolved = true
-            authWindow.close()
-            resolve(sessionCookie.value)
-          }
+          const sessionCookie = cookies.find(
+            (c) => sessionCookieNames.includes(c.name) && c.value
+          )
+          if (sessionCookie?.value) finish(sessionCookie.value)
         })
         .catch(() => {})
     }
 
+    // Detecta o cookie de sessão assim que a API o definir no callback do OAuth,
+    // antes mesmo da pagina de sucesso fechar a janela (corrige corrida de tempo).
+    const onCookieChanged = (_event: Electron.Event, cookie: Electron.Cookie) => {
+      if (resolved) return
+      if (sessionCookieNames.includes(cookie.name) && cookie.value) {
+        finish(cookie.value)
+      }
+    }
+
+    session.cookies.on('changed', onCookieChanged)
+
     const onNavigate = () => {
       if (resolved) return
-      setTimeout(checkCookie, 500)
-      setTimeout(checkCookie, 1500)
+      setTimeout(checkCookies, 300)
+      setTimeout(checkCookies, 800)
     }
 
     authWindow.webContents.on('will-redirect', onNavigate)
     authWindow.webContents.on('did-navigate', onNavigate)
-    authWindow.webContents.on('did-finish-load', checkCookie)
+    authWindow.webContents.on('did-finish-load', checkCookies)
 
-    let resolve: (value: string | PromiseLike<string>) => void = () => {}
-    let reject: (reason: unknown) => void = () => {}
-
-    const pollInterval = setInterval(checkCookie, 1000)
+    const pollInterval = setInterval(checkCookies, 500)
 
     authWindow.on('closed', () => {
       clearInterval(pollInterval)
+      session.cookies.removeListener('changed', onCookieChanged)
       if (!resolved) {
         reject(new Error('Janela de autenticação fechada'))
       }
@@ -86,7 +107,7 @@ export function registerAuthIpc(): void {
     return new Promise<string>((res, rej) => {
       resolve = res
       reject = rej
-      authWindow.loadURL(oauthUrl).then(checkCookie).catch(rej)
+      authWindow.loadURL(oauthUrl).then(checkCookies).catch(rej)
     })
   })
 }

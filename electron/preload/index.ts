@@ -11,6 +11,9 @@ const electronAPI: ElectronAPI = {
     oauth: (provider: string, apiUrl: string) =>
       ipcRenderer.invoke(IPC_CHANNELS.AUTH_OAUTH, provider, apiUrl)
   },
+  http: {
+    request: (payload) => ipcRenderer.invoke(IPC_CHANNELS.HTTP_REQUEST, payload)
+  },
   updater: {
     check: () => ipcRenderer.invoke(IPC_CHANNELS.UPDATER_CHECK),
     download: () => ipcRenderer.invoke(IPC_CHANNELS.UPDATER_DOWNLOAD),

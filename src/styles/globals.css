@@ -608,6 +608,10 @@ body {
       saturate(var(--hx-logo-saturate, 1.12))
       brightness(var(--hx-logo-brightness, 1.05));
   }
+
+  .hx-header-logo-glow {
+    filter: drop-shadow(0 0 14px hsl(var(--sidebar-highlight) / 0.5));
+  }
 }
 
 /* ——— Tema Cyberpunk ——— */

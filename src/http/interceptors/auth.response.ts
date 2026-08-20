@@ -1,14 +1,13 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { useAuthStore } from '@/app/stores/auth.store'
 import { authIpc } from '@/adapters/ipc/auth.ipc-adapter'
+import { SESSION_COOKIE_NAME } from '@/http/config'
 
 declare module 'axios' {
   interface InternalAxiosRequestConfig {
     _retry?: boolean
   }
 }
-
-const SESSION_COOKIE_NAME = 'hexavante.session_token'
 
 function extractSessionTokenFromSetCookie(setCookie: string[]): string | null {
   for (const cookie of setCookie) {

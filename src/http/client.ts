@@ -7,6 +7,7 @@ import {
   loggingResponseInterceptor,
 } from './interceptors/logging'
 import { errorResponseInterceptor } from './interceptors/error'
+import { createIpcHttpAdapter } from './ipc-adapter'
 
 export const api = axios.create({
   baseURL: httpConfig.baseURL,
@@ -15,6 +16,9 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: false,
+  adapter: typeof window !== 'undefined' && window.electronAPI?.http
+    ? createIpcHttpAdapter()
+    : undefined,
 })
 
 api.interceptors.request.use(authRequestInterceptor)

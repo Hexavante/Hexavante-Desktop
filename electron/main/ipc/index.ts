@@ -8,6 +8,7 @@ import { registerShellIpc } from './shell.ipc'
 import { registerAppIpc } from './app.ipc'
 import { registerLogIpc } from './log.ipc'
 import { registerNotificationIpc } from './notification.ipc'
+import { registerHttpIpc } from './http.ipc'
 
 export function registerAllIpc(): void {
   registerAuthIpc()
@@ -20,4 +21,5 @@ export function registerAllIpc(): void {
   registerAppIpc()
   registerLogIpc()
   registerNotificationIpc()
+  registerHttpIpc()
 }

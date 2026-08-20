@@ -3,6 +3,7 @@ export const IPC_CHANNELS = {
   AUTH_GET_REFRESH_TOKEN: 'auth:get-refresh-token',
   AUTH_CLEAR_REFRESH_TOKEN: 'auth:clear-refresh-token',
   AUTH_OAUTH: 'auth:oauth',
+  HTTP_REQUEST: 'http:request',
   UPDATER_CHECK: 'updater:check',
   UPDATER_DOWNLOAD: 'updater:download',
   UPDATER_INSTALL: 'updater:install',

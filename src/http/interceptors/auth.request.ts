@@ -1,7 +1,6 @@
 import type { InternalAxiosRequestConfig } from 'axios'
 import { useAuthStore } from '@/app/stores/auth.store'
-
-const SESSION_COOKIE_NAME = 'hexavante.session_token'
+import { SESSION_COOKIE_NAME } from '@/http/config'
 
 export function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   const token = useAuthStore.getState().sessionToken

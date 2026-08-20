@@ -5,6 +5,19 @@ export interface ElectronAPI {
     clearRefreshToken: () => Promise<void>
     oauth: (provider: string, apiUrl: string) => Promise<string>
   }
+  http: {
+    request: (payload: {
+      method: string
+      url: string
+      headers?: Record<string, string>
+      body?: unknown
+    }) => Promise<{
+      status: number
+      statusText: string
+      headers: Record<string, string | string[]>
+      body: string
+    }>
+  }
   updater: {
     check: () => Promise<UpdateInfo | null>
     download: () => Promise<void>

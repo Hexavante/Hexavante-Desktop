@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Link, useNavigate } from 'react-router-dom'
 import { Bell, LogOut, Settings, User, Sun, Moon, Search } from 'lucide-react'
+import { HexavanteLogo } from '@/components/brand/hexavante-logo'
 
 export function Header() {
   const { user, logout, isLoggingOut } = useAuth()
@@ -33,12 +34,13 @@ export function Header() {
             className="hx-header-brand group shrink-0"
             aria-label="Hexavante - Página inicial"
           >
-            <span className="hx-logo-glow flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-500/10 text-lg font-black text-cyan-400 sm:h-11 sm:w-11 md:h-12 md:w-12">
-              H
-            </span>
-            <span className="hx-header-wordmark hidden md:inline md:text-xl lg:text-[1.35rem]">
-              HEXAVANTE
-            </span>
+            <HexavanteLogo
+              showWordmark
+              size="lg"
+              className="gap-2 sm:gap-2.5"
+              imageClassName="hx-header-logo-glow h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12"
+              wordmarkClassName="hx-header-wordmark hidden md:inline md:text-xl lg:text-[1.35rem]"
+            />
           </Link>
 
           <div className="min-w-0 flex-1">

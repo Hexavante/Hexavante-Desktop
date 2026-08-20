@@ -3,7 +3,7 @@ import { normalizeError } from '@/adapters/error/error-normalizer'
 import { AppError } from '@/adapters/error/app-error'
 import { useAuthStore } from '@/app/stores/auth.store'
 import { authIpc } from '@/adapters/ipc/auth.ipc-adapter'
-import { httpConfig } from '@/http/config'
+import { SESSION_COOKIE_NAME } from '@/http/config'
 
 export async function errorResponseInterceptor(error: AxiosError) {
   const originalRequest = error.config
@@ -22,18 +22,12 @@ export async function errorResponseInterceptor(error: AxiosError) {
     }
 
     try {
-      const response = await fetch(
-        `${httpConfig.baseURL}/api/v1/auth/session`,
-        {
-          headers: {
-            Cookie: `hexavante.session_token=${currentToken}`,
-          },
-        }
-      )
+      const { api } = await import('@/http/client')
+      const sessionResponse = await api.get('/api/v1/auth/session')
 
-      if (response.ok) {
-        originalRequest.headers.Cookie = `hexavante.session_token=${currentToken}`
-        return originalRequest
+      if (sessionResponse.status === 200) {
+        originalRequest.headers.Cookie = `${SESSION_COOKIE_NAME}=${currentToken}`
+        return api(originalRequest)
       }
 
       useAuthStore.getState().clear()

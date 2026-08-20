@@ -1,11 +1,9 @@
 import { api } from '@/http/client'
-import { httpConfig } from '@/http/config'
+import { httpConfig, SESSION_COOKIE_NAME } from '@/http/config'
 import { ENDPOINTS } from '@/http/endpoints'
 import { authIpc } from '@/adapters/ipc/auth.ipc-adapter'
 import { useAuthStore } from '@/app/stores/auth.store'
 import type { AuthUser, SessionResponse } from '@/domain/types/auth.types'
-
-const SESSION_COOKIE_NAME = 'hexavante.session_token'
 
 function extractTokenFromSetCookie(setCookie: string | string[] | undefined): string | null {
   if (!setCookie) return null

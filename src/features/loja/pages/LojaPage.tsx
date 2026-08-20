@@ -96,7 +96,7 @@ export default function LojaPage() {
       </div>
 
       {categories.map((category) => {
-        const items = shopState?.items.filter((i) => i.category === category) ?? []
+        const items = (shopState?.items ?? []).filter((i) => i.category === category)
         if (items.length === 0) return null
         const Icon = CATEGORY_ICONS[category]
 

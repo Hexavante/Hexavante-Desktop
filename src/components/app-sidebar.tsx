@@ -15,61 +15,63 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import {
-  LayoutDashboard,
-  BookOpen,
-  FileCheck,
+  Award,
+  BarChart2,
   BarChart3,
-  Trophy,
-  MessageCircle,
-  Store,
-  Backpack,
-  User,
+  BookOpen,
+  Compass,
+  GraduationCap,
+  History,
+  Radio,
   Settings,
   Shield,
+  ShoppingBag,
+  Package,
+  Target,
+  User,
+  Users,
   LogIn,
   UserPlus,
 } from 'lucide-react'
 import { useEffect } from 'react'
+import { HexavanteLogo } from '@/components/brand/hexavante-logo'
 
 const NAV_SECTIONS = [
   {
     id: 'home',
     label: 'Início',
-    items: [
-      { icon: LayoutDashboard, label: 'Dashboard', href: '/' },
-    ],
+    items: [{ icon: Compass, label: 'Introdução', href: '/' }],
   },
   {
-    id: 'learning',
-    label: 'Aprendizado',
+    id: 'study',
+    label: 'Estudos',
     items: [
       { icon: BookOpen, label: 'Cursos', href: '/cursos' },
-      { icon: FileCheck, label: 'Simulados', href: '/simulados' },
+      { icon: Target, label: 'Simulados', href: '/simulados' },
       { icon: BarChart3, label: 'Estatísticas', href: '/estatisticas' },
+      { icon: ShoppingBag, label: 'Loja', href: '/loja' },
+      { icon: Package, label: 'Inventário', href: '/inventario' },
     ],
   },
   {
-    id: 'social',
+    id: 'community',
     label: 'Comunidade',
     items: [
-      { icon: Trophy, label: 'Ranking', href: '/ranking' },
-      { icon: MessageCircle, label: 'Comunidade', href: '/comunidade' },
+      { icon: Radio, label: 'Ao vivo', href: '/live' },
+      { icon: Users, label: 'Comunidade', href: '/comunidade' },
+      { icon: BarChart2, label: 'Ranking', href: '/ranking' },
+      { icon: Award, label: 'Certificados', href: '/certificados' },
+      { icon: History, label: 'Histórico de simulados', href: '/simulados/historico' },
     ],
   },
   {
-    id: 'store',
-    label: 'Loja',
-    items: [
-      { icon: Store, label: 'Loja', href: '/loja' },
-      { icon: Backpack, label: 'Inventário', href: '/inventario' },
-    ],
-  },
-  {
-    id: 'system',
-    label: 'Sistema',
+    id: 'account',
+    label: 'Conta',
     items: [
       { icon: User, label: 'Perfil', href: '/perfil' },
       { icon: Settings, label: 'Configurações', href: '/configuracoes' },
+      { icon: GraduationCap, label: 'Instrutor', href: '/instrutor' },
+      { icon: Shield, label: 'Moderação', href: '/moderacao' },
       { icon: Shield, label: 'Administração', href: '/admin' },
     ],
   },
@@ -83,7 +85,12 @@ function SidebarBrand() {
       aria-label="Hexavante - Página inicial"
     >
       <span className="hx-sidebar-brand-mark">
-        <span className="text-lg font-black text-cyan-400">H</span>
+        <HexavanteLogo
+          showWordmark={false}
+          size="md"
+          className="gap-0"
+          imageClassName="h-9 w-9"
+        />
       </span>
       <span className="min-w-0">
         <span className="block truncate text-sm font-extrabold tracking-tight text-white transition group-hover:text-cyan-100">
