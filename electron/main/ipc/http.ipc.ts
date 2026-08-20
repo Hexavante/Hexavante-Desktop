@@ -11,9 +11,23 @@ interface HttpRequestPayload {
   body?: unknown
 }
 
+const ALLOWED_HOSTS = [
+  'api.hexavante.com.br',
+  'localhost',
+  '127.0.0.1',
+  '187.127.54.55',
+]
+
+function isAllowedHost(hostname: string): boolean {
+  return ALLOWED_HOSTS.includes(hostname)
+}
+
 function resolveApiUrl(url: string): string {
   try {
     const parsed = new URL(url)
+    if (!isAllowedHost(parsed.hostname)) {
+      throw new Error(`Host não permitido: ${parsed.hostname}`)
+    }
     const isLocalApi =
       parsed.hostname === 'localhost' ||
       parsed.hostname === '127.0.0.1' ||
@@ -55,9 +69,11 @@ export function registerHttpIpc(): void {
 
       const responseBody = await response.text()
 
-      getLogger().debug(
-        `[http:request] ${method} ${url} => ${response.status} | ct=${responseHeaders['content-type']} | body=${responseBody.slice(0, 160)}`
-      )
+      if (process.env.NODE_ENV !== 'production') {
+        getLogger().debug(
+          `[http:request] ${method} ${url} => ${response.status} | ct=${responseHeaders['content-type']} | body=${responseBody.slice(0, 160)}`
+        )
+      }
 
       return {
         status: response.status,
