@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useEffect, useMemo } from 'react'
+import DOMPurify from 'isomorphic-dompurify'
 import { useThemeStore } from '@/app/stores/theme.store'
 import { APP_THEMES } from '@/lib/cosmetics'
 
@@ -58,7 +59,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   return (
     <>
-      {themeCss && <style id="hexavante-theme-vars" dangerouslySetInnerHTML={{ __html: themeCss }} />}
+      {themeCss && <style id="hexavante-theme-vars" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(themeCss, { USE_PROFILES: { html: false } }) }} />}
       {children}
     </>
   )

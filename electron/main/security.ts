@@ -9,7 +9,7 @@ export function setupSecurity(): void {
         responseHeaders: {
           ...details.responseHeaders,
           'Content-Security-Policy': [
-            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' *; img-src 'self' data:; form-action 'self';"
+            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.hexavante.com.br https://*.supabase.co http://localhost:3045 http://127.0.0.1:3045; img-src 'self' data: https://*.googleusercontent.com https://avatars.githubusercontent.com; form-action 'self';"
           ]
         }
       })
