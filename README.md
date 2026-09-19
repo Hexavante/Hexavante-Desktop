@@ -16,27 +16,74 @@
   <img src="https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-blueviolet" alt="Platform" />
 </p>
 
+<p align="center">
+  <a href="#português">🇧🇷 Português</a> · <a href="#english">🇺🇸 English</a> · <a href="docs/visão-geral.md">Docs</a>
+</p>
+
 ---
+
+<a id="português"></a>
 
 ## Português
 
-Cliente desktop em Electron (processo `main` + renderer React via `electron-vite`), consumindo a mesma API (`https://api.hexavante.com.br`) e as mesmas regras do app web.
+### Índice
 
-### Estrutura
+- [Sobre](#sobre)
+- [Arquitetura](#arquitetura)
+- [Estrutura de pastas](#estrutura-de-pastas)
+- [Setup](#setup)
+- [Variáveis de ambiente](#variáveis-de-ambiente)
+- [Scripts](#scripts)
+- [Sessão e API](#sessão-e-api)
+- [Empacotamento](#empacotamento)
+- [Solução de problemas](#solução-de-problemas)
+- [Como contribuir](#como-contribuir)
+
+### Sobre
+
+Cliente desktop em Electron (processo `main` + renderer React via `electron-vite`), com a mesma conta e os mesmos dados do app web.
+
+### Arquitetura
 
 ```
-src/            # main (Electron), renderer (React: app, features, components, hooks...)
-electron/       # Preloads e configuração do processo principal
-resources/      # Ícones e assets do instalador
-electron-builder.yml   # Alvos Windows/Linux
+Usuário ──▶ Janela Electron ──▶ Renderer React ──IPC──▶ Main ──HTTPS──▶ api.hexavante.com.br
+                                  │                                ▲
+                                  └──────── fetch direto ──────────┘
+```
+
+Segurança: `contextIsolation` ligado, `nodeIntegration` desligado no renderer — tudo passa pelos adapters/preload.
+
+### Estrutura de pastas
+
+```
+src/
+├── app/           # Composição (rotas/telas)
+├── features/      # Funcionalidades por domínio
+├── domain/        # Tipos e regras
+├── components/    # UI reutilizável
+├── hooks/         # Hooks React
+├── adapters/      # Pontes renderer↔main (IPC)
+├── api/ + http/   # Cliente da API Hexavante
+electron/          # Preloads e processo principal
+resources/         # Ícones e assets do instalador
+electron-builder.yml  # Alvos Windows/Linux
 ```
 
 ### Setup
 
 ```bash
-npm install
-npm run dev      # electron-vite dev (app + renderer com reload)
+npm install   # postinstall: electron-builder install-app-deps
+npm run dev   # electron-vite dev (app + renderer com reload)
 ```
+
+### Variáveis de ambiente
+
+| Variável | Para que |
+|---|---|
+| `API_URL` | Base da API (`https://api.hexavante.com.br`) |
+| `APP_ENV` | `development` / `production` (canal de update e logs) |
+
+Sem segredos commitados; tokens ficam no armazenamento do SO.
 
 ### Scripts
 
@@ -45,19 +92,41 @@ npm run dev      # electron-vite dev (app + renderer com reload)
 | `npm run dev` | Desenvolvimento |
 | `npm run build` | Build (main + renderer) |
 | `npm start` | Roda o build local (`electron .`) |
-| `npm run typecheck` | Tipos do main e do web (`tsconfig.node.json` + `tsconfig.web.json`) |
+| `npm run preview` | Preview do build |
+| `npm run typecheck` | Tipos do main e do web (obrigatório) |
 | `npm run lint` | ESLint |
+
+### Sessão e API
+
+Mesma sessão da plataforma: login e-mail/senha e OAuth (navegador do sistema + retorno ao app). Mesmos contratos (`/api/v1/*`, `{ data, pagination }`); 401 leva ao login; erros exibidos em pt-BR amigável.
 
 ### Empacotamento
 
-`electron-builder` gera os instaladores Windows/Linux a partir de `electron-builder.yml`. Sessão e API iguais às do web: o usuário loga com a mesma conta.
+`electron-builder` gera instaladores Windows (NSIS/portable) e Linux (AppImage/deb). Versionar `package.json` + tag git por release.
 
-### Documentação técnica
+### Solução de problemas
 
-Guias por sprint em [`docs/sprints/`](docs/sprints/) (fundação → shell → features → build/distribuição).
+| Sintoma | Causa provável | Ação |
+|---|---|---|
+| Tela branca | Erro no renderer | DevTools do Electron (`Ctrl+Shift+I`) + console |
+| IPC sem resposta | Canal não registrado no preload | Conferir `adapters/` e nomes dos canais |
+| Falha no build nativo | Deps de SO faltando | Rodar `postinstall` / `install-app-deps` de novo |
+| 401 em tudo | Sessão expirada | Logout + login (limpa secure store) |
+
+### Como contribuir
+
+1. Branch de `main`, commits curtos em português.
+2. `typecheck` (node + web) e `lint` verdes.
+3. Nunca commitar segredos, binários ou `out/`, `dist/`.
+
+### Documentação técnica (`docs/`)
+
+`visão-geral`, `requisitos-funcionais`, `regras-de-negocio`, `casos-de-uso`, `der-conceitual`, `der-logico`, `glossario`, `stack`, `permissoes`, `instalacao-e-desenvolvimento`, `deploy-producao`, `escopo-mvp`.
 
 ---
 
+<a id="english"></a>
+
 ## English (summary)
 
-Hexavante desktop client (Electron 33, React 18, Vite, Tailwind). Same API and account as the web app; builds Windows/Linux installers via electron-builder. Dev with `npm run dev`, typecheck both processes, see `docs/sprints/` for technical guides (in Portuguese).
+Hexavante desktop client (Electron 33, React 18, Vite, Tailwind). Same API and account as the web app; builds Windows/Linux installers via electron-builder. Dev with `npm run dev`, typecheck both processes, see `docs/` (in Portuguese) for full technical documentation.
