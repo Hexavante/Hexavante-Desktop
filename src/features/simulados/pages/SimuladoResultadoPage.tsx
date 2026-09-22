@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { useAttemptResult } from '@/api/exams/queries'
-import { Trophy, CheckCircle, XCircle, Clock3, ClipboardList, ArrowLeft, TrendingUp, Target } from 'lucide-react'
+import { Trophy, CheckCircle, XCircle, Clock3, ClipboardList, ArrowLeft, TrendingUp, Target, Zap, Coins } from 'lucide-react'
 
 const EXAM_TYPE_LABELS: Record<string, string> = {
   ENEM: 'ENEM',
@@ -47,6 +47,9 @@ export default function SimuladoResultadoPage() {
   const percentage = result.totalQuestions > 0
     ? Math.round((result.correctAnswers / result.totalQuestions) * 100)
     : 0
+
+  const xpReward = result.xpAwarded ?? 0
+  const coinsReward = result.coinsAwarded ?? 0
 
   const getScoreColor = (score: number) => {
     if (score >= 70) return 'text-green-400'
@@ -102,6 +105,23 @@ export default function SimuladoResultadoPage() {
               </div>
             )}
           </div>
+          {(xpReward > 0 || coinsReward > 0) && (
+            <div className="mt-3 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              {xpReward > 0 && (
+                <span className="inline-flex items-center gap-1">
+                  <Zap className="h-4 w-4 text-amber-400" />
+                  +{xpReward} XP
+                </span>
+              )}
+              {xpReward > 0 && coinsReward > 0 && <span aria-hidden="true">·</span>}
+              {coinsReward > 0 && (
+                <span className="inline-flex items-center gap-1">
+                  <Coins className="h-4 w-4 text-amber-400" />
+                  +{coinsReward} moedas
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </Card>
 

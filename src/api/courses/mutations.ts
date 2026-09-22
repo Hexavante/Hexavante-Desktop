@@ -62,8 +62,13 @@ export function useCompleteLesson(courseId: string) {
     onSuccess: (result, lessonId) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.courses.lesson(courseId, lessonId) })
       queryClient.invalidateQueries({ queryKey: queryKeys.courses.progress(courseId) })
-      if (result.totalXpEarned > 0) {
-        toast.success(`Aula concluída! +${result.totalXpEarned} XP`)
+      const xp = result.xpAwarded ?? result.totalXpEarned ?? 0
+      const coins = result.coinsAwarded ?? 0
+      const parts: string[] = []
+      if (xp > 0) parts.push(`+${xp} XP`)
+      if (coins > 0) parts.push(`+${coins} moedas`)
+      if (parts.length > 0) {
+        toast.success(`Aula concluída! ${parts.join(' ')}`)
       } else {
         toast.success('Aula concluída!')
       }

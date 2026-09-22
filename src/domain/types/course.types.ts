@@ -176,5 +176,7 @@ export interface LessonLearningContext {
 export interface LessonCompleteResult {
   progress: number
   totalXpEarned: number
+  xpAwarded?: number
+  coinsAwarded?: number
   newLevels: Array<{ level: number; leveledUp: boolean }>
 }

@@ -83,6 +83,8 @@ export interface SubmitAttemptResponse {
   score: number
   correctAnswers: number
   totalQuestions: number
+  xpAwarded?: number
+  coinsAwarded?: number
 }
 
 export interface AttemptResult {
@@ -94,6 +96,8 @@ export interface AttemptResult {
   correctAnswers: number
   totalQuestions: number
   finishedAt: string
+  xpAwarded?: number
+  coinsAwarded?: number
   questionResults: QuestionResult[]
 }
 
