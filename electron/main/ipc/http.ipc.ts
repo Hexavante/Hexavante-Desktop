@@ -52,10 +52,18 @@ export function registerHttpIpc(): void {
     }
 
     try {
+      // O adapter axios já serializa o body para string antes do IPC.
+      // Serializar de novo geraria string com aspas escapadas (erro Zod).
+      const serializedBody =
+        body === undefined || body === null
+          ? undefined
+          : typeof body === 'string'
+            ? body
+            : JSON.stringify(body)
       const response = await fetch(url, {
         method,
         headers: fetchHeaders,
-        body: body !== undefined && body !== null ? JSON.stringify(body) : undefined,
+        body: serializedBody,
       })
 
       const responseHeaders: Record<string, string | string[]> = {}

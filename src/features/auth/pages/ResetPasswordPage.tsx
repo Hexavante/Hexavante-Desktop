@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { PasswordInput } from '@/components/ui/password-input'
 import { authService } from '@/services/auth.service'
 import { normalizeError } from '@/adapters/error/error-normalizer'
 import { toast } from 'sonner'
@@ -215,10 +216,8 @@ export default function ResetPasswordPage() {
         </div>
         <div>
           <label htmlFor="password" className="hx-label">Nova senha</label>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
-            className="hx-input h-11"
             placeholder="Mínimo 8 caracteres"
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -228,10 +227,8 @@ export default function ResetPasswordPage() {
         </div>
         <div>
           <label htmlFor="confirmPassword" className="hx-label">Confirmar senha</label>
-          <input
+          <PasswordInput
             id="confirmPassword"
-            type="password"
-            className="hx-input h-11"
             placeholder="••••••"
             value={confirm}
             onChange={e => setConfirm(e.target.value)}

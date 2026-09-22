@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
 import { Loader2, Lock, Mail, ShieldCheck } from 'lucide-react'
+import { PasswordInput } from '@/components/ui/password-input'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { loginSchema, type LoginFormData } from '@/domain/schemas/auth.schema'
@@ -287,10 +288,9 @@ export default function LoginPage() {
                     className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
                     aria-hidden="true"
                   />
-                  <input
+                  <PasswordInput
                     id="password"
-                    type="password"
-                    className="hx-input h-11 pl-10"
+                    className="pl-10"
                     aria-invalid={Boolean(errors.password)}
                     {...register('password')}
                   />

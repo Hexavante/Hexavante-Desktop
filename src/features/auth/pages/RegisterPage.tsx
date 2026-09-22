@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { PasswordInput } from '@/components/ui/password-input'
 import { toast } from 'sonner'
 import { registerSchema, type RegisterFormData } from '@/domain/schemas/auth.schema'
 import { useRegister, useOAuth } from '@/api/auth/mutations'
@@ -189,10 +190,8 @@ export default function RegisterPage() {
 
               <div>
                 <label htmlFor="password" className="hx-label">Senha</label>
-                <input
+                <PasswordInput
                   id="password"
-                  className="hx-input h-11"
-                  type="password"
                   placeholder="Mínimo 8 caracteres"
                   aria-invalid={Boolean(errors.password)}
                   {...register('password')}
@@ -204,10 +203,8 @@ export default function RegisterPage() {
 
               <div>
                 <label htmlFor="confirmPassword" className="hx-label">Confirmar senha</label>
-                <input
+                <PasswordInput
                   id="confirmPassword"
-                  className="hx-input h-11"
-                  type="password"
                   placeholder="••••••"
                   aria-invalid={Boolean(errors.confirmPassword)}
                   {...register('confirmPassword')}
