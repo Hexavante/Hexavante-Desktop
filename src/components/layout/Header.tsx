@@ -52,7 +52,7 @@ export function Header() {
             >
               <Search className="h-4 w-4 shrink-0 text-slate-500" />
               <span className="pointer-events-none flex-1 text-sm text-slate-500">
-                Buscar cursos, produtos...
+                Buscar cursos, simulados...
               </span>
               <kbd className="hidden shrink-0 rounded border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-500 sm:inline">
                 Ctrl K
