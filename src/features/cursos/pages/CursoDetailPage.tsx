@@ -100,11 +100,14 @@ export default function CursoDetailPage() {
   if (isLoading) return <LoadingScreen />
   if (isError || !course) {
     return (
-      <EmptyState
-        title="Curso não encontrado"
-        description="O curso que você procura não existe ou foi removido"
-        action={{ label: 'Ver cursos', onClick: () => navigate('/cursos') }}
-      />
+      <div className="hx-page">
+        <PageHeader title="Curso não encontrado" />
+        <EmptyState
+          title="Curso não encontrado"
+          description="O curso que você procura não existe ou foi removido"
+          action={{ label: 'Ver cursos', onClick: () => navigate('/cursos') }}
+        />
+      </div>
     )
   }
 

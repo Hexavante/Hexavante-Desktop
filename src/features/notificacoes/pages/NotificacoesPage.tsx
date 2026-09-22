@@ -163,7 +163,7 @@ export default function NotificacoesPage() {
         <div className="space-y-3">
           {notifications.map((notification) => {
             const Icon = NOTIFICATION_ICONS[notification.type] || Bell
-            const style = NOTIFICATION_STYLES[notification.type] || 'bg-slate-500/20 text-muted-foreground'
+            const style = NOTIFICATION_STYLES[notification.type] || 'bg-surface text-muted-foreground'
             const typeLabel = NOTIFICATION_TYPE_LABELS[notification.type] || notification.type.replace(/_/g, ' ').toLowerCase()
             const isUnread = !notification.readAt
 

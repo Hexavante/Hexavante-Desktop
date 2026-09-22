@@ -26,7 +26,7 @@ export default function VerificarCertificadoPage() {
     <div className="hx-page max-w-2xl mx-auto">
       <PageHeader title="Verificar Certificado" description="Valide a autenticidade de um certificado Hexavante" />
 
-      <Card className="mb-6">
+      <Card className="mb-6 p-5">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="certificate-code" className="block text-sm font-medium text-muted-foreground mb-2">
@@ -54,7 +54,7 @@ export default function VerificarCertificadoPage() {
       </Card>
 
       {isSuccess && data?.certificate && (
-        <Card className="border-green-500/30 bg-green-500/5">
+        <Card className="border-green-500/30 bg-green-500/5 p-5">
           <div className="flex items-center gap-3 mb-4">
             <CheckCircle className="h-6 w-6 text-green-400" />
             <h3 className="text-lg font-bold text-green-300">Certificado Válido</h3>
@@ -90,7 +90,7 @@ export default function VerificarCertificadoPage() {
       )}
 
       {(isError || (isSuccess && !data?.certificate)) && !isPending && (
-        <Card className="border-red-500/30 bg-red-500/5">
+        <Card className="border-red-500/30 bg-red-500/5 p-5">
           <div className="flex items-center gap-3">
             <XCircle className="h-6 w-6 text-red-400" />
             <h3 className="text-lg font-bold text-red-300">Certificado inválido</h3>

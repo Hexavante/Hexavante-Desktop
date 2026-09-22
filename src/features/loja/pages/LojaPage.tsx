@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useShopState } from '@/api/shop/queries'
 import { usePurchaseItem, useEquipItem } from '@/api/shop/mutations'
+import { getThemeIdOf } from '@/lib/cosmetics'
 import { EmptyState } from '@/components/shared/EmptyState'
 import type { ShopItemView } from '@/domain/types/shop.types'
 import {
@@ -260,7 +261,7 @@ export default function LojaPage() {
   )
 
   const purchasingId = purchaseItem.isPending ? purchaseItem.variables : undefined
-  const equippingId = equipItem.isPending ? equipItem.variables : undefined
+  const equippingId = equipItem.isPending ? equipItem.variables?.inventoryId : undefined
 
   if (isLoading) return <LojaSkeleton />
 
@@ -372,7 +373,18 @@ export default function LojaPage() {
                   purchaseDisabled={purchaseItem.isPending}
                   equipDisabled={equipItem.isPending}
                   onPurchase={(id) => purchaseItem.mutate(id)}
-                  onEquip={(inventoryId) => equipItem.mutate(inventoryId)}
+                  onEquip={(inventoryId) => {
+                    const item = items.find((i) => i.inventoryId === inventoryId)
+                    const themeId = item ? getThemeIdOf(item) : null
+                    // Equipar tema aplica na hora; desequipar o tema ativo volta ao padrão.
+                    const applyThemeId =
+                      themeId == null
+                        ? undefined
+                        : item?.isEquipped
+                          ? 'default'
+                          : themeId
+                    equipItem.mutate({ inventoryId, applyThemeId })
+                  }}
                 />
               ))}
             </div>

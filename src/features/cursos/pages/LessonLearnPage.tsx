@@ -12,6 +12,7 @@ import {
 } from '@/api/courses/mutations'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { PageHeader } from '@/components/shared/PageHeader'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Clapperboard, FileText } from 'lucide-react'
@@ -50,12 +51,14 @@ export default function LessonLearnPage() {
   if (isError || !data) {
     return (
       <div className="hx-page">
-        <p className="rounded-lg bg-amber-900/20 p-4 text-amber-400">
-          Não foi possível carregar a aula. Verifique sua matrícula ou volte ao curso.
-        </p>
-        <Button className="mt-4" onClick={() => navigate(`/cursos/${id}`)}>
-          Voltar ao curso
-        </Button>
+        <Card className="p-5">
+          <p className="rounded-lg bg-amber-900/20 p-4 text-amber-400">
+            Não foi possível carregar a aula. Verifique sua matrícula ou volte ao curso.
+          </p>
+          <Button className="mt-4" onClick={() => navigate(`/cursos/${id}`)}>
+            Voltar ao curso
+          </Button>
+        </Card>
       </div>
     )
   }
@@ -140,7 +143,7 @@ export default function LessonLearnPage() {
           )}
 
           <div>
-            <h1 className="text-2xl font-bold text-foreground">{lesson.title}</h1>
+            <h2 className="text-2xl font-bold text-foreground">{lesson.title}</h2>
             {lesson.description && <p className="mt-2 text-muted-foreground">{lesson.description}</p>}
           </div>
 

@@ -51,11 +51,14 @@ export default function LiveRoomDetailPage() {
   if (isLoading) return <LoadingScreen />
   if (isError || !room) {
     return (
-      <EmptyState
-        title="Sala não encontrada"
-        description="A sala ao vivo não existe ou foi encerrada"
-        action={{ label: 'Ver salas', onClick: () => navigate('/live') }}
-      />
+      <div className="hx-page">
+        <PageHeader title="Sala não encontrada" />
+        <EmptyState
+          title="Sala não encontrada"
+          description="A sala ao vivo não existe ou foi encerrada"
+          action={{ label: 'Ver salas', onClick: () => navigate('/live') }}
+        />
+      </div>
     )
   }
 

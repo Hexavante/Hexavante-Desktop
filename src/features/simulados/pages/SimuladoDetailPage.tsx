@@ -98,7 +98,7 @@ export default function SimuladoDetailPage() {
                 </Badge>
               )}
             </div>
-            <h1 className="text-2xl font-bold text-foreground">{exam.title}</h1>
+            <p className="text-2xl font-bold text-foreground">{exam.title}</p>
           </div>
         </div>
 

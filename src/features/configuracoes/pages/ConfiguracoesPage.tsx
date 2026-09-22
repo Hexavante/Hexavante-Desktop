@@ -19,55 +19,55 @@ export default function ConfiguracoesPage() {
 
       <div className="space-y-6">
         <div className="hx-card p-5">
-          <h3 className="mb-4 text-sm font-bold text-white">Aparência</h3>
+          <h3 className="mb-4 text-sm font-bold text-foreground">Aparência</h3>
           <div className="flex gap-3">
             <button
-              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'dark' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
+              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'dark' ? 'border-cyan-500 bg-cyan-500/10' : 'border-border hover:border-muted-foreground/30'}`}
               onClick={() => setTheme('dark')}
             >
               <Moon className="h-6 w-6" />
-              <span className="text-sm font-medium text-white">Escuro</span>
+              <span className="text-sm font-medium text-foreground">Escuro</span>
             </button>
             <button
-              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'light' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
+              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${resolvedTheme === 'light' ? 'border-cyan-500 bg-cyan-500/10' : 'border-border hover:border-muted-foreground/30'}`}
               onClick={() => setTheme('light')}
             >
               <Sun className="h-6 w-6" />
-              <span className="text-sm font-medium text-white">Claro</span>
+              <span className="text-sm font-medium text-foreground">Claro</span>
             </button>
             <button
-              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${mode === 'system' ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/10 hover:border-white/20'}`}
+              className={`flex flex-1 flex-col items-center gap-2 rounded-lg border-2 p-4 transition ${mode === 'system' ? 'border-cyan-500 bg-cyan-500/10' : 'border-border hover:border-muted-foreground/30'}`}
               onClick={() => setTheme('system')}
             >
               <Monitor className="h-6 w-6" />
-              <span className="text-sm font-medium text-white">Sistema</span>
+              <span className="text-sm font-medium text-foreground">Sistema</span>
             </button>
           </div>
         </div>
 
         <div className="hx-card p-5">
-          <h3 className="mb-4 text-sm font-bold text-white">Temas Decorativos</h3>
-          <p className="mb-4 text-xs text-slate-400">
+          <h3 className="mb-4 text-sm font-bold text-foreground">Temas Decorativos</h3>
+          <p className="mb-4 text-xs text-muted-foreground">
             Escolha um tema visual para personalizar sua experiência.
           </p>
           <ThemeSelector />
         </div>
 
         <div className="hx-card p-5">
-          <h3 className="mb-4 text-sm font-bold text-white">Conta</h3>
+          <h3 className="mb-4 text-sm font-bold text-foreground">Conta</h3>
           <div className="space-y-3">
             {user ? (
               <>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-white">{user.name}</p>
-                    <p className="text-xs text-slate-400">{user.email}</p>
+                    <p className="text-sm text-foreground">{user.name}</p>
+                    <p className="text-xs text-muted-foreground">{user.email}</p>
                   </div>
                   <Button variant="outline" size="sm" onClick={() => navigate('/perfil')}>
                     Editar Perfil
                   </Button>
                 </div>
-                <hr className="border-white/5" />
+                <hr className="border-border" />
                 <Button
                   variant="outline"
                   size="sm"
@@ -88,19 +88,19 @@ export default function ConfiguracoesPage() {
         </div>
 
         <div className="hx-card p-5">
-          <h3 className="mb-4 text-sm font-bold text-white">Sobre</h3>
+          <h3 className="mb-4 text-sm font-bold text-foreground">Sobre</h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-400">Aplicativo</span>
-              <span className="text-white">Hexavante Desktop</span>
+              <span className="text-muted-foreground">Aplicativo</span>
+              <span className="text-foreground">Hexavante Desktop</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Versão</span>
-              <span className="text-white">1.0.0</span>
+              <span className="text-muted-foreground">Versão</span>
+              <span className="text-foreground">1.0.0</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Plataforma</span>
-              <span className="text-white">Electron</span>
+              <span className="text-muted-foreground">Plataforma</span>
+              <span className="text-foreground">Electron</span>
             </div>
           </div>
         </div>

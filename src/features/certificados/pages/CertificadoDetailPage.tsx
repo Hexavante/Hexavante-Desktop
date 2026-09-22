@@ -101,7 +101,7 @@ export default function CertificadoDetailPage() {
           {/* Header */}
           <div className="mb-8 text-center border-b border-border pb-8">
             <div className="mb-4 text-6xl">📜</div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Certificado de Conclusão</h1>
+            <p className="text-3xl md:text-4xl font-bold text-foreground mb-2">Certificado de Conclusão</p>
             <p className="text-muted-foreground">Hexavante - Plataforma Educacional</p>
           </div>
 

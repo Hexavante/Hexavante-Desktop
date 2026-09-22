@@ -40,7 +40,7 @@ export default function InstructorCoursesPage() {
             <Badge variant="secondary">
               {APPLICATION_STATUS_LABELS.PENDING}
             </Badge>
-            <p className="mt-2 text-sm text-slate-400">
+            <p className="mt-2 text-sm text-muted-foreground">
               Solicitação em análise pelo moderador.
             </p>
           </div>
@@ -82,19 +82,19 @@ export default function InstructorCoursesPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
-            <Card key={course.id} className="hx-card overflow-hidden">
+            <Card key={course.id} className="overflow-hidden">
               <CardContent className="space-y-3 p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-white">{course.title}</h3>
+                  <h3 className="font-semibold text-foreground">{course.title}</h3>
                   <Badge variant={statusBadgeVariant(course.status)}>
                     {COURSE_STATUS_LABELS[course.status] ?? course.status}
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   {COURSE_LEVEL_LABELS[course.level] ?? course.level}
                   {course.categoryName ? ` · ${course.categoryName}` : ''}
                 </p>
-                <div className="flex flex-wrap gap-2 text-xs text-slate-400">
+                <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                   <span>{course.moduleCount} módulos</span>
                   <span>{course.enrollmentCount} matrículas</span>
                   {course.estimatedHours && <span>~{course.estimatedHours}h</span>}

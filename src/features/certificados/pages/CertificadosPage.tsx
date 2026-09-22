@@ -54,7 +54,7 @@ export default function CertificadosPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {certificates.map((cert) => (
             <Card key={cert.id} className="overflow-hidden">
-              <div className="flex h-32 items-center justify-center border-b border-white/10 bg-gradient-to-br from-amber-500/20 to-yellow-500/20">
+              <div className="flex h-32 items-center justify-center border-b border-border bg-gradient-to-br from-amber-500/20 to-yellow-500/20">
                 <Award className="h-12 w-12 text-amber-400/70" aria-hidden="true" />
               </div>
               <div className="p-5">
@@ -66,11 +66,11 @@ export default function CertificadosPage() {
                     Verificado
                   </Badge>
                 </div>
-                <h3 className="text-base font-bold text-white line-clamp-2">{cert.course.title}</h3>
-                <p className="mt-2 text-xs text-slate-400">
+                <h3 className="text-base font-bold text-foreground line-clamp-2">{cert.course.title}</h3>
+                <p className="mt-2 text-xs text-muted-foreground">
                   Emitido em {new Date(cert.issuedAt).toLocaleDateString('pt-BR')}
                 </p>
-                <p className="mt-1 text-xs text-slate-500 font-mono">Código: {cert.code}</p>
+                <p className="mt-1 text-xs text-muted-foreground font-mono">Código: {cert.code}</p>
 
                 <div className="mt-4 flex items-center gap-2">
                   <Button

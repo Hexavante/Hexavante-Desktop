@@ -46,7 +46,7 @@ export default function InstructorApplyPage() {
       {app?.status === 'PENDING' ? (
         <div className="hx-card p-4">
           <Badge variant="secondary">{APPLICATION_STATUS_LABELS.PENDING}</Badge>
-          <p className="mt-3 text-sm text-slate-400">
+          <p className="mt-3 text-sm text-muted-foreground">
             Sua solicitação está em análise. Você receberá acesso à área de instrutor após aprovação.
           </p>
         </div>

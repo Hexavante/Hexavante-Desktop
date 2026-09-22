@@ -59,7 +59,7 @@ export default function CursosListPage() {
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row">
         <div className="navbar-search flex-1">
-          <svg className="h-4 w-4 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+          <svg className="h-4 w-4 shrink-0 text-muted-foreground" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
           <input
@@ -117,17 +117,17 @@ export default function CursosListPage() {
                     <Badge variant="outline" className="text-[10px]">{course.level === 'BEGINNER' ? 'Iniciante' : course.level === 'INTERMEDIATE' ? 'Intermediário' : 'Avançado'}</Badge>
                     <Badge variant="secondary" className="text-[10px]">{course.courseType === 'FREE' ? 'Grátis' : course.courseType === 'PAID' ? 'Pago' : 'Premium'}</Badge>
                   </div>
-                  <h3 className="truncate text-sm font-bold text-white group-hover:text-cyan-400">{course.title}</h3>
+                  <h3 className="truncate text-sm font-bold text-foreground group-hover:text-cyan-400">{course.title}</h3>
                   {course.shortDescription && (
-                    <p className="mt-1 line-clamp-2 text-xs text-slate-400">{course.shortDescription}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{course.shortDescription}</p>
                   )}
-                  <div className="mt-3 flex items-center gap-3 text-xs text-slate-500">
+                  <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{course.totalModules} módulos</span>
                     <span>{course.totalLessons} aulas</span>
                     {course.estimatedHours && <span>~{course.estimatedHours}h</span>}
                   </div>
                   {course.instructorName && (
-                    <p className="mt-2 text-xs text-slate-500">Por {course.instructorName}</p>
+                    <p className="mt-2 text-xs text-muted-foreground">Por {course.instructorName}</p>
                   )}
                 </div>
               </div>
@@ -144,7 +144,7 @@ export default function CursosListPage() {
               >
                 Anterior
               </Button>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-muted-foreground">
                 Página {data.pagination.page} de {data.pagination.totalPages}
               </span>
               <Button

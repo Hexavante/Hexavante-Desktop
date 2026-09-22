@@ -1,12 +1,14 @@
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { useExamHistory, useExamStats, useExamEvolution, useExamSubjectStats } from '@/api/exams/queries'
 
 const EXAM_PASS_SCORE = 60
 
 export default function SimuladosHistoricoPage() {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const page = Math.max(1, Number(searchParams.get('page')) || 1)
   const { data: history, isLoading: historyLoading, isError: historyError } = useExamHistory({ page })
@@ -23,7 +25,7 @@ export default function SimuladosHistoricoPage() {
           title="Meu histórico"
           description="Acompanhe tentativas, médias e evolução nos simulados."
         />
-        <Card>
+        <Card className="p-5">
           <p className="text-sm text-muted-foreground">Não foi possível carregar o histórico.</p>
           <button type="button" className="hx-btn hx-btn-primary mt-4" onClick={() => window.location.reload()}>
             Tentar novamente
@@ -42,15 +44,15 @@ export default function SimuladosHistoricoPage() {
 
       {stats && (
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
-          <Card >
+          <Card className="p-5">
             <p className="text-sm text-muted-foreground">Tentativas</p>
             <p className="text-2xl font-bold text-foreground">{stats.totalAttempts}</p>
           </Card>
-          <Card >
+          <Card className="p-5">
             <p className="text-sm text-muted-foreground">Média</p>
             <p className="text-2xl font-bold text-foreground">{stats.averageScore}%</p>
           </Card>
-          <Card >
+          <Card className="p-5">
             <p className="text-sm text-muted-foreground">Melhor nota</p>
             <p className="text-2xl font-bold text-emerald-400">{stats.bestScore}%</p>
           </Card>
@@ -58,7 +60,7 @@ export default function SimuladosHistoricoPage() {
       )}
 
       {evolution && evolution.length > 0 && (
-        <Card  className="mb-6">
+        <Card  className="mb-6 p-5">
           <h3 className="mb-3 text-sm font-bold text-foreground">Evolução</h3>
           <div className="flex items-end gap-2">
             {evolution.map((point, i) => (
@@ -77,7 +79,7 @@ export default function SimuladosHistoricoPage() {
       )}
 
       {subjectStats && subjectStats.length > 0 && (
-        <Card  className="mb-6">
+        <Card  className="mb-6 p-5">
           <h3 className="mb-3 text-sm font-bold text-foreground">Desempenho por assunto</h3>
           <div className="space-y-3">
             {subjectStats.map((s) => (
@@ -101,12 +103,11 @@ export default function SimuladosHistoricoPage() {
       )}
 
       {!history || history.attempts.length === 0 ? (
-        <div className="flex min-h-[200px] flex-col items-center justify-center gap-4">
-          <p className="text-sm text-muted-foreground">Nenhuma tentativa encontrada.</p>
-          <Link to="/simulados" className="hx-btn-primary px-4 py-2 text-sm font-semibold">
-            Ver simulados
-          </Link>
-        </div>
+        <EmptyState
+          title="Nenhuma tentativa encontrada"
+          description="Faça seu primeiro simulado para ver o histórico aqui."
+          action={{ label: 'Ver simulados', onClick: () => navigate('/simulados') }}
+        />
       ) : (
         <div className="space-y-3">
           {history.attempts.map((attempt) => (

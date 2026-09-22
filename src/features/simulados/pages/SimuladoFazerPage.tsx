@@ -157,7 +157,7 @@ const goToQuestion = (index: number) => {
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock3 className={`h-5 w-5 ${timeLeft <= 300 ? 'text-red-300 animate-pulse' : 'text-teal-400'}`} />
-              <span className="font-mono text-lg font-bold text-white">{formatTime(timeLeft)}</span>
+              <span className="font-mono text-lg font-bold text-foreground">{formatTime(timeLeft)}</span>
               {timeLeft <= 300 && <span className="text-xs text-red-300">Tempo acabando!</span>}
             </div>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">

@@ -8,6 +8,14 @@ export type AppThemeDef = {
   vars: Record<string, string>
 }
 
+/** Extrai o themeId de itens THEME da loja (metadata.themeId vem da API). */
+export function getThemeIdOf(item: { category: string; metadata?: unknown }): string | null {
+  if (item.category !== 'THEME') return null
+  const meta = item.metadata as { themeId?: string } | null | undefined
+  const id = meta?.themeId ?? null
+  return id && APP_THEMES[id] ? id : null
+}
+
 export const APP_THEMES: Record<string, AppThemeDef> = {
   default: {
     id: 'default',

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useInventory } from '@/api/shop/queries'
 import { useEquipItem } from '@/api/shop/mutations'
+import { getThemeIdOf } from '@/lib/cosmetics'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import {
@@ -78,7 +79,7 @@ export default function InventarioPage() {
           className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
             tab === 'all'
               ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-              : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+              : 'bg-surface text-muted-foreground hover:bg-surface-strong hover:text-foreground'
           }`}
         >
           Todos ({inventory.length})
@@ -95,7 +96,7 @@ export default function InventarioPage() {
               className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                 tab === key
                   ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+                  : 'bg-surface text-muted-foreground hover:bg-surface-strong hover:text-foreground'
               }`}
             >
               <span className="inline-flex items-center gap-1.5">
@@ -113,13 +114,13 @@ export default function InventarioPage() {
 
         return (
           <div key={category} className="mb-8">
-            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
               <Icon className="h-5 w-5" />
               {CATEGORY_LABELS[category]}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((entry) => (
-                <Card key={entry.id} >
+                <Card key={entry.id} className="p-5">
                   <div className="flex h-full flex-col">
                     <div className="mb-3 flex items-start justify-between">
                       <Badge variant={entry.item.isPremiumOnly ? 'violet' : 'default'}>
@@ -130,8 +131,8 @@ export default function InventarioPage() {
                       )}
                     </div>
 
-                    <h4 className="text-base font-bold text-white">{entry.item.name}</h4>
-                    <p className="mt-1 flex-1 text-sm text-slate-400">{entry.item.description}</p>
+                    <h4 className="text-base font-bold text-foreground">{entry.item.name}</h4>
+                    <p className="mt-1 flex-1 text-sm text-muted-foreground">{entry.item.description}</p>
 
                     {entry.expiresAt && (
                       <p className="mt-2 text-xs text-amber-400">
@@ -145,7 +146,16 @@ export default function InventarioPage() {
                           size="sm"
                           variant={entry.isEquipped ? 'outline' : 'default'}
                           disabled={equipItem.isPending}
-                          onClick={() => equipItem.mutate(entry.id)}
+                          onClick={() => {
+                            const themeId = getThemeIdOf(entry.item)
+                            const applyThemeId =
+                              themeId == null
+                                ? undefined
+                                : entry.isEquipped
+                                  ? 'default'
+                                  : themeId
+                            equipItem.mutate({ inventoryId: entry.id, applyThemeId })
+                          }}
                         >
                           {entry.isEquipped ? 'Desequipar' : 'Equipar'}
                         </Button>
@@ -161,7 +171,7 @@ export default function InventarioPage() {
 
       {inventory.length === 0 && (
         <EmptyState
-          icon={<Backpack className="h-12 w-12 text-slate-600" aria-hidden="true" />}
+          icon={<Backpack className="h-12 w-12 text-muted-foreground" aria-hidden="true" />}
           title="Inventário vazio"
           description="Compre itens na loja para vê-los aqui."
         />

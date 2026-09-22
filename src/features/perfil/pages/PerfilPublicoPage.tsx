@@ -20,7 +20,7 @@ export default function PerfilPublicoPage() {
     return (
       <div className="hx-page max-w-2xl mx-auto text-center">
         <PageHeader title="Perfil não encontrado" />
-        <Card>
+        <Card className="p-5">
           <EmptyState
             title="Usuário não encontrado"
             description="Este perfil não existe ou foi removido"
@@ -72,7 +72,7 @@ export default function PerfilPublicoPage() {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <h1 className="text-2xl font-bold text-foreground">{profile.fullName}</h1>
+            <p className="text-2xl font-bold text-foreground">{profile.fullName}</p>
             <p className="text-muted-foreground">@{profile.username}</p>
 
             <div className="flex flex-wrap items-center justify-center gap-2 mt-2">

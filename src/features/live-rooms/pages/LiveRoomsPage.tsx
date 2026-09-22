@@ -61,29 +61,29 @@ export default function LiveRoomsPage() {
 
       {!rooms || rooms.length === 0 ? (
         <EmptyState
-          icon={<Radio className="h-12 w-12 text-slate-600" aria-hidden="true" />}
+          icon={<Radio className="h-12 w-12 text-muted-foreground" aria-hidden="true" />}
           title="Nenhuma sala encontrada"
           description={filter === 'all' ? 'Não há salas ao vivo neste momento.' : 'Nenhuma sala neste filtro no momento.'}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {rooms.map((room) => (
-            <Card key={room.id} className="hx-card">
+            <Card key={room.id} className="p-5">
               <CardContent className="space-y-3 p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-white">{room.title}</h3>
+                  <h3 className="font-semibold text-foreground">{room.title}</h3>
                   <Badge variant={room.status === 'LIVE' ? 'emerald' : 'secondary'}>
                     {LIVE_ROOM_STATUS_LABELS[room.status]}
                   </Badge>
                 </div>
                 {room.description && (
-                  <p className="line-clamp-2 text-sm text-slate-400">{room.description}</p>
+                  <p className="line-clamp-2 text-sm text-muted-foreground">{room.description}</p>
                 )}
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-muted-foreground">
                   {formatScheduledDate(room.scheduledAt)}
                   {room.course ? ` · ${room.course.title}` : ''}
                 </p>
-                <p className="text-xs text-slate-500">{room.participantCount} participantes</p>
+                <p className="text-xs text-muted-foreground">{room.participantCount} participantes</p>
                 <Button
                   variant={room.status === 'LIVE' ? 'default' : 'outline'}
                   size="sm"
