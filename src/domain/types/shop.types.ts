@@ -44,6 +44,11 @@ export interface ShopState {
   premium: boolean
   premiumExpiresAt: string | null
   coinHistory: CoinTransaction[]
+  booster?: {
+    active: boolean
+    multiplier: number
+    expiresAt: string | null
+  }
 }
 
 export interface CoinTransaction {

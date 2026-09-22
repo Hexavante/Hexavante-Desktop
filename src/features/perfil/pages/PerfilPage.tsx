@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -9,8 +9,9 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Star } from 'lucide-react'
+import { Star, Trophy, Award } from 'lucide-react'
 import { toast } from 'sonner'
+import { shopService } from '@/services/shop.service'
 
 const profileFormSchema = z.object({
   fullName: z.string().min(2, 'Mínimo de 2 caracteres'),
@@ -24,11 +25,56 @@ const profileFormSchema = z.object({
 
 type ProfileFormData = z.infer<typeof profileFormSchema>
 
+const BORDER_COLORS: Record<string, string> = {
+  'border-cyan': '#22d3ee',
+  'border-aurora': '#a78bfa',
+  'border-gold': '#fcd34d',
+  'border-crystal': '#bae6fd',
+}
+
+function getTitleTextOf(item: { metadata?: unknown }, fallback: string): string {
+  const meta = item.metadata as { titleText?: unknown } | null | undefined
+  if (meta && typeof meta.titleText === 'string' && meta.titleText.trim().length > 0) {
+    return meta.titleText
+  }
+  return fallback
+}
+
+function getBorderIdOf(item: { metadata?: unknown }): string | null {
+  const meta = item.metadata as { borderId?: unknown } | null | undefined
+  return typeof meta?.borderId === 'string' && meta.borderId.length > 0 ? meta.borderId : null
+}
+
 export default function PerfilPage() {
   const { user } = useAuth()
   const { data: profile, isLoading, isError, refetch } = useProfile()
   const updateProfile = useUpdateProfile()
   const [editing, setEditing] = useState(false)
+  const [equippedTitle, setEquippedTitle] = useState<string | null>(null)
+  const [equippedBadge, setEquippedBadge] = useState<string | null>(null)
+  const [equippedBorderId, setEquippedBorderId] = useState<string | null>(null)
+
+  useEffect(() => {
+    shopService
+      .getInventory()
+      .then((data) => {
+        const items = data?.items ?? []
+        const titleEntry = items.find((e) => e.isEquipped && e.item.category === 'TITLE')
+        if (titleEntry) {
+          setEquippedTitle(getTitleTextOf(titleEntry.item, titleEntry.item.name))
+        }
+        const badgeEntry = items.find((e) => e.isEquipped && e.item.category === 'BADGE')
+        if (badgeEntry) {
+          setEquippedBadge(badgeEntry.item.name)
+        }
+        const borderEntry = items.find((e) => e.isEquipped && e.item.category === 'AVATAR_BORDER')
+        if (borderEntry) {
+          const borderId = getBorderIdOf(borderEntry.item)
+          if (borderId) setEquippedBorderId(borderId)
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   const {
     register,
@@ -85,6 +131,10 @@ export default function PerfilPage() {
     )
   }
 
+  const borderColor = equippedBorderId
+    ? (BORDER_COLORS[equippedBorderId] ?? 'hsl(var(--sidebar-highlight))')
+    : undefined
+
   return (
     <div className="hx-page">
       <PageHeader
@@ -101,11 +151,31 @@ export default function PerfilPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1">
           <div className="hx-card flex flex-col items-center p-6">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400">
+            <div
+              className={`flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400 ${borderColor ? 'border-2 border-solid' : ''}`}
+              style={borderColor ? { borderColor } : undefined}
+            >
               {user?.name?.charAt(0).toUpperCase()}
             </div>
             <h2 className="mt-4 text-lg font-bold text-foreground">{userProfile.fullName}</h2>
             <p className="text-sm text-muted-foreground">@{userProfile.username}</p>
+
+            {equippedTitle || equippedBadge ? (
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
+                {equippedTitle ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/10 px-2.5 py-0.5 text-xs font-bold text-amber-500">
+                    <Trophy className="h-3 w-3" aria-hidden="true" />
+                    {equippedTitle}
+                  </span>
+                ) : null}
+                {equippedBadge ? (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-500">
+                    <Award className="h-3 w-3" aria-hidden="true" />
+                    {equippedBadge}
+                  </span>
+                ) : null}
+              </div>
+            ) : null}
 
             <div className="mt-4 flex gap-2">
               {userProfile.isPremium && <Badge><Star className="h-3 w-3" /> Premium</Badge>}

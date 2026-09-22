@@ -24,6 +24,7 @@ import {
   Sparkles,
   ShoppingBag,
   Ticket,
+  Zap,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -68,6 +69,18 @@ function categoryLabel(code: string): string {
 
 function isPurchasable(item: ShopItemView): boolean {
   return item.ownershipStatus === 'available' || item.ownershipStatus === 'expired_temporary'
+}
+
+function formatBoosterExpiry(expiresAt: string | null): string | null {
+  if (!expiresAt) return null
+  const date = new Date(expiresAt)
+  if (Number.isNaN(date.getTime())) return null
+  return date.toLocaleString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 }
 
 function LojaSkeleton() {
@@ -237,6 +250,8 @@ export default function LojaPage() {
 
   const items = useMemo(() => shopState?.items ?? [], [shopState])
   const isPremium = shopState?.premium ?? false
+  const booster = shopState?.booster
+  const boosterExpiryLabel = booster?.expiresAt ? formatBoosterExpiry(booster.expiresAt) : null
 
   // Categorias presentes de fato na resposta, em ordem amigável.
   const categories = useMemo(() => {
@@ -294,6 +309,19 @@ export default function LojaPage() {
           </div>
         </div>
       </PageHeader>
+
+      {booster?.active ? (
+        <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-surface px-4 py-3">
+          <Zap className="h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
+          <span className="text-sm font-bold text-foreground">Booster x{booster.multiplier} ativo</span>
+          {boosterExpiryLabel ? (
+            <span className="text-xs text-muted-foreground">até {boosterExpiryLabel}</span>
+          ) : null}
+          <span className="w-full text-xs text-muted-foreground sm:w-auto sm:flex-1 sm:text-right">
+            Seus ganhos estão multiplicados enquanto durar.
+          </span>
+        </div>
+      ) : null}
 
       {categories.length > 0 ? (
         <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoria">
