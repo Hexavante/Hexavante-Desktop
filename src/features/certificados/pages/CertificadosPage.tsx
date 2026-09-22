@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -5,12 +7,35 @@ import { Button } from '@/components/ui/button'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { useUserCertificates } from '@/api/certificates/queries'
-import { ExternalLink } from 'lucide-react'
+import { Award, Copy, ExternalLink } from 'lucide-react'
 
 export default function CertificadosPage() {
-  const { data: certificates, isLoading } = useUserCertificates()
+  const navigate = useNavigate()
+  const { data: certificates, isLoading, isError, refetch } = useUserCertificates()
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Meus Certificados" description="Certificados de conclusão de cursos" />
+        <EmptyState
+          title="Erro ao carregar certificados"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
+
+  async function handleCopyCode(code: string) {
+    try {
+      await navigator.clipboard.writeText(code)
+      toast.success('Código copiado!')
+    } catch {
+      toast.error('Não foi possível copiar o código.')
+    }
+  }
 
   return (
     <div className="hx-page">
@@ -22,15 +47,15 @@ export default function CertificadosPage() {
           description="Conclua cursos para ganhar certificados"
           action={{
             label: 'Explorar Cursos',
-            onClick: () => { window.location.href = '/cursos' }
+            onClick: () => navigate('/cursos')
           }}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {certificates.map((cert) => (
             <Card key={cert.id} className="overflow-hidden">
-              <div className="flex h-32 items-center justify-center bg-gradient-to-br from-amber-500/20 to-yellow-500/20 border-b border-white/10">
-                <span className="text-5xl">📜</span>
+              <div className="flex h-32 items-center justify-center border-b border-white/10 bg-gradient-to-br from-amber-500/20 to-yellow-500/20">
+                <Award className="h-12 w-12 text-amber-400/70" aria-hidden="true" />
               </div>
               <div className="p-5">
                 <div className="mb-3 flex items-center justify-between">
@@ -52,15 +77,15 @@ export default function CertificadosPage() {
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => navigator.clipboard.writeText(cert.code)}
+                    onClick={() => handleCopyCode(cert.code)}
                   >
-                    <span className="mr-2">📋</span> Copiar Código
+                    <Copy className="h-4 w-4 mr-1" /> Copiar Código
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="flex-1"
-                    onClick={() => window.open(`/certificados/c/${cert.code}`, '_blank')}
+                    onClick={() => navigate(`/certificados/c/${cert.code}`)}
                   >
                     <ExternalLink className="h-4 w-4 mr-1" /> Ver
                   </Button>

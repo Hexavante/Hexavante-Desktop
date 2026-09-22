@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { useFeed, useTrendingTags, useSuggestedUsers } from '@/api/community/queries'
 import { useCreateDiscussion, useToggleLike, useAddComment } from '@/api/community/mutations'
 import { useAuth } from '@/app/hooks/use-auth'
@@ -19,7 +20,7 @@ export default function ComunidadePage() {
   const [commentText, setCommentText] = useState<Record<string, string>>({})
   const [openComments, setOpenComments] = useState<Record<string, boolean>>({})
 
-  const { data: activities, isLoading } = useFeed(tab)
+  const { data: activities, isLoading, isError, refetch } = useFeed(tab)
   const { data: trendingTags } = useTrendingTags()
   const { data: suggestedUsers } = useSuggestedUsers()
   const createDiscussion = useCreateDiscussion()
@@ -27,6 +28,19 @@ export default function ComunidadePage() {
   const addComment = useAddComment()
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Comunidade" description="Conecte-se com outros estudantes" />
+        <EmptyState
+          title="Erro ao carregar a comunidade"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   function handleCreateDiscussion(event: React.FormEvent) {
     event.preventDefault()
@@ -103,10 +117,15 @@ export default function ComunidadePage() {
             ))}
           </div>
 
-          {activities?.length === 0 ? (
-            <div className="flex min-h-[200px] items-center justify-center">
-              <p className="text-sm text-slate-400">Nenhuma publicação ainda.</p>
-            </div>
+          {!activities || activities.length === 0 ? (
+            <EmptyState
+              title="Nenhuma publicação ainda"
+              description={tab === 'explore' ? 'Seja a primeira pessoa a iniciar uma discussão!' : 'Nada por aqui nesta aba no momento.'}
+              action={user ? {
+                label: 'Nova discussão',
+                onClick: () => setShowForm(true),
+              } : undefined}
+            />
           ) : (
             <div className="space-y-4">
               {activities?.map((activity) => (
@@ -198,9 +217,11 @@ export default function ComunidadePage() {
                             </div>
                           )}
 
-                          <p className="text-xs text-slate-500">
-                            Faça login para ver e escrever comentários.
-                          </p>
+                          {!user && (
+                            <p className="text-xs text-slate-500">
+                              Faça login para ver e escrever comentários.
+                            </p>
+                          )}
                         </div>
                       )}
                     </div>

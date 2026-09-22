@@ -17,13 +17,33 @@ function StatCard({ label, value, subtitle }: { label: string; value: string | n
 
 export default function EstatisticasPage() {
   const { user } = useAuth()
-  const { data: profile, isLoading: profileLoading } = useProfile()
-  const { data: ranking, isLoading: rankingLoading } = useMyRanking()
-  const { data: achievementsData, isLoading: achievementsLoading } = useMyAchievements()
+  const { data: profile, isLoading: profileLoading, isError: profileError, refetch: refetchProfile } = useProfile()
+  const { data: ranking, isLoading: rankingLoading, isError: rankingError, refetch: refetchRanking } = useMyRanking()
+  const { data: achievementsData, isLoading: achievementsLoading, isError: achievementsError, refetch: refetchAchievements } = useMyAchievements()
 
   const isLoading = profileLoading || rankingLoading || achievementsLoading
 
   if (isLoading) return <LoadingScreen />
+
+  if (profileError || rankingError || achievementsError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Estatísticas" description="Seu desempenho na plataforma" />
+        <p className="text-sm text-slate-400">Não foi possível carregar as estatísticas.</p>
+        <button
+          type="button"
+          className="hx-btn hx-btn-primary mt-4"
+          onClick={() => {
+            void refetchProfile()
+            void refetchRanking()
+            void refetchAchievements()
+          }}
+        >
+          Tentar novamente
+        </button>
+      </div>
+    )
+  }
 
   const achievements = achievementsData ?? []
   const unlockedCount = achievements.filter(a => a.unlocked).length

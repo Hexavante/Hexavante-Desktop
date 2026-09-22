@@ -16,12 +16,16 @@ import {
 } from '@/components/ui/sidebar'
 import {
   Award,
+  BadgeCheck,
   BarChart2,
   BarChart3,
+  Bell,
   BookOpen,
   Compass,
   GraduationCap,
   History,
+  LogOut,
+  MessageSquare,
   Radio,
   Settings,
   Shield,
@@ -40,7 +44,7 @@ const NAV_SECTIONS = [
   {
     id: 'home',
     label: 'Início',
-    items: [{ icon: Compass, label: 'Introdução', href: '/' }],
+    items: [{ icon: Compass, label: 'Início', href: '/' }],
   },
   {
     id: 'study',
@@ -60,7 +64,10 @@ const NAV_SECTIONS = [
       { icon: Radio, label: 'Ao vivo', href: '/live' },
       { icon: Users, label: 'Comunidade', href: '/comunidade' },
       { icon: BarChart2, label: 'Ranking', href: '/ranking' },
+      { icon: MessageSquare, label: 'Mensagens', href: '/mensagens' },
+      { icon: Bell, label: 'Notificações', href: '/notificacoes' },
       { icon: Award, label: 'Certificados', href: '/certificados' },
+      { icon: BadgeCheck, label: 'Verificar certificado', href: '/certificados/verificar' },
       { icon: History, label: 'Histórico de simulados', href: '/simulados/historico' },
     ],
   },
@@ -112,7 +119,7 @@ function isActive(pathname: string, href: string): boolean {
 export function AppSidebar() {
   const pathname = useLocation().pathname
   const { setOpenMobile } = useSidebar()
-  const { user } = useAuth()
+  const { user, logout, isLoggingOut } = useAuth()
 
   useEffect(() => {
     setOpenMobile(false)
@@ -191,6 +198,15 @@ export function AppSidebar() {
               <Settings className="h-4 w-4" />
               Configurações
             </Link>
+            <button
+              type="button"
+              onClick={logout}
+              disabled={isLoggingOut}
+              className="hx-sidebar-settings w-full text-red-400 hover:text-red-300 disabled:opacity-60"
+            >
+              <LogOut className="h-4 w-4" />
+              {isLoggingOut ? 'Saindo...' : 'Sair'}
+            </button>
           </div>
         ) : (
           <div className="flex flex-col gap-2">

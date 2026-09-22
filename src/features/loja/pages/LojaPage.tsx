@@ -6,8 +6,10 @@ import { Badge } from '@/components/ui/badge'
 import { useShopState } from '@/api/shop/queries'
 import { usePurchaseItem, useEquipItem } from '@/api/shop/mutations'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import {
   Coins,
+  Loader2,
   Rocket,
   BookOpen,
   Trophy,
@@ -42,12 +44,25 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
 
 export default function LojaPage() {
-  const { data: shopState, isLoading } = useShopState()
+  const { data: shopState, isLoading, isError, refetch } = useShopState()
   const purchaseItem = usePurchaseItem()
   const equipItem = useEquipItem()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Loja" description="Gaste suas moedas com itens exclusivos" />
+        <EmptyState
+          title="Erro ao carregar a loja"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   const categories = selectedCategory
     ? [selectedCategory]
@@ -95,10 +110,17 @@ export default function LojaPage() {
         })}
       </div>
 
+      {(shopState?.items ?? []).length === 0 ? (
+        <EmptyState
+          title="Nenhum item na loja"
+          description="Novos itens serão adicionados em breve. Volte mais tarde!"
+        />
+      ) : null}
+
       {categories.map((category) => {
         const items = (shopState?.items ?? []).filter((i) => i.category === category)
         if (items.length === 0) return null
-        const Icon = CATEGORY_ICONS[category]
+        const Icon = CATEGORY_ICONS[category] ?? Sparkles
 
         return (
           <div key={category} className="mb-8">
@@ -117,7 +139,7 @@ export default function LojaPage() {
                             <Star className="h-3 w-3" /> Premium
                           </>
                         ) : (
-                          item.category
+                          CATEGORY_LABELS[item.category] ?? item.category
                         )}
                       </Badge>
                       {item.ownershipStatus !== 'available' && (
@@ -146,7 +168,14 @@ export default function LojaPage() {
                           disabled={purchaseItem.isPending}
                           onClick={() => purchaseItem.mutate(item.id)}
                         >
-                          {purchaseItem.isPending ? '...' : 'Comprar'}
+                          {purchaseItem.isPending ? (
+                            <>
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                              Comprando...
+                            </>
+                          ) : (
+                            'Comprar'
+                          )}
                         </Button>
                       ) : item.ownershipStatus === 'owned_permanent' || item.ownershipStatus === 'active_temporary' ? (
                         EQUIPPABLE_CATEGORIES.includes(item.category) ? (

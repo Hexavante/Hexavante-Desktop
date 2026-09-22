@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react'
 import { createHashRouter, RouterProvider, useRouteError } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { RequireAuth, RedirectIfAuthenticated } from '@/components/auth/RequireAuth'
 import {
   LoginPage,
   RegisterPage,
@@ -82,11 +83,19 @@ function LazyPage({ children }: { children: React.ReactNode }) {
 }
 
 function AuthPage({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+  return (
+    <RedirectIfAuthenticated>
+      <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+    </RedirectIfAuthenticated>
+  )
 }
 
 function AppPage({ children }: { children: React.ReactNode }) {
-  return <AppShell><Suspense fallback={<LoadingScreen />}>{children}</Suspense></AppShell>
+  return (
+    <RequireAuth>
+      <AppShell><Suspense fallback={<LoadingScreen />}>{children}</Suspense></AppShell>
+    </RequireAuth>
+  )
 }
 
 const router = createHashRouter([

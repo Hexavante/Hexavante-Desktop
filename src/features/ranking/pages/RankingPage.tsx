@@ -30,8 +30,24 @@ function LeagueIcon({ league }: { league: string }) {
 export default function RankingPage() {
   const [page, setPage] = useState(1)
   const { user } = useAuth()
-  const { data, isLoading } = useRankings({ page, limit: 20 })
+  const { data, isLoading, isError, refetch } = useRankings({ page, limit: 20 })
   const { data: myRanking } = useMyRanking()
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader
+          title="Ranking"
+          description="Veja os melhores estudantes da plataforma"
+        />
+        <EmptyState
+          title="Erro ao carregar ranking"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="hx-page">

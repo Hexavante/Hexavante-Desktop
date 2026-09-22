@@ -14,7 +14,7 @@ export default function MensagensPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [showNewConversation, setShowNewConversation] = useState(false)
   const [newConversationUsername, setNewConversationUsername] = useState('')
-  const { data, isLoading, refetch } = useInbox()
+  const { data, isLoading, isError, refetch } = useInbox()
   const createConversation = useCreateConversation()
 
   const conversations = data?.conversations ?? []
@@ -55,6 +55,19 @@ export default function MensagensPage() {
   )
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Mensagens" description="Caixa de entrada" />
+        <EmptyState
+          title="Erro ao carregar mensagens"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="hx-page">

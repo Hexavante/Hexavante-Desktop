@@ -11,6 +11,7 @@ import {
   LIVE_ROOM_STATUS_LABELS,
   formatScheduledDate,
 } from '@/domain/types/live-room.types'
+import { Radio } from 'lucide-react'
 
 type Filter = 'all' | 'scheduled' | 'live' | 'ended'
 
@@ -24,9 +25,22 @@ const FILTER_LABELS: Record<Filter, string> = {
 export default function LiveRoomsPage() {
   const navigate = useNavigate()
   const [filter, setFilter] = useState<Filter>('all')
-  const { data: rooms, isLoading } = useLiveRooms(filter === 'all' ? undefined : filter)
+  const { data: rooms, isLoading, isError, refetch } = useLiveRooms(filter === 'all' ? undefined : filter)
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Salas ao vivo" description="Participe de transmissões ao vivo com instrutores." />
+        <EmptyState
+          title="Erro ao carregar salas"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="hx-page">
@@ -47,9 +61,9 @@ export default function LiveRoomsPage() {
 
       {!rooms || rooms.length === 0 ? (
         <EmptyState
-          icon={<span className="text-5xl">📡</span>}
+          icon={<Radio className="h-12 w-12 text-slate-600" aria-hidden="true" />}
           title="Nenhuma sala encontrada"
-          description="Não há salas ao vivo neste momento."
+          description={filter === 'all' ? 'Não há salas ao vivo neste momento.' : 'Nenhuma sala neste filtro no momento.'}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

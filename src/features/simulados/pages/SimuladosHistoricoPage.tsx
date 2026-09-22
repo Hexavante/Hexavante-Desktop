@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
@@ -7,12 +7,31 @@ import { useExamHistory, useExamStats, useExamEvolution, useExamSubjectStats } f
 const EXAM_PASS_SCORE = 60
 
 export default function SimuladosHistoricoPage() {
-  const { data: history, isLoading: historyLoading } = useExamHistory()
-  const { data: stats, isLoading: statsLoading } = useExamStats()
+  const [searchParams] = useSearchParams()
+  const page = Math.max(1, Number(searchParams.get('page')) || 1)
+  const { data: history, isLoading: historyLoading, isError: historyError } = useExamHistory({ page })
+  const { data: stats, isLoading: statsLoading, isError: statsError } = useExamStats()
   const { data: evolution } = useExamEvolution()
   const { data: subjectStats } = useExamSubjectStats()
 
   if (historyLoading || statsLoading) return <LoadingScreen />
+
+  if (historyError || statsError) {
+    return (
+      <div className="hx-page">
+        <PageHeader
+          title="Meu histórico"
+          description="Acompanhe tentativas, médias e evolução nos simulados."
+        />
+        <Card>
+          <p className="text-sm text-slate-300">Não foi possível carregar o histórico.</p>
+          <button type="button" className="hx-btn hx-btn-primary mt-4" onClick={() => window.location.reload()}>
+            Tentar novamente
+          </button>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="hx-page">

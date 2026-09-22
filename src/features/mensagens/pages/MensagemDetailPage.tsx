@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState, useRef } from 'react'
+import { toast } from 'sonner'
 import { PageHeader } from '@/components/shared/PageHeader'
-import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { useConversationMessages, useSendMessage, useMarkConversationRead, useInbox } from '@/api/conversations/queries'
 import { useAuth } from '@/app/hooks/use-auth'
 import { Send, ArrowLeft, MoreVertical, Check, CheckCheck, MessageSquare } from 'lucide-react'
@@ -105,7 +106,7 @@ function ConversationDetailInner({ conversationId, otherUser }: ConversationDeta
               Ver perfil
             </button>
             <button
-              onClick={() => { setShowMenu(false); } }
+              onClick={() => { setShowMenu(false); toast.info('O bloqueio de usuários estará disponível em breve.') } }
               className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-white/[0.05]"
             >
               Bloquear usuário
@@ -213,62 +214,57 @@ function ConversationDetailInner({ conversationId, otherUser }: ConversationDeta
 export default function MensagemDetailPage() {
   const { conversationId } = useParams<{ conversationId: string }>()
   const navigate = useNavigate()
-  const [conversationData, setConversationData] = useState<{
-    otherUser: {
-      id: string
-      username: string | null
-      fullName: string
-      avatarUrl: string | null
-    }
-  } | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: inbox, isLoading, isError, refetch } = useInbox()
 
-  useEffect(() => {
-    if (!conversationId) {
-      navigate('/mensagens')
-      return
-    }
-
-    const fetchConversation = async () => {
-      try {
-        const inbox = await fetch(`/api/v1/conversations`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sessionToken')}` },
-        }).then(res => res.json())
-
-        type InboxConversation = {
-          id: string
-          otherUser: {
-            id: string
-            username: string | null
-            fullName: string
-            avatarUrl: string | null
-          }
-        }
-        const conv = inbox.conversations?.find((c: InboxConversation) => c.id === conversationId)
-        if (conv) {
-          setConversationData({
-            otherUser: {
-              id: conv.otherUser.id,
-              username: conv.otherUser.username,
-              fullName: conv.otherUser.fullName,
-              avatarUrl: conv.otherUser.avatarUrl,
-            },
-          })
-        } else {
-          navigate('/mensagens')
-        }
-      } catch (error) {
-        navigate('/mensagens')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchConversation()
-  }, [conversationId, navigate])
+  if (!conversationId) {
+    return (
+      <div className="hx-page">
+        <EmptyState
+          title="Conversa não encontrada"
+          description="Volte para a caixa de entrada e escolha uma conversa."
+          action={{ label: 'Ver mensagens', onClick: () => navigate('/mensagens') }}
+        />
+      </div>
+    )
+  }
 
   if (isLoading) return <LoadingScreen />
-  if (!conversationData) return <LoadingScreen />
 
-  return <ConversationDetailInner conversationId={conversationId!} otherUser={conversationData.otherUser} />
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <EmptyState
+          title="Erro ao carregar conversa"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
+
+  const conversation = inbox?.conversations.find((c) => c.id === conversationId)
+
+  if (!conversation) {
+    return (
+      <div className="hx-page">
+        <EmptyState
+          title="Conversa não encontrada"
+          description="Ela pode ter sido removida ou você não tem acesso."
+          action={{ label: 'Ver mensagens', onClick: () => navigate('/mensagens') }}
+        />
+      </div>
+    )
+  }
+
+  return (
+    <ConversationDetailInner
+      conversationId={conversationId}
+      otherUser={{
+        id: conversation.otherUser.id,
+        username: conversation.otherUser.username,
+        fullName: conversation.otherUser.fullName,
+        avatarUrl: conversation.otherUser.avatarUrl,
+      }}
+    />
+  )
 }

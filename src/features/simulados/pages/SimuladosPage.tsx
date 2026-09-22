@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { useExams } from '@/api/exams/queries'
 import { BarChart3, Clock3, ClipboardList, Crown, Search, Target } from 'lucide-react'
 
@@ -25,9 +25,22 @@ export default function SimuladosPage() {
   const [tipo, setTipo] = useState<string>('')
   const [sort, setSort] = useState<string>('recent')
 
-  const { data: exams, isLoading } = useExams({ q: searchQuery || undefined, tipo: tipo || undefined, sort })
+  const { data: exams, isLoading, isError, refetch } = useExams({ q: searchQuery || undefined, tipo: tipo || undefined, sort })
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Simulados" description="Teste seus conhecimentos" />
+        <EmptyState
+          title="Erro ao carregar simulados"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="hx-page">
@@ -101,9 +114,10 @@ export default function SimuladosPage() {
       </p>
 
       {!exams || exams.length === 0 ? (
-        <div className="flex min-h-[200px] items-center justify-center">
-          <p className="text-sm text-slate-400">Nenhum simulado encontrado.</p>
-        </div>
+        <EmptyState
+          title="Nenhum simulado encontrado"
+          description={searchQuery || tipo ? 'Tente ajustar a busca ou os filtros.' : 'Novos simulados serão publicados em breve.'}
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {exams.map((exam) => (

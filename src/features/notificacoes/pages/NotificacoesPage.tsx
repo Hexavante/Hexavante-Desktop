@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -25,26 +26,44 @@ const NOTIFICATION_ICONS: Record<string, React.ComponentType<{ className?: strin
   SOLUTION_ACCEPTED: CheckCircle2,
 }
 
-const NOTIFICATION_COLORS: Record<string, string> = {
-  XP_EARNED: 'amber',
-  COIN_EARNED: 'amber',
-  LEVEL_UP: 'amber',
-  COURSE_APPROVED: 'green',
-  COURSE_REJECTED: 'red',
-  COURSE_UPDATED: 'blue',
-  INSTRUCTOR_APPROVED: 'green',
-  INSTRUCTOR_REJECTED: 'red',
-  CERTIFICATE_ISSUED: 'amber',
-  SYSTEM_ANNOUNCEMENT: 'blue',
-  MODERATION_ACTION: 'red',
-  NEW_MESSAGE: 'blue',
-  COMMUNITY_REPLY: 'green',
-  SOLUTION_ACCEPTED: 'green',
+const NOTIFICATION_STYLES: Record<string, string> = {
+  XP_EARNED: 'bg-amber-500/20 text-amber-400',
+  COIN_EARNED: 'bg-amber-500/20 text-amber-400',
+  LEVEL_UP: 'bg-amber-500/20 text-amber-400',
+  COURSE_APPROVED: 'bg-green-500/20 text-green-400',
+  COURSE_REJECTED: 'bg-red-500/20 text-red-400',
+  COURSE_UPDATED: 'bg-blue-500/20 text-blue-400',
+  INSTRUCTOR_APPROVED: 'bg-green-500/20 text-green-400',
+  INSTRUCTOR_REJECTED: 'bg-red-500/20 text-red-400',
+  CERTIFICATE_ISSUED: 'bg-amber-500/20 text-amber-400',
+  SYSTEM_ANNOUNCEMENT: 'bg-blue-500/20 text-blue-400',
+  MODERATION_ACTION: 'bg-red-500/20 text-red-400',
+  NEW_MESSAGE: 'bg-blue-500/20 text-blue-400',
+  COMMUNITY_REPLY: 'bg-green-500/20 text-green-400',
+  SOLUTION_ACCEPTED: 'bg-green-500/20 text-green-400',
+}
+
+const NOTIFICATION_TYPE_LABELS: Record<string, string> = {
+  XP_EARNED: 'XP recebido',
+  COIN_EARNED: 'Moedas recebidas',
+  LEVEL_UP: 'Subiu de nível',
+  COURSE_APPROVED: 'Curso aprovado',
+  COURSE_REJECTED: 'Curso recusado',
+  COURSE_UPDATED: 'Curso atualizado',
+  INSTRUCTOR_APPROVED: 'Instrutor aprovado',
+  INSTRUCTOR_REJECTED: 'Instrutor recusado',
+  CERTIFICATE_ISSUED: 'Certificado emitido',
+  SYSTEM_ANNOUNCEMENT: 'Aviso do sistema',
+  MODERATION_ACTION: 'Ação de moderação',
+  NEW_MESSAGE: 'Nova mensagem',
+  COMMUNITY_REPLY: 'Resposta na comunidade',
+  SOLUTION_ACCEPTED: 'Solução aceita',
 }
 
 export default function NotificacoesPage() {
+  const navigate = useNavigate()
   const [filter, setFilter] = useState<'all' | 'unread'>('all')
-  const { data, isLoading, refetch } = useNotifications({ unreadOnly: filter === 'unread' })
+  const { data, isLoading, isError, refetch } = useNotifications({ unreadOnly: filter === 'unread' })
   const markAllRead = useMarkAllNotificationsRead()
   const markRead = useMarkNotificationRead()
 
@@ -71,6 +90,27 @@ export default function NotificacoesPage() {
   }
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Notificações" description="Suas atualizações na plataforma" />
+        <EmptyState
+          title="Erro ao carregar notificações"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
+
+  function handleOpenLink(link: string) {
+    if (link.startsWith('/')) {
+      navigate(link)
+    } else {
+      window.open(link, '_blank', 'noopener,noreferrer')
+    }
+  }
 
   return (
     <div className="hx-page">
@@ -123,7 +163,8 @@ export default function NotificacoesPage() {
         <div className="space-y-3">
           {notifications.map((notification) => {
             const Icon = NOTIFICATION_ICONS[notification.type] || Bell
-            const color = NOTIFICATION_COLORS[notification.type] || 'slate'
+            const style = NOTIFICATION_STYLES[notification.type] || 'bg-slate-500/20 text-slate-400'
+            const typeLabel = NOTIFICATION_TYPE_LABELS[notification.type] || notification.type.replace(/_/g, ' ').toLowerCase()
             const isUnread = !notification.readAt
 
             return (
@@ -131,7 +172,7 @@ export default function NotificacoesPage() {
                 key={notification.id}
                 className={`flex items-start gap-4 p-4 transition-all ${isUnread ? 'bg-white/[0.03] ring-1 ring-teal-500/20' : 'bg-white/[0.02]'} hover:bg-white/[0.04]`}
               >
-                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-${color}-500/20 text-${color}-400`}>
+                <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${style}`}>
                   <Icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -148,8 +189,8 @@ export default function NotificacoesPage() {
                           <Clock className="h-3 w-3" />
                           {getTimeAgo(notification.createdAt)}
                         </span>
-                        <Badge variant="outline" className="text-[10px] capitalize">
-                          {notification.type.replace(/_/g, ' ').toLowerCase()}
+                        <Badge variant="outline" className="text-[10px]">
+                          {typeLabel}
                         </Badge>
                       </div>
                     </div>
@@ -171,7 +212,7 @@ export default function NotificacoesPage() {
                       variant="ghost"
                       size="sm"
                       className="mt-2 text-teal-400 hover:text-teal-300"
-                      onClick={() => window.open(notification.link!, '_blank')}
+                      onClick={() => handleOpenLink(notification.link!)}
                     >
                       Ver detalhes
                     </Button>

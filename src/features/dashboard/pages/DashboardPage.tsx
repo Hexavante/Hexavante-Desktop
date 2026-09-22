@@ -5,9 +5,9 @@ import { useMyRanking, useMyAchievements } from '@/api/gamification/queries'
 import { useCourses } from '@/api/courses/queries'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   Star,
   Trophy,
@@ -84,14 +84,39 @@ function LeagueBadge({ league }: { league: string }) {
 export default function DashboardPage() {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { data: profile, isLoading: profileLoading } = useProfile()
-  const { data: ranking, isLoading: rankingLoading } = useMyRanking()
-  const { data: achievementsData, isLoading: achievementsLoading } = useMyAchievements()
-  const { data: coursesData, isLoading: coursesLoading } = useCourses({ limit: 6 })
+  const { data: profile, isLoading: profileLoading, isError: profileError, refetch: refetchProfile } = useProfile()
+  const { data: ranking, isLoading: rankingLoading, isError: rankingError, refetch: refetchRanking } = useMyRanking()
+  const { data: achievementsData, isLoading: achievementsLoading, isError: achievementsError, refetch: refetchAchievements } = useMyAchievements()
+  const { data: coursesData, isLoading: coursesLoading, isError: coursesError, refetch: refetchCourses } = useCourses({ limit: 6 })
 
   const isLoading = profileLoading || rankingLoading || achievementsLoading || coursesLoading
+  const hasError = profileError || rankingError || achievementsError || coursesError
 
   if (isLoading) return <LoadingScreen />
+
+  if (hasError) {
+    return (
+      <div className="hx-page">
+        <PageHeader
+          title={`Olá, ${user?.name || 'Estudante'}!`}
+          description="Bem-vindo ao Hexavante"
+        />
+        <EmptyState
+          title="Não foi possível carregar o painel"
+          description="Verifique sua conexão e tente novamente."
+          action={{
+            label: 'Tentar novamente',
+            onClick: () => {
+              refetchProfile()
+              refetchRanking()
+              refetchAchievements()
+              refetchCourses()
+            },
+          }}
+        />
+      </div>
+    )
+  }
 
   const achievements = achievementsData ?? []
   const unlockedAchievements = achievements.filter(a => a.unlocked)

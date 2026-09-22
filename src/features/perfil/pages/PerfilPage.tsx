@@ -26,7 +26,7 @@ type ProfileFormData = z.infer<typeof profileFormSchema>
 
 export default function PerfilPage() {
   const { user } = useAuth()
-  const { data: profile, isLoading } = useProfile()
+  const { data: profile, isLoading, isError, refetch } = useProfile()
   const updateProfile = useUpdateProfile()
   const [editing, setEditing] = useState(false)
 
@@ -73,7 +73,14 @@ export default function PerfilPage() {
     return (
       <div className="hx-page">
         <PageHeader title="Perfil" />
-        <p className="text-sm text-slate-400">Erro ao carregar perfil</p>
+        <p className="text-sm text-slate-400">
+          {isError ? 'Não foi possível carregar o perfil.' : 'Erro ao carregar perfil'}
+        </p>
+        {isError ? (
+          <button type="button" className="hx-btn hx-btn-primary mt-4" onClick={() => void refetch()}>
+            Tentar novamente
+          </button>
+        ) : null}
       </div>
     )
   }

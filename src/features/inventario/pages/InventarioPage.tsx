@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { useInventory } from '@/api/shop/queries'
 import { useEquipItem } from '@/api/shop/mutations'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import {
   Backpack,
   Rocket,
@@ -41,11 +42,24 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
 
 export default function InventarioPage() {
-  const { data, isLoading } = useInventory()
+  const { data, isLoading, isError, refetch } = useInventory()
   const equipItem = useEquipItem()
   const [tab, setTab] = useState<string>('all')
 
   if (isLoading) return <LoadingScreen />
+
+  if (isError) {
+    return (
+      <div className="hx-page">
+        <PageHeader title="Inventário" description="Seus itens adquiridos" />
+        <EmptyState
+          title="Erro ao carregar o inventário"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
+      </div>
+    )
+  }
 
   const inventory = data?.items ?? []
 
@@ -109,7 +123,7 @@ export default function InventarioPage() {
                   <div className="flex h-full flex-col">
                     <div className="mb-3 flex items-start justify-between">
                       <Badge variant={entry.item.isPremiumOnly ? 'violet' : 'default'}>
-                        {entry.item.category}
+                        {CATEGORY_LABELS[entry.item.category] ?? entry.item.category}
                       </Badge>
                       {entry.isEquipped && (
                         <Badge variant="emerald">Equipado</Badge>
@@ -146,15 +160,11 @@ export default function InventarioPage() {
       })}
 
       {inventory.length === 0 && (
-        <div className="hx-card flex min-h-[300px] items-center justify-center">
-          <div className="text-center">
-            <Backpack className="mx-auto h-12 w-12" />
-            <h2 className="mt-4 text-lg font-bold text-white">Inventário vazio</h2>
-            <p className="mt-2 text-sm text-slate-400">
-              Compre itens na loja para vê-los aqui.
-            </p>
-          </div>
-        </div>
+        <EmptyState
+          icon={<Backpack className="h-12 w-12 text-slate-600" aria-hidden="true" />}
+          title="Inventário vazio"
+          description="Compre itens na loja para vê-los aqui."
+        />
       )}
     </div>
   )

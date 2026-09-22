@@ -6,7 +6,7 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, RotateCcw } from 'lucide-react'
 import type { CourseLevel, CourseType } from '@/domain/types/course.types'
 
 const LEVELS = [
@@ -30,7 +30,7 @@ export default function CursosListPage() {
   const [courseType, setCourseType] = useState<CourseType | ''>('')
   const [page, setPage] = useState(1)
 
-  const { data, isLoading, isError } = useCourses({
+  const { data, isLoading, isError, refetch } = useCourses({
     page,
     limit: 12,
     level: level || undefined,
@@ -38,10 +38,23 @@ export default function CursosListPage() {
     search: search || undefined,
   })
 
+  const hasActiveFilters = search !== '' || level !== '' || courseType !== ''
+
+  function handleClearFilters() {
+    setSearch('')
+    setLevel('')
+    setCourseType('')
+    setPage(1)
+    refetch()
+  }
+
   return (
     <div className="hx-page">
       <PageHeader title="Cursos" description="Explore todos os cursos disponíveis">
-        <Button onClick={() => navigate('/cursos')}>⇄</Button>
+        <Button variant="outline" size="sm" onClick={handleClearFilters} disabled={!hasActiveFilters}>
+          <RotateCcw className="h-4 w-4" />
+          Limpar filtros
+        </Button>
       </PageHeader>
 
       <div className="mb-6 flex flex-col gap-3 sm:flex-row">
@@ -74,7 +87,11 @@ export default function CursosListPage() {
       {isLoading ? (
         <LoadingScreen />
       ) : isError ? (
-        <EmptyState title="Erro ao carregar cursos" description="Tente novamente mais tarde" />
+        <EmptyState
+          title="Erro ao carregar cursos"
+          description="Verifique sua conexão e tente novamente."
+          action={{ label: 'Tentar novamente', onClick: () => refetch() }}
+        />
       ) : !data || data.data.length === 0 ? (
         <EmptyState
           title="Nenhum curso encontrado"

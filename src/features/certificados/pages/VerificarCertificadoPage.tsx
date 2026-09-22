@@ -1,23 +1,25 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { useVerifyCertificate } from '@/api/certificates/queries'
 import { Search, CheckCircle, XCircle } from 'lucide-react'
 
 export default function VerificarCertificadoPage() {
-  const navigate = useNavigate()
   const [code, setCode] = useState('')
-  const { mutate: verifyCertificate, isPending, data } = useVerifyCertificate()
+  const { mutate: verifyCertificate, isPending, isError, isSuccess, data, reset } = useVerifyCertificate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (code.trim()) {
       verifyCertificate(code.trim().toUpperCase())
     }
+  }
+
+  function handleCodeChange(value: string) {
+    setCode(value.toUpperCase())
+    if (isError || isSuccess) reset()
   }
 
   return (
@@ -37,7 +39,7 @@ export default function VerificarCertificadoPage() {
                 type="text"
                 placeholder="HXV-XXXXXXXX"
                 value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
+                onChange={(e) => handleCodeChange(e.target.value)}
                 className="pl-10"
                 disabled={isPending}
                 autoFocus
@@ -51,7 +53,7 @@ export default function VerificarCertificadoPage() {
         </form>
       </Card>
 
-      {data && (
+      {isSuccess && data?.certificate && (
         <Card className="border-green-500/30 bg-green-500/5">
           <div className="flex items-center gap-3 mb-4">
             <CheckCircle className="h-6 w-6 text-green-400" />
@@ -81,23 +83,23 @@ export default function VerificarCertificadoPage() {
               </div>
             )}
           </div>
-          <Button variant="outline" className="mt-4 w-full" onClick={() => setCode('')}>
-            Verificar Outro
+          <Button variant="outline" className="mt-4 w-full" onClick={() => { setCode(''); reset() }}>
+            Verificar outro
           </Button>
         </Card>
       )}
 
-      {data?.certificate === undefined && !isPending && code && (
+      {(isError || (isSuccess && !data?.certificate)) && !isPending && (
         <Card className="border-red-500/30 bg-red-500/5">
           <div className="flex items-center gap-3">
             <XCircle className="h-6 w-6 text-red-400" />
-            <h3 className="text-lg font-bold text-red-300">Certificado Inválido</h3>
+            <h3 className="text-lg font-bold text-red-300">Certificado inválido</h3>
           </div>
           <p className="mt-2 text-sm text-slate-400">
             Nenhum certificado encontrado com o código <span className="font-mono">{code}</span>
           </p>
-          <Button variant="outline" className="mt-4 w-full" onClick={() => setCode('')}>
-            Tentar Novamente
+          <Button variant="outline" className="mt-4 w-full" onClick={() => { setCode(''); reset() }}>
+            Tentar novamente
           </Button>
         </Card>
       )}
