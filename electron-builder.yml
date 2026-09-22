@@ -26,6 +26,9 @@ nsis:
   deleteAppDataOnUninstall: false
   createDesktopShortcut: true
 
+portable:
+  artifactName: ${productName}-Portable-${version}-${arch}.${ext}
+
 linux:
   target:
     - target: AppImage
