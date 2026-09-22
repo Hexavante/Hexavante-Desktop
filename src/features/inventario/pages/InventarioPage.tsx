@@ -3,7 +3,7 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { useInventory } from '@/api/shop/queries'
+import { useInventory, useShopState } from '@/api/shop/queries'
 import { useEquipItem } from '@/api/shop/mutations'
 import { getThemeIdOf, resolveProfileBackground, resolveProfileFrame, resolveProfileIcon } from '@/lib/cosmetics'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
@@ -22,6 +22,7 @@ import {
   Star,
   Gem,
   Shield,
+  Zap,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -45,7 +46,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   REVIEW_PACK: BookOpen,
 }
 
-const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
+const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC', 'BADGE', 'FRAME', 'PROFILE_BACKGROUND', 'EMOJI_PACK']
 
 // Metadados dos itens do inventário (unknown na API — cast local).
 type CosmeticMetadata = {
@@ -125,6 +126,8 @@ function CosmeticPreview({ item }: { item: { category: string; metadata?: unknow
 
 export default function InventarioPage() {
   const { data, isLoading, isError, refetch } = useInventory()
+  const { data: shopState } = useShopState()
+  const booster = shopState?.booster
   const equipItem = useEquipItem()
   const [tab, setTab] = useState<string>('all')
 
@@ -210,6 +213,11 @@ export default function InventarioPage() {
                       {entry.isEquipped && (
                         <Badge variant="emerald">Equipado</Badge>
                       )}
+                      {entry.item.category === 'BOOSTER' && booster?.active ? (
+                        <Badge variant="emerald">
+                          <Zap className="h-3 w-3" aria-hidden="true" /> Ativo x{booster.multiplier}
+                        </Badge>
+                      ) : null}
                     </div>
 
                     <h4 className="text-base font-bold text-foreground">{entry.item.name}</h4>

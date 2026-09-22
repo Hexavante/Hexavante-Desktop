@@ -60,7 +60,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 // Ordem preferida das seções; categorias desconhecidas vão para o fim.
 const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS)
 
-const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
+const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC', 'BADGE', 'FRAME', 'PROFILE_BACKGROUND', 'EMOJI_PACK']
 
 function categoryLabel(code: string): string {
   const mapped = CATEGORY_LABELS[code]
@@ -122,6 +122,8 @@ function LojaSkeleton() {
 interface ShopItemCardProps {
   item: ShopItemView
   isPremium: boolean
+  boosterActive: boolean
+  boosterMultiplier: number
   isPurchasing: boolean
   isEquipping: boolean
   purchaseDisabled: boolean
@@ -209,6 +211,8 @@ function CosmeticPreview({ item }: { item: { category: string; metadata?: unknow
 function ShopItemCard({
   item,
   isPremium,
+  boosterActive,
+  boosterMultiplier,
   isPurchasing,
   isEquipping,
   purchaseDisabled,
@@ -220,6 +224,8 @@ function ShopItemCard({
   const expired = item.ownershipStatus === 'expired_temporary'
   const locked = item.isPremiumOnly && !isPremium
   const equippable = EQUIPPABLE_CATEGORIES.includes(item.category)
+  const owned = !purchasable
+  const boosting = owned && !expired && item.category === 'BOOSTER' && boosterActive
 
   return (
     <Card className="p-5">
@@ -236,6 +242,10 @@ function ShopItemCard({
           {item.isEquipped ? (
             <Badge variant="emerald">
               <Check className="h-3 w-3" aria-hidden="true" /> Em uso
+            </Badge>
+          ) : boosting ? (
+            <Badge variant="emerald">
+              <Zap className="h-3 w-3" aria-hidden="true" /> Ativo x{boosterMultiplier}
             </Badge>
           ) : purchasable ? (
             expired ? (
@@ -478,6 +488,8 @@ export default function LojaPage() {
                   key={item.id}
                   item={item}
                   isPremium={isPremium}
+                  boosterActive={booster?.active ?? false}
+                  boosterMultiplier={booster?.multiplier ?? 1}
                   isPurchasing={purchasingId === item.id}
                   isEquipping={equippingId === item.inventoryId}
                   purchaseDisabled={purchaseItem.isPending}
