@@ -1,10 +1,16 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/HEXAVANTE-Desktop-0ea5e9?style=for-the-badge&labelColor=0f172a" alt="Hexavante Desktop" />
+  <img src="public/brand/hexavante-logo.png" width="120" alt="Hexavante" />
 </p>
+
+<h1 align="center">Hexavante Desktop</h1>
 
 <p align="center">
   <strong>Aplicação desktop da plataforma Hexavante (Windows/Linux).</strong><br/>
   <em>Native desktop client: Electron + React + Vite.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/HEXAVANTE-Desktop-0ea5e9?style=for-the-badge&labelColor=0f172a" alt="Hexavante Desktop" />
 </p>
 
 <p align="center">
@@ -17,7 +23,14 @@
 </p>
 
 <p align="center">
-  <a href="#português">🇧🇷 Português</a> · <a href="#english">🇺🇸 English</a> · <a href="docs/visão-geral.md">Docs</a>
+  <a href="#português">🇧🇷 Português</a> · <a href="#english">🇺🇸 English</a> · <a href="docs/visão-geral.md">📚 Docs</a>
+</p>
+
+<p align="center">
+  <a href="#download">⬇️ Download</a> ·
+  <a href="#funcionalidades">✨ Funcionalidades</a> ·
+  <a href="#setup">🚀 Setup</a> ·
+  <a href="#empacotamento">📦 Empacotamento</a>
 </p>
 
 ---
@@ -26,8 +39,12 @@
 
 ## Português
 
+> Cliente desktop em Electron para estudar com a mesma conta do app web — Windows e Linux, instaladores próprios, sessão compartilhada com a plataforma.
+
 ### Índice
 
+- [Download](#download)
+- [Funcionalidades](#funcionalidades)
 - [Sobre](#sobre)
 - [Arquitetura](#arquitetura)
 - [Estrutura de pastas](#estrutura-de-pastas)
@@ -38,6 +55,31 @@
 - [Empacotamento](#empacotamento)
 - [Solução de problemas](#solução-de-problemas)
 - [Como contribuir](#como-contribuir)
+- [Ecossistema Hexavante](#ecossistema-hexavante)
+- [Documentação técnica (`docs/`)](#documentação-técnica-docs)
+
+### Download
+
+> [!NOTE]
+> Ainda não há releases publicadas neste repo. Quando disponíveis, os instaladores estarão em [Releases](../../releases).
+
+| Sistema | Formato | Status |
+|---|---|---|
+| Windows | NSIS (instalador) | em breve |
+| Windows | Portable | em breve |
+| Linux | AppImage | em breve |
+| Linux | deb | em breve |
+
+Versionar `package.json` + tag git por release (ver [Empacotamento](#empacotamento)).
+
+### Funcionalidades
+
+| Recurso | O que é |
+|---|---|
+| 📚 Estudo offline-friendly | Janela Electron dedicada (processo `main` + renderer React via `electron-vite`) para estudar fora do navegador |
+| 👤 Mesma conta | Mesma conta e mesmos dados do app web, mesma sessão da plataforma (`/api/v1/*`) |
+| 💻 Instaladores | Windows (NSIS/portable) e Linux (AppImage/deb) gerados com `electron-builder` |
+| 🔒 Segurança `contextIsolation` | `contextIsolation` ligado, `nodeIntegration` desligado no renderer — tudo passa pelos adapters/preload |
 
 ### Sobre
 
@@ -47,8 +89,8 @@ Cliente desktop em Electron (processo `main` + renderer React via `electron-vite
 
 ```
 Usuário ──▶ Janela Electron ──▶ Renderer React ──IPC──▶ Main ──HTTPS──▶ api.hexavante.com.br
-                                  │                                ▲
-                                  └──────── fetch direto ──────────┘
+                                   │                                ▲
+                                   └──────── fetch direto ──────────┘
 ```
 
 Segurança: `contextIsolation` ligado, `nodeIntegration` desligado no renderer — tudo passa pelos adapters/preload.
@@ -118,6 +160,15 @@ Mesma sessão da plataforma: login e-mail/senha e OAuth (navegador do sistema + 
 1. Branch de `main`, commits curtos em português.
 2. `typecheck` (node + web) e `lint` verdes.
 3. Nunca commitar segredos, binários ou `out/`, `dist/`.
+
+### Ecossistema Hexavante
+
+| Projeto | Repo |
+|---|---|
+| 🌐 Web | [Hexavante/Hexavante-web](https://github.com/Hexavante/Hexavante-web) |
+| 🔌 API | [Hexavante/Hexavante-Api](https://github.com/Hexavante/Hexavante-Api) |
+| 📱 Mobile | [Hexavante/Hexavante-Mobile](https://github.com/Hexavante/Hexavante-Mobile) |
+| 🏠 Landing | [Hexavante/Hexavante-landing](https://github.com/Hexavante/Hexavante-landing) |
 
 ### Documentação técnica (`docs/`)
 
