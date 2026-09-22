@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { authService } from '@/services/auth.service'
+import { authService, VerificationNeededError } from '@/services/auth.service'
 import { useAuthStore } from '@/app/stores/auth.store'
 import { normalizeError } from '@/adapters/error/error-normalizer'
 import { queryKeys } from '@/api/keys'
@@ -23,6 +23,8 @@ export function useLogin() {
       navigate('/', { replace: true })
     },
     onError: (error) => {
+      // A etapa de verificação de dispositivo é tratada na página de login.
+      if (error instanceof VerificationNeededError) return
       const appError = normalizeError(error)
       toast.error(appError.message)
     },
@@ -72,6 +74,9 @@ export function useRegister() {
       navigate('/', { replace: true })
     },
     onError: (error) => {
+      // Registro seguido de login pode exigir verificação de dispositivo;
+      // a página de registro trata esse caso sem toast genérico.
+      if (error instanceof VerificationNeededError) return
       const appError = normalizeError(error)
       toast.error(appError.message)
     },

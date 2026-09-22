@@ -1,27 +1,16 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
-import { authService } from '@/services/auth.service'
-import { toast } from 'sonner'
+import { Link, useNavigate } from 'react-router-dom'
 import { HexavanteLogo } from '@/components/brand/hexavante-logo'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
-    try {
-      await authService.forgotPassword(email)
-      setSent(true)
-      toast.success('Email de recuperação enviado!')
-    } catch {
-      toast.error('Erro ao enviar email de recuperação')
-    } finally {
-      setLoading(false)
-    }
+    // O fluxo de recuperação vive em /reset-password (passo 1: e-mail).
+    // Passa o e-mail via query param para pré-preencher o campo.
+    navigate(`/reset-password?email=${encodeURIComponent(email.trim())}`)
   }
 
   return (
@@ -41,58 +30,37 @@ export default function ForgotPasswordPage() {
         </Link>
 
         <div className="w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/70 p-8 shadow-lg shadow-black/30 backdrop-blur">
-          {sent ? (
-            <div className="text-center">
-              <h1 className="text-2xl font-black tracking-tight text-white">Email enviado</h1>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Enviamos um link para redefinir sua senha. Verifique sua caixa de entrada.
-              </p>
-              <Link to="/login" className="hx-btn hx-btn-primary mt-6 inline-block">
-                Voltar ao login
-              </Link>
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-sky-300">Hexavante</p>
+            <h1 className="mt-2 text-2xl font-black tracking-tight text-white">Recuperar senha</h1>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Informe o e-mail da sua conta. Enviaremos um código para redefinir a senha.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="hx-label">E-mail</label>
+              <input
+                id="email"
+                type="email"
+                className="hx-input h-11"
+                placeholder="seu@email.com"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
             </div>
-          ) : (
-            <>
-              <div className="mb-6">
-                <p className="text-xs font-semibold uppercase tracking-wide text-sky-300">Hexavante</p>
-                <h1 className="mt-2 text-2xl font-black tracking-tight text-white">Recuperar senha</h1>
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  Informe o e-mail da sua conta. Enviaremos um link para redefinir a senha.
-                </p>
-              </div>
+            <button type="submit" className="hx-btn hx-btn-primary h-11 w-full">
+              Continuar
+            </button>
+          </form>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="hx-label">E-mail</label>
-                  <input
-                    id="email"
-                    type="email"
-                    className="hx-input h-11"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <button type="submit" className="hx-btn hx-btn-primary h-11 w-full" disabled={loading}>
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                      Enviando...
-                    </>
-                  ) : (
-                    'Enviar link'
-                  )}
-                </button>
-              </form>
-
-              <p className="mt-6 text-center text-sm text-slate-400">
-                <Link to="/login" className="hx-link">
-                  ← Voltar ao login
-                </Link>
-              </p>
-            </>
-          )}
+          <p className="mt-6 text-center text-sm text-slate-400">
+            <Link to="/login" className="hx-link">
+              ← Voltar ao login
+            </Link>
+          </p>
         </div>
       </div>
     </div>

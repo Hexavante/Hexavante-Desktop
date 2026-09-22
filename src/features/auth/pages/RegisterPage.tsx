@@ -1,9 +1,11 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { registerSchema, type RegisterFormData } from '@/domain/schemas/auth.schema'
 import { useRegister, useOAuth } from '@/api/auth/mutations'
+import { VerificationNeededError } from '@/services/auth.service'
 import { HexavanteLogo } from '@/components/brand/hexavante-logo'
 
 function GoogleIcon() {
@@ -40,6 +42,7 @@ function GitHubIcon() {
 export default function RegisterPage() {
   const registerMutation = useRegister()
   const oauth = useOAuth()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -53,6 +56,13 @@ export default function RegisterPage() {
   async function onSubmit(data: RegisterFormData) {
     registerMutation.mutate(data, {
       onError: (error) => {
+        // Conta criada, mas o login automático exigiu verificação de
+        // dispositivo novo — o usuário conclui entrando pelo login.
+        if (error instanceof VerificationNeededError) {
+          toast.info('Conta criada! Enviamos um código de 6 dígitos para o seu e-mail.')
+          navigate('/login', { replace: true })
+          return
+        }
         const err = error as { fields?: Record<string, string> }
         if (err.fields) {
           for (const [field, message] of Object.entries(err.fields)) {
