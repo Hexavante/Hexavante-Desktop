@@ -52,6 +52,7 @@ export default function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: { username: '', fullName: '', email: '', password: '', confirmPassword: '', birthDate: '' },
   })
 
   async function onSubmit(data: RegisterFormData) {
