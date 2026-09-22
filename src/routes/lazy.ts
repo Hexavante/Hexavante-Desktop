@@ -25,7 +25,6 @@ export const SimuladosHistoricoPage = lazy(() => import('@/features/simulados/pa
 export const SimuladoDetailPage = lazy(() => import('@/features/simulados/pages/SimuladoDetailPage'))
 export const SimuladoFazerPage = lazy(() => import('@/features/simulados/pages/SimuladoFazerPage'))
 export const SimuladoResultadoPage = lazy(() => import('@/features/simulados/pages/SimuladoResultadoPage'))
-export const ComunidadePage = lazy(() => import('@/features/comunidade/pages/ComunidadePage'))
 export const LojaPage = lazy(() => import('@/features/loja/pages/LojaPage'))
 export const InventarioPage = lazy(() => import('@/features/inventario/pages/InventarioPage'))
 export const AdminPage = lazy(() => import('@/features/admin/pages/AdminPage'))
@@ -33,5 +32,3 @@ export const CertificadosPage = lazy(() => import('@/features/certificados/pages
 export const VerificarCertificadoPage = lazy(() => import('@/features/certificados/pages/VerificarCertificadoPage'))
 export const CertificadoDetailPage = lazy(() => import('@/features/certificados/pages/CertificadoDetailPage'))
 export const NotificacoesPage = lazy(() => import('@/features/notificacoes/pages/NotificacoesPage'))
-export const MensagensPage = lazy(() => import('@/features/mensagens/pages/MensagensPage'))
-export const MensagemDetailPage = lazy(() => import('@/features/mensagens/pages/MensagemDetailPage'))

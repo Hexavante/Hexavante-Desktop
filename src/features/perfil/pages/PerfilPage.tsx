@@ -73,7 +73,7 @@ export default function PerfilPage() {
     return (
       <div className="hx-page">
         <PageHeader title="Perfil" />
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-muted-foreground">
           {isError ? 'Não foi possível carregar o perfil.' : 'Erro ao carregar perfil'}
         </p>
         {isError ? (
@@ -104,8 +104,8 @@ export default function PerfilPage() {
             <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400">
               {user?.name?.charAt(0).toUpperCase()}
             </div>
-            <h2 className="mt-4 text-lg font-bold text-white">{userProfile.fullName}</h2>
-            <p className="text-sm text-slate-400">@{userProfile.username}</p>
+            <h2 className="mt-4 text-lg font-bold text-foreground">{userProfile.fullName}</h2>
+            <p className="text-sm text-muted-foreground">@{userProfile.username}</p>
 
             <div className="mt-4 flex gap-2">
               {userProfile.isPremium && <Badge><Star className="h-3 w-3" /> Premium</Badge>}
@@ -114,12 +114,12 @@ export default function PerfilPage() {
 
             <div className="mt-6 flex w-full justify-around text-center">
               <div>
-                <p className="text-xl font-bold text-white">{userProfile.coins}</p>
-                <p className="text-xs text-slate-400">Moedas</p>
+                <p className="text-xl font-bold text-foreground">{userProfile.coins}</p>
+                <p className="text-xs text-muted-foreground">Moedas</p>
               </div>
               <div>
-                <p className="text-xl font-bold text-white">{userProfile.isPremium ? 'Sim' : 'Não'}</p>
-                <p className="text-xs text-slate-400">Premium</p>
+                <p className="text-xl font-bold text-foreground">{userProfile.isPremium ? 'Sim' : 'Não'}</p>
+                <p className="text-xs text-muted-foreground">Premium</p>
               </div>
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function PerfilPage() {
 
         <div className="lg:col-span-2">
           <div className="hx-card p-6">
-            <h3 className="mb-4 text-sm font-bold text-white">
+            <h3 className="mb-4 text-sm font-bold text-foreground">
               {editing ? 'Editar Informações' : 'Informações Pessoais'}
             </h3>
 
@@ -168,47 +168,47 @@ export default function PerfilPage() {
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <p className="text-xs text-slate-400">Email</p>
-                    <p className="text-sm text-white">{userProfile.email}</p>
+                    <p className="text-xs text-muted-foreground">Email</p>
+                    <p className="text-sm text-foreground">{userProfile.email}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400">Nome de usuário</p>
-                    <p className="text-sm text-white">@{userProfile.username}</p>
+                    <p className="text-xs text-muted-foreground">Nome de usuário</p>
+                    <p className="text-sm text-foreground">@{userProfile.username}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400">Data de nascimento</p>
-                    <p className="text-sm text-white">
+                    <p className="text-xs text-muted-foreground">Data de nascimento</p>
+                    <p className="text-sm text-foreground">
                       {userProfile.birthDate
                         ? new Date(userProfile.birthDate).toLocaleDateString('pt-BR')
                         : 'Não informada'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-400">Membro desde</p>
-                    <p className="text-sm text-white">
+                    <p className="text-xs text-muted-foreground">Membro desde</p>
+                    <p className="text-sm text-foreground">
                       {new Date(userProfile.createdAt).toLocaleDateString('pt-BR')}
                     </p>
                   </div>
                 </div>
                 {(userProfile.phone || userProfile.city || userProfile.bio) && (
                   <>
-                    <hr className="border-white/5" />
+                    <hr className="border-border" />
                     {userProfile.phone && (
                       <div>
-                        <p className="text-xs text-slate-400">Telefone</p>
-                        <p className="text-sm text-white">{userProfile.phone}</p>
+                        <p className="text-xs text-muted-foreground">Telefone</p>
+                        <p className="text-sm text-foreground">{userProfile.phone}</p>
                       </div>
                     )}
                     {userProfile.city && userProfile.state && (
                       <div>
-                        <p className="text-xs text-slate-400">Localização</p>
-                        <p className="text-sm text-white">{userProfile.city}, {userProfile.state}</p>
+                        <p className="text-xs text-muted-foreground">Localização</p>
+                        <p className="text-sm text-foreground">{userProfile.city}, {userProfile.state}</p>
                       </div>
                     )}
                     {userProfile.bio && (
                       <div>
-                        <p className="text-xs text-slate-400">Bio</p>
-                        <p className="text-sm text-white">{userProfile.bio}</p>
+                        <p className="text-xs text-muted-foreground">Bio</p>
+                        <p className="text-sm text-foreground">{userProfile.bio}</p>
                       </div>
                     )}
                   </>

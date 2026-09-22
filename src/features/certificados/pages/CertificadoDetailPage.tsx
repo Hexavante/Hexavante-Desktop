@@ -99,57 +99,57 @@ export default function CertificadoDetailPage() {
       <Card className="border-amber-500/30 bg-gradient-to-b from-amber-500/5 to-transparent">
         <div className="p-8 md:p-12">
           {/* Header */}
-          <div className="mb-8 text-center border-b border-white/10 pb-8">
+          <div className="mb-8 text-center border-b border-border pb-8">
             <div className="mb-4 text-6xl">📜</div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Certificado de Conclusão</h1>
-            <p className="text-slate-400">Hexavante - Plataforma Educacional</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">Certificado de Conclusão</h1>
+            <p className="text-muted-foreground">Hexavante - Plataforma Educacional</p>
           </div>
 
           {/* Certificate Body */}
           <div className="space-y-6 text-center">
             <div>
-              <p className="text-lg text-slate-300 mb-2">Certificamos que</p>
-              <p className="text-3xl md:text-4xl font-bold text-white">{certificate.user.fullName}</p>
+              <p className="text-lg text-muted-foreground mb-2">Certificamos que</p>
+              <p className="text-3xl md:text-4xl font-bold text-foreground">{certificate.user.fullName}</p>
             </div>
 
             <div className="my-6">
-              <p className="text-lg text-slate-300 mb-2">concluiu com êxito o curso</p>
+              <p className="text-lg text-muted-foreground mb-2">concluiu com êxito o curso</p>
               <p className="text-2xl md:text-3xl font-bold text-amber-300">{certificate.course.title}</p>
             </div>
 
             {/* Details Grid */}
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-              <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                <p className="text-xs text-slate-400 uppercase tracking-wide">Código</p>
-                <p className="font-mono text-sm text-white break-all">{certificate.code}</p>
+              <div className="p-4 bg-surface rounded-lg border border-border">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Código</p>
+                <p className="font-mono text-sm text-foreground break-all">{certificate.code}</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                <p className="text-xs text-slate-400 uppercase tracking-wide">Emissão</p>
-                <p className="text-sm text-white">{new Date(certificate.issuedAt).toLocaleDateString('pt-BR')}</p>
+              <div className="p-4 bg-surface rounded-lg border border-border">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Emissão</p>
+                <p className="text-sm text-foreground">{new Date(certificate.issuedAt).toLocaleDateString('pt-BR')}</p>
               </div>
-              <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                <p className="text-xs text-slate-400 uppercase tracking-wide">Status</p>
+              <div className="p-4 bg-surface rounded-lg border border-border">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide">Status</p>
                 <p className="text-sm text-green-400 flex items-center justify-center gap-1">
                   <CheckCircle className="h-3.5 w-3.5" /> Válido
                 </p>
               </div>
               {certificate.verifiedAt && (
-                <div className="p-4 bg-white/5 rounded-lg border border-white/10">
-                  <p className="text-xs text-slate-400 uppercase tracking-wide">Verificação</p>
-                  <p className="text-sm text-white">{new Date(certificate.verifiedAt).toLocaleDateString('pt-BR')}</p>
+                <div className="p-4 bg-surface rounded-lg border border-border">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Verificação</p>
+                  <p className="text-sm text-foreground">{new Date(certificate.verifiedAt).toLocaleDateString('pt-BR')}</p>
                 </div>
               )}
             </div>
 
             {/* Verification URL */}
-            <div className="pt-6 border-t border-white/10">
-              <p className="text-xs text-slate-500 mb-2">Verifique a autenticidade em:</p>
-              <p className="text-xs text-slate-400 font-mono break-all">{window.location.origin}/certificados/verificar/{certificate.code}</p>
+            <div className="pt-6 border-t border-border">
+              <p className="text-xs text-muted-foreground mb-2">Verifique a autenticidade em:</p>
+              <p className="text-xs text-muted-foreground font-mono break-all">{window.location.origin}/certificados/verificar/{certificate.code}</p>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="mt-8 flex items-center justify-between text-xs text-slate-500">
+          <div className="mt-8 flex items-center justify-between text-xs text-muted-foreground">
             <span>Hexavante © 2024</span>
             <span>Documento digital verificado por blockchain</span>
           </div>

@@ -49,9 +49,9 @@ export default function SimuladoDetailPage() {
         <PageHeader title="Simulado não encontrado" />
         <Card>
           <div className="p-8">
-            <ClipboardList className="h-12 w-12 mx-auto mb-4 text-slate-700" />
-            <h3 className="text-lg font-bold text-white mb-2">Simulado não encontrado</h3>
-            <p className="text-sm text-slate-400 mb-4">Este simulado não existe ou foi removido</p>
+            <ClipboardList className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-bold text-foreground mb-2">Simulado não encontrado</h3>
+            <p className="text-sm text-muted-foreground mb-4">Este simulado não existe ou foi removido</p>
             <Button variant="outline" onClick={() => navigate('/simulados')}>
               <ArrowLeft className="h-4 w-4 mr-2" /> Voltar
             </Button>
@@ -98,16 +98,16 @@ export default function SimuladoDetailPage() {
                 </Badge>
               )}
             </div>
-            <h1 className="text-2xl font-bold text-white">{exam.title}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{exam.title}</h1>
           </div>
         </div>
 
         <div className="p-5 space-y-4">
           {exam.description && (
-            <p className="text-slate-300 leading-relaxed">{exam.description}</p>
+            <p className="text-muted-foreground leading-relaxed">{exam.description}</p>
           )}
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-400">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <ClipboardList className="h-4 w-4 text-teal-300" />
               {exam.questionCount} questões
@@ -126,10 +126,10 @@ export default function SimuladoDetailPage() {
             )}
           </div>
 
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+          <div className="pt-4 border-t border-border flex items-center justify-between">
             <div>
-              <p className="text-sm text-slate-400">Pronto para testar seus conhecimentos?</p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm text-muted-foreground">Pronto para testar seus conhecimentos?</p>
+              <p className="text-xs text-muted-foreground">
                 {exam.questionCount} questões {exam.timeLimit ? `em ${exam.timeLimit} min` : 'sem limite de tempo'}
               </p>
             </div>
@@ -159,19 +159,19 @@ export default function SimuladoDetailPage() {
 
       <Card>
         <div className="p-5">
-          <h3 className="mb-4 text-sm font-bold text-white">Sobre este simulado</h3>
+          <h3 className="mb-4 text-sm font-bold text-foreground">Sobre este simulado</h3>
           <div className="grid gap-4 sm:grid-cols-3 text-center">
-            <div className="p-4 bg-white/[0.03] rounded-lg">
+            <div className="p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-teal-400">{exam.questionCount}</p>
-              <p className="text-xs text-slate-400">Questões</p>
+              <p className="text-xs text-muted-foreground">Questões</p>
             </div>
-            <div className="p-4 bg-white/[0.03] rounded-lg">
+            <div className="p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-sky-400">{exam.timeLimit ?? '∞'}</p>
-              <p className="text-xs text-slate-400">Minutos</p>
+              <p className="text-xs text-muted-foreground">Minutos</p>
             </div>
-            <div className="p-4 bg-white/[0.03] rounded-lg">
+            <div className="p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-amber-400">{EXAM_TYPE_LABELS[exam.examType] ?? exam.examType}</p>
-              <p className="text-xs text-slate-400">Tipo</p>
+              <p className="text-xs text-muted-foreground">Tipo</p>
             </div>
           </div>
         </div>

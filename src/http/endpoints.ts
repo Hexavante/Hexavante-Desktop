@@ -103,21 +103,6 @@ export const ENDPOINTS = {
     LIST: '/api/v1/inventory',
   },
 
-  COMMUNITY: {
-    FEED: (type: string) => `/api/v1/community/feed/${type}`,
-    CREATE_DISCUSSION: '/api/v1/community/discussions',
-    LIKE: (id: string) => `/api/v1/community/activities/${id}/like`,
-    REACT: (id: string) => `/api/v1/community/activities/${id}/react`,
-    COMMENTS: (id: string) => `/api/v1/community/activities/${id}/comments`,
-    ADD_COMMENT: (id: string) => `/api/v1/community/activities/${id}/comments`,
-    TRENDING_TAGS: '/api/v1/community/tags/trending',
-    SUGGESTED_USERS: '/api/v1/community/users/suggested',
-    FOLLOW: (id: string) => `/api/v1/community/users/${id}/follow`,
-    REPORT: (id: string) => `/api/v1/community/activities/${id}/report`,
-    DELETE: (id: string) => `/api/v1/community/activities/${id}`,
-    PIN: (id: string) => `/api/v1/community/activities/${id}/pin`,
-  },
-
   EXAMS: {
     LIST: '/api/v1/exams',
     DETAIL: (slug: string) => `/api/v1/exams/${slug}`,
@@ -142,11 +127,4 @@ export const ENDPOINTS = {
     MARK_ALL_READ: '/api/v1/notifications/read-all',
   },
 
-  CONVERSATIONS: {
-    INBOX: '/api/v1/conversations',
-    CREATE: '/api/v1/conversations',
-    MESSAGES: (conversationId: string) => `/api/v1/conversations/${conversationId}/messages`,
-    MARK_READ: (conversationId: string) => `/api/v1/conversations/${conversationId}/read`,
-    SEND_MESSAGE: (conversationId: string) => `/api/v1/conversations/${conversationId}/messages`,
-  },
 } as const

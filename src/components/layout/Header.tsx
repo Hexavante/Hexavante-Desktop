@@ -50,11 +50,11 @@ export function Header() {
               className="navbar-search w-full text-left"
               aria-label="Abrir busca (Ctrl+K)"
             >
-              <Search className="h-4 w-4 shrink-0 text-slate-500" />
-              <span className="pointer-events-none flex-1 text-sm text-slate-500">
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <span className="pointer-events-none flex-1 text-sm text-muted-foreground">
                 Buscar cursos, simulados...
               </span>
-              <kbd className="hidden shrink-0 rounded border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-500 sm:inline">
+              <kbd className="hidden shrink-0 rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground sm:inline">
                 Ctrl K
               </kbd>
             </button>
@@ -83,7 +83,7 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-sm font-semibold text-slate-300 transition hover:ring-2 hover:ring-cyan-400/30"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-sm font-semibold text-muted-foreground transition hover:ring-2 hover:ring-cyan-400/30"
                     aria-label={`Perfil de ${user.name}`}
                   >
                     {user.name?.charAt(0).toUpperCase()}
@@ -91,8 +91,8 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium text-white">{user.name}</p>
-                    <p className="text-xs text-slate-400">{user.email}</p>
+                    <p className="text-sm font-medium text-foreground">{user.name}</p>
+                    <p className="text-xs text-muted-foreground">{user.email}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate('/perfil')}>

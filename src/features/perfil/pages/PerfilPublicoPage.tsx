@@ -1,13 +1,12 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { usePublicProfile } from '@/api/users/queries'
 import { useAuth } from '@/app/hooks/use-auth'
-import { MessageSquare, Award, Check, Calendar, User, Crown, Shield } from 'lucide-react'
+import { Award, Check, Calendar, User, Crown, Shield } from 'lucide-react'
 
 export default function PerfilPublicoPage() {
   const { username } = useParams<{ username: string }>()
@@ -26,8 +25,8 @@ export default function PerfilPublicoPage() {
             title="Usuário não encontrado"
             description="Este perfil não existe ou foi removido"
             action={{
-              label: 'Voltar para Comunidade',
-              onClick: () => navigate('/comunidade'),
+              label: 'Voltar para o início',
+              onClick: () => navigate('/'),
             }}
           />
         </Card>
@@ -73,8 +72,8 @@ export default function PerfilPublicoPage() {
           </div>
 
           <div className="flex flex-col items-center gap-2">
-            <h1 className="text-2xl font-bold text-white">{profile.fullName}</h1>
-            <p className="text-slate-400">@{profile.username}</p>
+            <h1 className="text-2xl font-bold text-foreground">{profile.fullName}</h1>
+            <p className="text-muted-foreground">@{profile.username}</p>
 
             <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
               {profile.isPremium && (
@@ -89,7 +88,7 @@ export default function PerfilPublicoPage() {
               )}
             </div>
 
-            <p className="text-xs text-slate-500 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
               <Calendar className="h-3 w-3" />
               Membro desde {getJoinedDate()}
             </p>
@@ -97,7 +96,7 @@ export default function PerfilPublicoPage() {
 
           {profile.bio && (
             <div className="w-full">
-              <p className="text-sm text-slate-300 text-center leading-relaxed">{profile.bio}</p>
+              <p className="text-sm text-muted-foreground text-center leading-relaxed">{profile.bio}</p>
             </div>
           )}
         </div>
@@ -105,36 +104,24 @@ export default function PerfilPublicoPage() {
 
       <Card>
         <div className="p-6">
-          <h3 className="mb-4 text-sm font-bold text-white">Estatísticas</h3>
+          <h3 className="mb-4 text-sm font-bold text-foreground">Estatísticas</h3>
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="text-center p-4 bg-white/[0.03] rounded-lg">
+            <div className="text-center p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-cyan-400">0</p>
-              <p className="text-xs text-slate-400">Cursos</p>
+              <p className="text-xs text-muted-foreground">Cursos</p>
             </div>
-            <div className="text-center p-4 bg-white/[0.03] rounded-lg">
+            <div className="text-center p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-amber-400">0</p>
-              <p className="text-xs text-slate-400">Certificados</p>
+              <p className="text-xs text-muted-foreground">Certificados</p>
             </div>
-            <div className="text-center p-4 bg-white/[0.03] rounded-lg">
+            <div className="text-center p-4 bg-surface rounded-lg">
               <p className="text-2xl font-bold text-teal-400">0</p>
-              <p className="text-xs text-slate-400">Simulados</p>
+              <p className="text-xs text-muted-foreground">Simulados</p>
             </div>
           </div>
         </div>
       </Card>
 
-      {!isOwner && (
-        <Card className="mt-6 border-teal-500/30 bg-teal-500/5">
-          <div className="p-6 text-center">
-            <MessageSquare className="h-10 w-10 mx-auto mb-3 text-teal-400" />
-            <h3 className="text-lg font-bold text-white mb-2">Iniciar conversa</h3>
-            <p className="text-sm text-slate-400 mb-4">Envie uma mensagem para {profile.fullName}</p>
-            <Button onClick={() => navigate(`/mensagens`)} variant="outline">
-              <MessageSquare className="h-4 w-4 mr-2" /> Nova Mensagem
-            </Button>
-          </div>
-        </Card>
-      )}
     </div>
   )
 }

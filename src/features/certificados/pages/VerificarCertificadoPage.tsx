@@ -29,11 +29,11 @@ export default function VerificarCertificadoPage() {
       <Card className="mb-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="certificate-code" className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="certificate-code" className="block text-sm font-medium text-muted-foreground mb-2">
               Código do Certificado
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 id="certificate-code"
                 type="text"
@@ -45,7 +45,7 @@ export default function VerificarCertificadoPage() {
                 autoFocus
               />
             </div>
-            <p className="mt-1 text-xs text-slate-500">Formato: HXV-XXXXXXXX (8 caracteres alfanuméricos)</p>
+            <p className="mt-1 text-xs text-muted-foreground">Formato: HXV-XXXXXXXX (8 caracteres alfanuméricos)</p>
           </div>
           <Button type="submit" disabled={isPending || !code.trim()} className="w-full">
             {isPending ? 'Verificando...' : 'Verificar'}
@@ -61,25 +61,25 @@ export default function VerificarCertificadoPage() {
           </div>
           <div className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-400">Código:</span>
-              <span className="font-mono text-white">{data.certificate.code}</span>
+              <span className="text-muted-foreground">Código:</span>
+              <span className="font-mono text-foreground">{data.certificate.code}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Estudante:</span>
-              <span className="text-white">{data.certificate.user.fullName}</span>
+              <span className="text-muted-foreground">Estudante:</span>
+              <span className="text-foreground">{data.certificate.user.fullName}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Curso:</span>
-              <span className="text-white">{data.certificate.course.title}</span>
+              <span className="text-muted-foreground">Curso:</span>
+              <span className="text-foreground">{data.certificate.course.title}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Emitido em:</span>
-              <span className="text-white">{new Date(data.certificate.issuedAt).toLocaleDateString('pt-BR')}</span>
+              <span className="text-muted-foreground">Emitido em:</span>
+              <span className="text-foreground">{new Date(data.certificate.issuedAt).toLocaleDateString('pt-BR')}</span>
             </div>
             {data.certificate.verifiedAt && (
               <div className="flex justify-between">
-                <span className="text-slate-400">Verificado em:</span>
-                <span className="text-white">{new Date(data.certificate.verifiedAt).toLocaleDateString('pt-BR')}</span>
+                <span className="text-muted-foreground">Verificado em:</span>
+                <span className="text-foreground">{new Date(data.certificate.verifiedAt).toLocaleDateString('pt-BR')}</span>
               </div>
             )}
           </div>
@@ -95,7 +95,7 @@ export default function VerificarCertificadoPage() {
             <XCircle className="h-6 w-6 text-red-400" />
             <h3 className="text-lg font-bold text-red-300">Certificado inválido</h3>
           </div>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-muted-foreground">
             Nenhum certificado encontrado com o código <span className="font-mono">{code}</span>
           </p>
           <Button variant="outline" className="mt-4 w-full" onClick={() => { setCode(''); reset() }}>

@@ -30,7 +30,6 @@ import {
   SimuladoDetailPage,
   SimuladoFazerPage,
   SimuladoResultadoPage,
-  ComunidadePage,
   LojaPage,
   InventarioPage,
   AdminPage,
@@ -38,8 +37,6 @@ import {
   VerificarCertificadoPage,
   CertificadoDetailPage,
   NotificacoesPage,
-  MensagensPage,
-  MensagemDetailPage,
 } from './lazy'
 
 function RootErrorElement() {
@@ -146,7 +143,6 @@ const router = createHashRouter([
       { path: 'simulados/:slug', element: <AppPage><SimuladoDetailPage /></AppPage> },
       { path: 'simulados/:slug/fazer/:attemptId', element: <AppPage><SimuladoFazerPage /></AppPage> },
       { path: 'simulados/:slug/resultado/:attemptId', element: <AppPage><SimuladoResultadoPage /></AppPage> },
-      { path: 'comunidade', element: <AppPage><ComunidadePage /></AppPage> },
       { path: 'loja', element: <AppPage><LojaPage /></AppPage> },
       { path: 'inventario', element: <AppPage><InventarioPage /></AppPage> },
       { path: 'admin', element: <AppPage><AdminPage /></AppPage> },
@@ -155,8 +151,6 @@ const router = createHashRouter([
       { path: 'certificados/verificar', element: <AppPage><VerificarCertificadoPage /></AppPage> },
       { path: 'certificados/c/:code', element: <AppPage><CertificadoDetailPage /></AppPage> },
       { path: 'notificacoes', element: <AppPage><NotificacoesPage /></AppPage> },
-      { path: 'mensagens', element: <AppPage><MensagensPage /></AppPage> },
-      { path: 'mensagens/:conversationId', element: <AppPage><MensagemDetailPage /></AppPage> },
       { path: 'login', element: <AuthPage><LoginPage /></AuthPage> },
       { path: 'register', element: <AuthPage><RegisterPage /></AuthPage> },
       { path: 'forgot-password', element: <AuthPage><ForgotPasswordPage /></AuthPage> },

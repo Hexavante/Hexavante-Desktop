@@ -40,12 +40,6 @@ export const queryKeys = {
   inventory: {
     list: ['inventory'] as const,
   },
-  community: {
-    feed: (type: string) => ['community', 'feed', type] as const,
-    trendingTags: ['community', 'trendingTags'] as const,
-    suggestedUsers: ['community', 'suggestedUsers'] as const,
-    comments: (id: string) => ['community', 'comments', id] as const,
-  },
   exams: {
     list: (filters?: Record<string, unknown>) =>
       ['exams', 'list', filters].filter(Boolean) as readonly unknown[],
@@ -68,11 +62,6 @@ export const queryKeys = {
     list: (params?: { limit?: number; unreadOnly?: boolean }) =>
       ['notifications', 'list', params].filter(Boolean) as readonly unknown[],
     unreadCount: ['notifications', 'unreadCount'] as const,
-  },
-  conversations: {
-    inbox: ['conversations', 'inbox'] as const,
-    messages: (conversationId: string, params?: { since?: string; limit?: number }) =>
-      ['conversations', 'messages', conversationId, params].filter(Boolean) as readonly unknown[],
   },
   instructor: {
     status: ['instructor', 'status'] as const,

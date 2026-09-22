@@ -8,9 +8,9 @@ import { Badge } from '@/components/ui/badge'
 function StatCard({ label, value, subtitle }: { label: string; value: string | number; subtitle?: string }) {
   return (
     <div className="hx-card p-5">
-      <p className="text-sm font-semibold text-slate-400">{label}</p>
-      <p className="mt-1 text-2xl font-black tracking-tight text-white">{value}</p>
-      {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
+      <p className="text-sm font-semibold text-muted-foreground">{label}</p>
+      <p className="mt-1 text-2xl font-black tracking-tight text-foreground">{value}</p>
+      {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
     </div>
   )
 }
@@ -29,7 +29,7 @@ export default function EstatisticasPage() {
     return (
       <div className="hx-page">
         <PageHeader title="Estatísticas" description="Seu desempenho na plataforma" />
-        <p className="text-sm text-slate-400">Não foi possível carregar as estatísticas.</p>
+        <p className="text-sm text-muted-foreground">Não foi possível carregar as estatísticas.</p>
         <button
           type="button"
           className="hx-btn hx-btn-primary mt-4"
@@ -61,46 +61,46 @@ export default function EstatisticasPage() {
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="hx-card p-5">
-          <h3 className="mb-3 text-sm font-bold text-white">Informações da Conta</h3>
+          <h3 className="mb-3 text-sm font-bold text-foreground">Informações da Conta</h3>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-sm text-slate-400">Membro desde</span>
-              <span className="text-sm text-white">{profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('pt-BR') : '-'}</span>
+              <span className="text-sm text-muted-foreground">Membro desde</span>
+              <span className="text-sm text-foreground">{profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('pt-BR') : '-'}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-slate-400">Premium</span>
+              <span className="text-sm text-muted-foreground">Premium</span>
               <Badge variant={profile?.isPremium ? 'default' : 'outline'}>{profile?.isPremium ? 'Sim' : 'Não'}</Badge>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-slate-400">Verificado</span>
+              <span className="text-sm text-muted-foreground">Verificado</span>
               <Badge variant={profile?.isVerified ? 'default' : 'outline'}>{profile?.isVerified ? 'Sim' : 'Não'}</Badge>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-slate-400">Liga Atual</span>
-              <span className="text-sm font-semibold text-white">{ranking?.league ?? '-'}</span>
+              <span className="text-sm text-muted-foreground">Liga Atual</span>
+              <span className="text-sm font-semibold text-foreground">{ranking?.league ?? '-'}</span>
             </div>
           </div>
         </div>
 
         <div className="hx-card p-5">
-          <h3 className="mb-3 text-sm font-bold text-white">Conquistas</h3>
+          <h3 className="mb-3 text-sm font-bold text-foreground">Conquistas</h3>
           <div className="flex items-end gap-4">
             <div>
-              <p className="text-3xl font-black text-white">{unlockedCount}</p>
-              <p className="text-xs text-slate-400">desbloqueadas</p>
+              <p className="text-3xl font-black text-foreground">{unlockedCount}</p>
+              <p className="text-xs text-muted-foreground">desbloqueadas</p>
             </div>
             <div>
-              <p className="text-3xl font-black text-slate-600">{achievements.length}</p>
-              <p className="text-xs text-slate-400">total</p>
+              <p className="text-3xl font-black text-muted-foreground">{achievements.length}</p>
+              <p className="text-xs text-muted-foreground">total</p>
             </div>
           </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/5">
+          <div className="mt-3 h-2 overflow-hidden rounded-full bg-surface">
             <div
               className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
               style={{ width: `${achievements.length > 0 ? (unlockedCount / achievements.length) * 100 : 0}%` }}
             />
           </div>
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-muted-foreground">
             {achievements.length > 0 ? Math.round((unlockedCount / achievements.length) * 100) : 0}% completo
           </p>
         </div>

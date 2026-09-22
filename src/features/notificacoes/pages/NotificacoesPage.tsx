@@ -137,7 +137,7 @@ export default function NotificacoesPage() {
           className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
             filter === 'all'
               ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-              : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+              : 'bg-surface text-muted-foreground hover:bg-surface'
           }`}
         >
           Todas
@@ -147,7 +147,7 @@ export default function NotificacoesPage() {
           className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
             filter === 'unread'
               ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-              : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+              : 'bg-surface text-muted-foreground hover:bg-surface'
           }`}
         >
           <Bell className="h-4 w-4 mr-1" /> Não lidas ({unreadCount})
@@ -163,14 +163,14 @@ export default function NotificacoesPage() {
         <div className="space-y-3">
           {notifications.map((notification) => {
             const Icon = NOTIFICATION_ICONS[notification.type] || Bell
-            const style = NOTIFICATION_STYLES[notification.type] || 'bg-slate-500/20 text-slate-400'
+            const style = NOTIFICATION_STYLES[notification.type] || 'bg-slate-500/20 text-muted-foreground'
             const typeLabel = NOTIFICATION_TYPE_LABELS[notification.type] || notification.type.replace(/_/g, ' ').toLowerCase()
             const isUnread = !notification.readAt
 
             return (
               <Card
                 key={notification.id}
-                className={`flex items-start gap-4 p-4 transition-all ${isUnread ? 'bg-white/[0.03] ring-1 ring-teal-500/20' : 'bg-white/[0.02]'} hover:bg-white/[0.04]`}
+                className={`flex items-start gap-4 p-4 transition-all ${isUnread ? 'bg-surface ring-1 ring-teal-500/20' : 'bg-surface'} hover:bg-surface`}
               >
                 <div className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${style}`}>
                   <Icon className="h-5 w-5" />
@@ -178,13 +178,13 @@ export default function NotificacoesPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h4 className={`font-semibold text-white ${isUnread ? '' : 'text-slate-300'}`}>
+                      <h4 className={`font-semibold text-foreground ${isUnread ? '' : 'text-muted-foreground'}`}>
                         {notification.title}
                       </h4>
-                      <p className={`mt-1 text-sm ${isUnread ? 'text-slate-300' : 'text-slate-500'}`}>
+                      <p className={`mt-1 text-sm ${isUnread ? 'text-muted-foreground' : 'text-muted-foreground'}`}>
                         {notification.message}
                       </p>
-                      <div className="mt-2 flex items-center gap-3 text-xs text-slate-500">
+                      <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
                           {getTimeAgo(notification.createdAt)}

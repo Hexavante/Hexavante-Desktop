@@ -8,6 +8,9 @@ export interface ShopItemView {
   imageUrl: string | null
   isPremiumOnly: boolean
   isPermanent: boolean
+  // Metadados vindos da API (ex: { themeId } em itens THEME). Opcional no
+  // desktop para tolerar respostas antigas sem o campo.
+  metadata?: unknown
   ownershipStatus: 'available' | 'owned_permanent' | 'active_temporary' | 'expired_temporary'
   inventoryId: string | null
   isEquipped: boolean
@@ -30,6 +33,7 @@ export interface InventoryEntry {
     imageUrl: string | null
     isPremiumOnly: boolean
     isPermanent: boolean
+    metadata?: unknown
   }
 }
 

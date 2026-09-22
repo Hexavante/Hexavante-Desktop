@@ -24,7 +24,7 @@ export default function SimuladosHistoricoPage() {
           description="Acompanhe tentativas, médias e evolução nos simulados."
         />
         <Card>
-          <p className="text-sm text-slate-300">Não foi possível carregar o histórico.</p>
+          <p className="text-sm text-muted-foreground">Não foi possível carregar o histórico.</p>
           <button type="button" className="hx-btn hx-btn-primary mt-4" onClick={() => window.location.reload()}>
             Tentar novamente
           </button>
@@ -43,15 +43,15 @@ export default function SimuladosHistoricoPage() {
       {stats && (
         <div className="mb-6 grid gap-4 sm:grid-cols-3">
           <Card >
-            <p className="text-sm text-slate-400">Tentativas</p>
-            <p className="text-2xl font-bold text-white">{stats.totalAttempts}</p>
+            <p className="text-sm text-muted-foreground">Tentativas</p>
+            <p className="text-2xl font-bold text-foreground">{stats.totalAttempts}</p>
           </Card>
           <Card >
-            <p className="text-sm text-slate-400">Média</p>
-            <p className="text-2xl font-bold text-white">{stats.averageScore}%</p>
+            <p className="text-sm text-muted-foreground">Média</p>
+            <p className="text-2xl font-bold text-foreground">{stats.averageScore}%</p>
           </Card>
           <Card >
-            <p className="text-sm text-slate-400">Melhor nota</p>
+            <p className="text-sm text-muted-foreground">Melhor nota</p>
             <p className="text-2xl font-bold text-emerald-400">{stats.bestScore}%</p>
           </Card>
         </div>
@@ -59,7 +59,7 @@ export default function SimuladosHistoricoPage() {
 
       {evolution && evolution.length > 0 && (
         <Card  className="mb-6">
-          <h3 className="mb-3 text-sm font-bold text-slate-200">Evolução</h3>
+          <h3 className="mb-3 text-sm font-bold text-foreground">Evolução</h3>
           <div className="flex items-end gap-2">
             {evolution.map((point, i) => (
               <div key={i} className="flex flex-1 flex-col items-center gap-1">
@@ -67,7 +67,7 @@ export default function SimuladosHistoricoPage() {
                   className="w-full rounded-t bg-teal-500/30"
                   style={{ height: `${point.score}px`, minHeight: '4px' }}
                 />
-                <span className="text-[10px] text-slate-500">
+                <span className="text-[10px] text-muted-foreground">
                   {new Date(point.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
                 </span>
               </div>
@@ -78,17 +78,17 @@ export default function SimuladosHistoricoPage() {
 
       {subjectStats && subjectStats.length > 0 && (
         <Card  className="mb-6">
-          <h3 className="mb-3 text-sm font-bold text-slate-200">Desempenho por assunto</h3>
+          <h3 className="mb-3 text-sm font-bold text-foreground">Desempenho por assunto</h3>
           <div className="space-y-3">
             {subjectStats.map((s) => (
               <div key={s.subject}>
                 <div className="mb-1 flex justify-between text-xs">
-                  <span className="text-slate-300">{s.subject}</span>
-                  <span className="text-slate-400">
+                  <span className="text-muted-foreground">{s.subject}</span>
+                  <span className="text-muted-foreground">
                     {s.correct}/{s.total} ({s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0}%)
                   </span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div className="h-2 overflow-hidden rounded-full bg-surface">
                   <div
                     className="h-full rounded-full bg-teal-500/50 transition-all"
                     style={{ width: `${s.total > 0 ? (s.correct / s.total) * 100 : 0}%` }}
@@ -102,7 +102,7 @@ export default function SimuladosHistoricoPage() {
 
       {!history || history.attempts.length === 0 ? (
         <div className="flex min-h-[200px] flex-col items-center justify-center gap-4">
-          <p className="text-sm text-slate-400">Nenhuma tentativa encontrada.</p>
+          <p className="text-sm text-muted-foreground">Nenhuma tentativa encontrada.</p>
           <Link to="/simulados" className="hx-btn-primary px-4 py-2 text-sm font-semibold">
             Ver simulados
           </Link>
@@ -113,11 +113,11 @@ export default function SimuladosHistoricoPage() {
             <Link
               key={attempt.id}
               to={`/simulados/${attempt.examSlug}/resultado/${attempt.id}`}
-              className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] p-4 transition hover:border-sky-400/35"
+              className="flex items-center justify-between rounded-xl border border-border bg-surface p-4 transition hover:border-sky-400/35"
             >
               <div>
-                <p className="font-semibold text-white">{attempt.examTitle}</p>
-                <p className="text-sm text-slate-400">
+                <p className="font-semibold text-foreground">{attempt.examTitle}</p>
+                <p className="text-sm text-muted-foreground">
                   {attempt.examType} · {attempt.correctAnswers}/{attempt.totalQuestions} acertos ·{' '}
                   {attempt.finishedAt
                     ? new Date(attempt.finishedAt).toLocaleDateString('pt-BR')
@@ -146,7 +146,7 @@ export default function SimuladosHistoricoPage() {
               ← Anterior
             </Link>
           )}
-          <span className="text-sm text-slate-400">
+          <span className="text-sm text-muted-foreground">
             Página {history.page} de {history.totalPages}
           </span>
           {history.page < history.totalPages && (

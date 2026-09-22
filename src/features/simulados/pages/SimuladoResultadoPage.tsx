@@ -32,9 +32,9 @@ export default function SimuladoResultadoPage() {
         <PageHeader title="Resultado não encontrado" />
         <Card>
           <div className="p-8">
-            <ClipboardList className="h-12 w-12 mx-auto mb-4 text-slate-700" />
-            <h3 className="text-lg font-bold text-white mb-2">Resultado não encontrado</h3>
-            <p className="text-sm text-slate-400 mb-4">Esta tentativa não existe ou foi removida</p>
+            <ClipboardList className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-bold text-foreground mb-2">Resultado não encontrado</h3>
+            <p className="text-sm text-muted-foreground mb-4">Esta tentativa não existe ou foi removida</p>
             <Button variant="outline" onClick={() => navigate('/simulados')}>
               <ArrowLeft className="h-4 w-4 mr-2" /> Voltar aos Simulados
             </Button>
@@ -78,9 +78,9 @@ export default function SimuladoResultadoPage() {
             <span className={`text-5xl font-black ${getScoreColor(result.score)}`}>
               {result.score}%
             </span>
-            <span className="ml-2 text-slate-400">de 100%</span>
+            <span className="ml-2 text-muted-foreground">de 100%</span>
           </div>
-          <div className="h-4 w-full max-w-md mx-auto bg-white/10 rounded-full overflow-hidden">
+          <div className="h-4 w-full max-w-md mx-auto bg-surface rounded-full overflow-hidden">
             <div
               className={`h-full transition-all duration-1000 ${getScoreBg(result.score)}`}
               style={{ width: `${percentage}%` }}
@@ -109,18 +109,18 @@ export default function SimuladoResultadoPage() {
       <div className="grid gap-4 mb-6 sm:grid-cols-3">
         <Card className="p-4 text-center">
           <TrendingUp className="h-8 w-8 mx-auto mb-2 text-teal-400" />
-          <p className="text-2xl font-bold text-white">{result.score}%</p>
-          <p className="text-xs text-slate-400">Pontuação Final</p>
+          <p className="text-2xl font-bold text-foreground">{result.score}%</p>
+          <p className="text-xs text-muted-foreground">Pontuação Final</p>
         </Card>
         <Card className="p-4 text-center">
           <Target className="h-8 w-8 mx-auto mb-2 text-amber-400" />
-          <p className="text-2xl font-bold text-white">{result.correctAnswers}/{result.totalQuestions}</p>
-          <p className="text-xs text-slate-400">Questões Certas</p>
+          <p className="text-2xl font-bold text-foreground">{result.correctAnswers}/{result.totalQuestions}</p>
+          <p className="text-xs text-muted-foreground">Questões Certas</p>
         </Card>
         <Card className="p-4 text-center">
           <ClipboardList className="h-8 w-8 mx-auto mb-2 text-sky-400" />
-          <p className="text-2xl font-bold text-white">{percentage}%</p>
-          <p className="text-xs text-slate-400">Aproveitamento</p>
+          <p className="text-2xl font-bold text-foreground">{percentage}%</p>
+          <p className="text-xs text-muted-foreground">Aproveitamento</p>
         </Card>
       </div>
 
@@ -128,7 +128,7 @@ export default function SimuladoResultadoPage() {
       <Card>
         <div className="p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white">Detalhamento das Questões</h3>
+            <h3 className="text-sm font-bold text-foreground">Detalhamento das Questões</h3>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-[10px]">
                 <CheckCircle className="h-3 w-3 mr-1 text-green-400" />
@@ -156,7 +156,7 @@ export default function SimuladoResultadoPage() {
                   <div className="mb-3 flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                           Questão {index + 1}
                         </span>
                         <span className={`text-xs font-semibold ${
@@ -164,14 +164,14 @@ export default function SimuladoResultadoPage() {
                         }`}>
                           {isCorrect ? 'Correta' : 'Incorreta'}
                         </span>
-                        <span className="text-xs text-slate-500">{qr.points} pts</span>
+                        <span className="text-xs text-muted-foreground">{qr.points} pts</span>
                         {qr.earnedPoints !== qr.points && (
                           <span className="text-xs text-amber-400">
                             {qr.earnedPoints}/{qr.points} pts
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-white line-clamp-2">{qr.questionStatement}</p>
+                      <p className="text-sm text-foreground line-clamp-2">{qr.questionStatement}</p>
                     </div>
                     <div className="flex-shrink-0 flex items-center gap-2">
                       {isCorrect ? (

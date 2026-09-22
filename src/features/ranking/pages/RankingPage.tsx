@@ -15,7 +15,7 @@ const MEDAL_COLORS: Record<number, string> = {
 
 function RankBadge({ rank }: { rank: number }) {
   if (rank <= 3) return <Medal className={`h-5 w-5 ${MEDAL_COLORS[rank]}`} />
-  return <span className="w-6 text-center text-sm font-bold text-slate-500">#{rank}</span>
+  return <span className="w-6 text-center text-sm font-bold text-muted-foreground">#{rank}</span>
 }
 
 function LeagueIcon({ league }: { league: string }) {
@@ -66,14 +66,14 @@ export default function RankingPage() {
             )}
           </span>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-white">Sua posição</p>
+            <p className="text-sm font-semibold text-foreground">Sua posição</p>
             <div className="mt-1 flex items-center gap-2">
-              <span className="text-xs text-slate-400">{myRanking.totalXp} XP • Nível {myRanking.level}</span>
+              <span className="text-xs text-muted-foreground">{myRanking.totalXp} XP • Nível {myRanking.level}</span>
               <LeagueIcon league={myRanking.league} />
-              <span className="text-xs text-slate-500">{myRanking.league}</span>
+              <span className="text-xs text-muted-foreground">{myRanking.league}</span>
             </div>
           </div>
-          <span className="text-xs text-slate-500">Temporada {myRanking.seasonKey}</span>
+          <span className="text-xs text-muted-foreground">Temporada {myRanking.seasonKey}</span>
         </div>
       )}
 
@@ -87,39 +87,39 @@ export default function RankingPage() {
       ) : (
         <>
           <div className="hx-card overflow-hidden">
-            <div className="grid grid-cols-[40px_1fr_80px_80px_80px] gap-2 border-b border-white/5 px-4 py-3 text-xs font-semibold text-slate-500">
+            <div className="grid grid-cols-[40px_1fr_80px_80px_80px] gap-2 border-b border-border px-4 py-3 text-xs font-semibold text-muted-foreground">
               <span>#</span>
               <span>Estudante</span>
               <span className="text-center">Nível</span>
               <span className="text-center">Liga</span>
               <span className="text-right">XP</span>
             </div>
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-border">
               {data.data.map(entry => {
                 const isMe = user && entry.userId === user.id
                 return (
                   <div
                     key={entry.rank}
-                    className={`grid grid-cols-[40px_1fr_80px_80px_80px] items-center gap-2 px-4 py-3 transition hover:bg-white/5 ${isMe ? 'bg-cyan-500/5' : ''}`}
+                    className={`grid grid-cols-[40px_1fr_80px_80px_80px] items-center gap-2 px-4 py-3 transition hover:bg-surface ${isMe ? 'bg-cyan-500/5' : ''}`}
                   >
                     <RankBadge rank={entry.rank} />
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/5 text-sm font-semibold text-slate-300">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-semibold text-muted-foreground">
                         {entry.fullName?.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-white">
+                        <p className="truncate text-sm font-medium text-foreground">
                           {entry.fullName}
                           {isMe && <span className="ml-1 text-xs text-cyan-400">(você)</span>}
                         </p>
-                        <p className="truncate text-xs text-slate-500">@{entry.username}</p>
+                        <p className="truncate text-xs text-muted-foreground">@{entry.username}</p>
                       </div>
                     </div>
-                    <span className="text-center text-sm text-slate-300">{entry.level}</span>
+                    <span className="text-center text-sm text-muted-foreground">{entry.level}</span>
                     <span className="flex justify-center">
                       <LeagueIcon league={entry.league} />
                     </span>
-                    <span className="text-right text-sm font-semibold text-white">
+                    <span className="text-right text-sm font-semibold text-foreground">
                       {entry.totalXp.toLocaleString()}
                     </span>
                   </div>
@@ -133,7 +133,7 @@ export default function RankingPage() {
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
                 Anterior
               </Button>
-              <span className="text-sm text-slate-400">
+              <span className="text-sm text-muted-foreground">
                 Página {data.pagination.page} de {data.pagination.totalPages}
               </span>
               <Button variant="outline" size="sm" disabled={page >= data.pagination.totalPages} onClick={() => setPage(p => p + 1)}>

@@ -140,7 +140,7 @@ const goToQuestion = (index: number) => {
         <PageHeader title="Erro" />
         <Card className="p-8">
           <AlertCircle className="h-12 w-12 mx-auto mb-4 text-red-400" />
-          <h3 className="text-lg font-bold text-white mb-2">Erro ao carregar simulado</h3>
+          <h3 className="text-lg font-bold text-foreground mb-2">Erro ao carregar simulado</h3>
           <Button onClick={() => navigate('/simulados')}>Voltar</Button>
         </Card>
       </div>
@@ -152,17 +152,17 @@ const goToQuestion = (index: number) => {
       {/* Timer Header */}
       {timeLeft !== null && (
         <div className={`fixed top-0 left-0 right-0 z-50 px-4 py-2 transition-colors ${
-          timeLeft <= 300 ? 'bg-red-600/90' : 'bg-slate-900/95'
-        } border-b border-white/10`}>
+          timeLeft <= 300 ? 'bg-red-600/90' : 'bg-surface'
+        } border-b border-border`}>
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock3 className={`h-5 w-5 ${timeLeft <= 300 ? 'text-red-300 animate-pulse' : 'text-teal-400'}`} />
               <span className="font-mono text-lg font-bold text-white">{formatTime(timeLeft)}</span>
               {timeLeft <= 300 && <span className="text-xs text-red-300">Tempo acabando!</span>}
             </div>
-            <div className="flex items-center gap-4 text-sm text-slate-400">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span>Questão {currentQuestion + 1} de {totalQuestions}</span>
-              <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-32 h-2 bg-surface rounded-full overflow-hidden">
                 <div
                   className="h-full bg-teal-500 transition-all duration-300"
                   style={{ width: `${progress}%` }}
@@ -197,7 +197,7 @@ const goToQuestion = (index: number) => {
                     ? 'bg-teal-500 text-white ring-2 ring-teal-500/50'
                     : answers[questions[index].id]
                     ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
-                    : 'bg-white/5 text-slate-500 hover:bg-white/10'
+                    : 'bg-surface text-muted-foreground hover:bg-surface'
                 }`}
               >
                 {index + 1}
@@ -213,7 +213,7 @@ const goToQuestion = (index: number) => {
                   <span className="text-xs font-semibold text-teal-400 uppercase tracking-wide">
                     Questão {currentQuestion + 1}
                   </span>
-                  <span className="text-xs text-slate-500">{currentQ.points} pts</span>
+                  <span className="text-xs text-muted-foreground">{currentQ.points} pts</span>
                   {currentQ.type === 'ESSAY' && (
                     <span className="text-xs text-amber-400">Dissertativa</span>
                   )}
@@ -229,7 +229,7 @@ const goToQuestion = (index: number) => {
                   </div>
                 )}
 
-                <p className="text-lg text-white leading-relaxed whitespace-pre-wrap">
+                <p className="text-lg text-foreground leading-relaxed whitespace-pre-wrap">
                   {currentQ.statement}
                 </p>
 
@@ -242,18 +242,18 @@ const goToQuestion = (index: number) => {
                         className={`w-full p-4 text-left rounded-lg border-2 transition ${
                           answers[currentQ.id] === alt.id
                             ? 'border-teal-500 bg-teal-500/10'
-                            : 'border-white/10 hover:border-teal-500/30 bg-white/5'
+                            : 'border-border hover:border-teal-500/30 bg-surface'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                             answers[currentQ.id] === alt.id
                               ? 'border-teal-500 bg-teal-500 text-white'
-                              : 'border-white/20 text-slate-400'
+                              : 'border-border text-muted-foreground'
                           }`}>
                             {answers[currentQ.id] === alt.id && <CheckCircle className="w-4 h-4" />}
                           </div>
-                          <span className="text-white">{alt.text}</span>
+                          <span className="text-foreground">{alt.text}</span>
                         </div>
                       </button>
                     ))}
@@ -265,7 +265,7 @@ const goToQuestion = (index: number) => {
                     value={(answers[currentQ.id] as string) || ''}
                     onChange={(e) => handleAnswer(currentQ.id, e.target.value)}
                     placeholder="Digite sua resposta aqui..."
-                    className="w-full min-h-[150px] p-4 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 resize-none"
+                    className="w-full min-h-[150px] p-4 bg-surface border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 resize-none"
                     rows={6}
                   />
                 )}
@@ -283,9 +283,9 @@ const goToQuestion = (index: number) => {
               <ChevronLeft className="h-4 w-4 mr-1" /> Anterior
             </Button>
 
-            <div className="flex items-center gap-2 text-sm text-slate-400">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>Respondidas: {answeredCount}/{totalQuestions}</span>
-              <div className="w-32 h-2 bg-white/10 rounded-full overflow-hidden">
+              <div className="w-32 h-2 bg-surface rounded-full overflow-hidden">
                 <div
                   className="h-full bg-teal-500 transition-all duration-300"
                   style={{ width: `${progress}%` }}
@@ -316,8 +316,8 @@ const goToQuestion = (index: number) => {
           <Card className="w-full max-w-md">
             <div className="p-6 space-y-4 text-center">
               <AlertCircle className="h-12 w-12 mx-auto text-amber-400" />
-              <h3 className="text-lg font-bold text-white">Finalizar simulado?</h3>
-              <p className="text-slate-400">
+              <h3 className="text-lg font-bold text-foreground">Finalizar simulado?</h3>
+              <p className="text-muted-foreground">
                 Você respondeu {answeredCount} de {totalQuestions} questões.
                 {answeredCount < totalQuestions && (
                   <span className="text-amber-400"> {totalQuestions - answeredCount} não respondida(s).</span>

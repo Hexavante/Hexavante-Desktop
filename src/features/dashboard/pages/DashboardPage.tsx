@@ -38,11 +38,11 @@ function StatCard({
   const content = (
     <div className="hx-card-interactive p-5" onClick={onClick} role={onClick ? 'button' : undefined} tabIndex={onClick ? 0 : undefined} onKeyDown={e => e.key === 'Enter' && onClick?.()}>
       <div className="flex items-center justify-between">
-        <span className="truncate text-sm font-semibold text-slate-400">{label}</span>
+        <span className="truncate text-sm font-semibold text-muted-foreground">{label}</span>
         <Icon className="h-5 w-5" />
       </div>
-      <p className="mt-1 text-2xl font-black tracking-tight text-white">{value}</p>
-      {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
+      <p className="mt-1 text-2xl font-black tracking-tight text-foreground">{value}</p>
+      {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
     </div>
   )
   return content
@@ -53,10 +53,10 @@ function XPProgress({ currentXp, totalXp, level }: { currentXp: number; totalXp:
   return (
     <div className="hx-card p-5">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-slate-400">Nível {level}</span>
-        <span className="text-xs text-slate-500">{currentXp} / {totalXp} XP</span>
+        <span className="text-sm font-semibold text-muted-foreground">Nível {level}</span>
+        <span className="text-xs text-muted-foreground">{currentXp} / {totalXp} XP</span>
       </div>
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/5">
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface">
         <div className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all" style={{ width: `${pct}%` }} />
       </div>
     </div>
@@ -164,7 +164,7 @@ export default function DashboardPage() {
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Cursos em Destaque</h2>
+            <h2 className="text-lg font-bold text-foreground">Cursos em Destaque</h2>
             <Button variant="ghost" size="sm" onClick={() => navigate('/cursos')}>
               Ver todos
             </Button>
@@ -172,7 +172,7 @@ export default function DashboardPage() {
 
           {courses.length === 0 ? (
             <div className="hx-card flex min-h-[200px] items-center justify-center">
-              <p className="text-sm text-slate-400">Nenhum curso disponível no momento</p>
+              <p className="text-sm text-muted-foreground">Nenhum curso disponível no momento</p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
@@ -189,11 +189,11 @@ export default function DashboardPage() {
                     <BookOpen className="h-6 w-6" />
                     <Badge variant="outline" className="text-[10px]">{course.level}</Badge>
                   </div>
-                  <h3 className="truncate text-sm font-bold text-white">{course.title}</h3>
+                  <h3 className="truncate text-sm font-bold text-foreground">{course.title}</h3>
                   {course.shortDescription && (
-                    <p className="mt-1 line-clamp-2 text-xs text-slate-400">{course.shortDescription}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{course.shortDescription}</p>
                   )}
-                  <div className="mt-3 flex items-center gap-3 text-xs text-slate-500">
+                  <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{course.totalModules} módulos</span>
                     <span>{course.totalLessons} aulas</span>
                   </div>
@@ -204,10 +204,10 @@ export default function DashboardPage() {
         </div>
 
         <div>
-          <h2 className="mb-4 text-lg font-bold text-white">Conquistas</h2>
+          <h2 className="mb-4 text-lg font-bold text-foreground">Conquistas</h2>
           {unlockedAchievements.length === 0 ? (
             <div className="hx-card flex min-h-[200px] items-center justify-center">
-              <p className="text-sm text-slate-400">Nenhuma conquista ainda</p>
+              <p className="text-sm text-muted-foreground">Nenhuma conquista ainda</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -215,8 +215,8 @@ export default function DashboardPage() {
                 <div key={achievement.key} className="hx-card flex items-center gap-3 p-3">
                   <Award className="h-5 w-5 shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">{achievement.name}</p>
-                    <p className="truncate text-xs text-slate-400">{achievement.description}</p>
+                    <p className="truncate text-sm font-medium text-foreground">{achievement.name}</p>
+                    <p className="truncate text-xs text-muted-foreground">{achievement.description}</p>
                   </div>
                 </div>
               ))}
@@ -227,8 +227,8 @@ export default function DashboardPage() {
 
       <div className="mt-8">
         <div className="hx-card p-6">
-          <h2 className="text-lg font-bold text-white">Acesso Rápido</h2>
-          <p className="mt-1 text-sm text-slate-400">Navegue pelas seções da plataforma</p>
+          <h2 className="text-lg font-bold text-foreground">Acesso Rápido</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Navegue pelas seções da plataforma</p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Button onClick={() => navigate('/cursos')}>
               <BookOpen className="h-4 w-4" />

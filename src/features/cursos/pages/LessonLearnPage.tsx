@@ -21,9 +21,9 @@ function VideoPlayer({ url, provider }: { url: string; provider: string | null }
     return (
       <div className="aspect-video overflow-hidden rounded-lg">
         <div className="flex h-full w-full items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
-          <span className="text-sm text-slate-400">Player de vídeo ({provider})</span>
+          <span className="text-sm text-muted-foreground">Player de vídeo ({provider})</span>
         </div>
-        <p className="mt-2 truncate text-xs text-slate-500">{url}</p>
+        <p className="mt-2 truncate text-xs text-muted-foreground">{url}</p>
       </div>
     )
   }
@@ -109,7 +109,7 @@ export default function LessonLearnPage() {
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         <aside className="hx-card p-3">
-          <div className="mb-2 px-2 text-sm font-bold text-white">Conteúdo</div>
+          <div className="mb-2 px-2 text-sm font-bold text-foreground">Conteúdo</div>
           <div className="space-y-1">
             {sidebarLessons.map((l) => (
               <button
@@ -118,10 +118,10 @@ export default function LessonLearnPage() {
                 className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm transition ${
                   l.id === lesson.id
                     ? 'bg-cyan-500/15 text-cyan-300'
-                    : 'text-slate-300 hover:bg-white/10'
+                    : 'text-muted-foreground hover:bg-surface'
                 }`}
               >
-                <span className="shrink-0 text-xs text-slate-500">
+                <span className="shrink-0 text-xs text-muted-foreground">
                   {String(l.moduleOrder).padStart(2, '0')}.
                   {String(l.orderNumber).padStart(2, '0')}
                 </span>
@@ -134,14 +134,14 @@ export default function LessonLearnPage() {
 
         <div className="space-y-6">
           {module && (
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted-foreground">
               Módulo {module.orderNumber}: {module.title}
             </p>
           )}
 
           <div>
-            <h1 className="text-2xl font-bold text-white">{lesson.title}</h1>
-            {lesson.description && <p className="mt-2 text-slate-300">{lesson.description}</p>}
+            <h1 className="text-2xl font-bold text-foreground">{lesson.title}</h1>
+            {lesson.description && <p className="mt-2 text-muted-foreground">{lesson.description}</p>}
           </div>
 
           {lesson.videoUrl && (
@@ -150,7 +150,7 @@ export default function LessonLearnPage() {
 
           {module && module.materials.length > 0 && (
             <div className="hx-card p-4">
-              <h3 className="mb-3 text-sm font-bold text-white">Material do módulo</h3>
+              <h3 className="mb-3 text-sm font-bold text-foreground">Material do módulo</h3>
               <div className="space-y-2">
                 {module.materials.map((m) => (
                   <a
@@ -158,7 +158,7 @@ export default function LessonLearnPage() {
                     href={m.fileUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-sm text-cyan-400 hover:bg-white/10"
+                    className="flex items-center gap-2 rounded-md bg-surface px-3 py-2 text-sm text-cyan-400 hover:bg-surface"
                   >
                     <FileText className="h-4 w-4 shrink-0" /> {m.title}
                   </a>
@@ -168,9 +168,9 @@ export default function LessonLearnPage() {
           )}
 
           <div className="hx-card p-4">
-            <h3 className="mb-3 text-sm font-bold text-white">Anotações</h3>
+            <h3 className="mb-3 text-sm font-bold text-foreground">Anotações</h3>
             <textarea
-              className="min-h-28 w-full rounded-md border border-white/10 bg-white/5 p-3 text-sm text-white"
+              className="min-h-28 w-full rounded-md border border-border bg-surface p-3 text-sm text-foreground"
               placeholder="Escreva suas anotações desta aula..."
               defaultValue={note ?? ''}
               onChange={(e) => setNoteDraft(e.target.value)}

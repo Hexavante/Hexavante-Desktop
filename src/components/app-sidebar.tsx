@@ -25,7 +25,6 @@ import {
   GraduationCap,
   History,
   LogOut,
-  MessageSquare,
   Radio,
   Settings,
   Shield,
@@ -33,7 +32,6 @@ import {
   Package,
   Target,
   User,
-  Users,
   LogIn,
   UserPlus,
 } from 'lucide-react'
@@ -62,9 +60,7 @@ const NAV_SECTIONS = [
     label: 'Comunidade',
     items: [
       { icon: Radio, label: 'Ao vivo', href: '/live' },
-      { icon: Users, label: 'Comunidade', href: '/comunidade' },
       { icon: BarChart2, label: 'Ranking', href: '/ranking' },
-      { icon: MessageSquare, label: 'Mensagens', href: '/mensagens' },
       { icon: Bell, label: 'Notificações', href: '/notificacoes' },
       { icon: Award, label: 'Certificados', href: '/certificados' },
       { icon: BadgeCheck, label: 'Verificar certificado', href: '/certificados/verificar' },
@@ -100,7 +96,7 @@ function SidebarBrand() {
         />
       </span>
       <span className="min-w-0">
-        <span className="block truncate text-sm font-extrabold tracking-tight text-white transition group-hover:text-cyan-100">
+        <span className="block truncate text-sm font-extrabold tracking-tight text-foreground transition group-hover:text-cyan-100">
           HEXAVANTE
         </span>
         <span className="hx-sidebar-brand-subtitle block truncate text-[11px] font-medium">
@@ -182,14 +178,14 @@ export function AppSidebar() {
         {user ? (
           <div className="space-y-2">
             <Link to="/perfil" className="hx-sidebar-profile">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-sm font-semibold text-slate-300">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface text-sm font-semibold text-muted-foreground">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-semibold text-white">
+                <span className="block truncate text-sm font-semibold text-foreground">
                   {user.name}
                 </span>
-                <span className="block truncate text-xs text-slate-400">
+                <span className="block truncate text-xs text-muted-foreground">
                   Ver perfil
                 </span>
               </span>

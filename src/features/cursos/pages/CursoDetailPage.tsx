@@ -22,23 +22,23 @@ function LessonDialog({ lesson, open, onOpenChange }: {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle className="text-white">{lesson.title}</DialogTitle>
+          <DialogTitle className="text-foreground">{lesson.title}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
             <div className="text-center">
               <Clapperboard className="mx-auto h-12 w-12" />
-              <p className="mt-2 text-sm text-slate-400">Player de vídeo</p>
+              <p className="mt-2 text-sm text-muted-foreground">Player de vídeo</p>
             </div>
           </div>
           {lesson.description && (
             <div>
-              <h4 className="mb-1 text-sm font-semibold text-white">Descrição</h4>
-              <p className="text-sm text-slate-400 leading-relaxed">{lesson.description}</p>
+              <h4 className="mb-1 text-sm font-semibold text-foreground">Descrição</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{lesson.description}</p>
             </div>
           )}
           {lesson.duration && (
-            <p className="text-xs text-slate-500">Duração: {Math.floor(lesson.duration / 60)}min {lesson.duration % 60}s</p>
+            <p className="text-xs text-muted-foreground">Duração: {Math.floor(lesson.duration / 60)}min {lesson.duration % 60}s</p>
           )}
         </div>
       </DialogContent>
@@ -60,22 +60,22 @@ function ModuleItem({ title, description, orderNumber, lessons, onLessonClick }:
           {orderNumber}
         </span>
         <div className="min-w-0 flex-1">
-          <h4 className="text-sm font-bold text-white">{title}</h4>
-          {description && <p className="mt-1 text-xs text-slate-400">{description}</p>}
+          <h4 className="text-sm font-bold text-foreground">{title}</h4>
+          {description && <p className="mt-1 text-xs text-muted-foreground">{description}</p>}
           <div className="mt-3 space-y-1">
             {lessons.map((lesson, idx) => (
               <div
                 key={lesson.id}
-                className="flex cursor-pointer items-center gap-2 rounded-md bg-white/5 px-3 py-2 transition hover:bg-white/10"
+                className="flex cursor-pointer items-center gap-2 rounded-md bg-surface px-3 py-2 transition hover:bg-surface"
                 onClick={() => onLessonClick(lesson)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={e => e.key === 'Enter' && onLessonClick(lesson)}
               >
-                <span className="text-xs text-slate-500">{String(orderNumber).padStart(2, '0')}.{String(idx + 1).padStart(2, '0')}</span>
-                <span className="flex-1 truncate text-sm text-slate-300">{lesson.title}</span>
+                <span className="text-xs text-muted-foreground">{String(orderNumber).padStart(2, '0')}.{String(idx + 1).padStart(2, '0')}</span>
+                <span className="flex-1 truncate text-sm text-muted-foreground">{lesson.title}</span>
                 {lesson.duration && (
-                  <span className="shrink-0 text-xs text-slate-500">{Math.floor(lesson.duration / 60)}min</span>
+                  <span className="shrink-0 text-xs text-muted-foreground">{Math.floor(lesson.duration / 60)}min</span>
                 )}
                 <span className="text-xs text-cyan-400">▶</span>
               </div>
@@ -134,18 +134,18 @@ export default function CursoDetailPage() {
 
           {course.description && (
             <div className="hx-card mb-4 p-4">
-              <h3 className="mb-2 text-sm font-bold text-white">Sobre o curso</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{course.description}</p>
+              <h3 className="mb-2 text-sm font-bold text-foreground">Sobre o curso</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{course.description}</p>
             </div>
           )}
 
           {isEnrolled && progress && (
             <div className="hx-card mb-4 p-4">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-white">Seu Progresso</h3>
+                <h3 className="text-sm font-bold text-foreground">Seu Progresso</h3>
                 <span className="text-sm font-bold text-cyan-400">{Math.round(progress.progress)}%</span>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/5">
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all"
                   style={{ width: `${progress.progress}%` }}
@@ -157,7 +157,7 @@ export default function CursoDetailPage() {
 
         <div>
           <div className="hx-card p-4">
-            <h3 className="mb-3 text-sm font-bold text-white">Ações</h3>
+            <h3 className="mb-3 text-sm font-bold text-foreground">Ações</h3>
             {isEnrolled ? (
               <Button className="w-full" disabled>
                 <CheckCircle2 className="h-4 w-4" />
@@ -180,7 +180,7 @@ export default function CursoDetailPage() {
               </Button>
             )}
             {!isAuthenticated && (
-              <p className="mt-2 text-center text-xs text-slate-500">
+              <p className="mt-2 text-center text-xs text-muted-foreground">
                 Faça login para se matricular
               </p>
             )}
@@ -188,12 +188,12 @@ export default function CursoDetailPage() {
 
           {isEnrolled && progress?.modules && (
             <div className="hx-card mt-4 p-4">
-              <h3 className="mb-3 text-sm font-bold text-white">Progresso por Módulo</h3>
+              <h3 className="mb-3 text-sm font-bold text-foreground">Progresso por Módulo</h3>
               <div className="space-y-2">
                 {progress.modules.map(m => (
                   <div key={m.moduleId} className="flex items-center justify-between text-sm">
-                    <span className="truncate text-slate-300">{m.title}</span>
-                    <span className="shrink-0 text-xs text-slate-500">
+                    <span className="truncate text-muted-foreground">{m.title}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">
                       {m.completedLessons}/{m.totalLessons}
                     </span>
                   </div>
@@ -204,7 +204,7 @@ export default function CursoDetailPage() {
         </div>
       </div>
 
-      <h3 className="mb-4 text-lg font-bold text-white">Conteúdo do Curso</h3>
+      <h3 className="mb-4 text-lg font-bold text-foreground">Conteúdo do Curso</h3>
       <div className="space-y-3">
         {course.modules.map(m => (
           <ModuleItem

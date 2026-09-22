@@ -87,23 +87,23 @@ export default function LiveRoomDetailPage() {
         <div className="space-y-4">
           {room.videoUrl ? (
             <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
-              <span className="text-sm text-slate-400">Player de vídeo</span>
+              <span className="text-sm text-muted-foreground">Player de vídeo</span>
             </div>
           ) : (
-            <div className="flex aspect-video items-center justify-center rounded-lg bg-white/5">
+            <div className="flex aspect-video items-center justify-center rounded-lg bg-surface">
               <span className="text-5xl">📡</span>
             </div>
           )}
 
           {room.description && (
-            <div className="hx-card p-4 text-sm text-slate-400">{room.description}</div>
+            <div className="hx-card p-4 text-sm text-muted-foreground">{room.description}</div>
           )}
 
           <div className="hx-card p-4">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-muted-foreground">
               Agendada para {formatScheduledDate(room.scheduledAt)}
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               {room.activeParticipants.length} participantes ativos
             </p>
           </div>
@@ -128,7 +128,7 @@ export default function LiveRoomDetailPage() {
         </div>
 
         <div className="hx-card flex max-h-[70vh] flex-col p-0">
-          <div className="border-b border-white/10 p-3 text-sm font-bold text-white">
+          <div className="border-b border-border p-3 text-sm font-bold text-foreground">
             Chat
           </div>
 
@@ -144,12 +144,12 @@ export default function LiveRoomDetailPage() {
             <>
               <div className="flex-1 space-y-3 overflow-y-auto p-3">
                 {!messages || messages.length === 0 ? (
-                  <p className="text-sm text-slate-500">Nenhuma mensagem ainda.</p>
+                  <p className="text-sm text-muted-foreground">Nenhuma mensagem ainda.</p>
                 ) : (
                   messages.map((m) => (
                     <div key={m.id} className="text-sm">
                       <span className="font-semibold text-cyan-300">{m.user.fullName}: </span>
-                      <span className="text-slate-300">{m.message}</span>
+                      <span className="text-muted-foreground">{m.message}</span>
                     </div>
                   ))
                 )}
@@ -157,7 +157,7 @@ export default function LiveRoomDetailPage() {
               </div>
 
               {room.status === 'LIVE' && (
-                <div className="border-t border-white/10 p-3">
+                <div className="border-t border-border p-3">
                   <div className="flex gap-2">
                     <input
                       className="hx-input flex-1"

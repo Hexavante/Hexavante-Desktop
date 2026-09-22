@@ -61,7 +61,7 @@ export default function SimuladosPage() {
       <Card  className="mb-6 space-y-4">
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <input
               type="search"
               value={searchQuery}
@@ -87,7 +87,7 @@ export default function SimuladosPage() {
             className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
               !tipo
                 ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-                : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+                : 'bg-surface text-muted-foreground hover:bg-surface'
             }`}
           >
             Todos
@@ -100,7 +100,7 @@ export default function SimuladosPage() {
               className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
                 tipo === value
                   ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
+                  : 'bg-surface text-muted-foreground hover:bg-surface'
               }`}
             >
               {label}
@@ -109,8 +109,8 @@ export default function SimuladosPage() {
         </div>
       </Card>
 
-      <p className="mb-4 text-sm text-slate-400">
-        <span className="font-semibold text-white">{exams?.length ?? 0}</span> simulados encontrados
+      <p className="mb-4 text-sm text-muted-foreground">
+        <span className="font-semibold text-foreground">{exams?.length ?? 0}</span> simulados encontrados
       </p>
 
       {!exams || exams.length === 0 ? (
@@ -124,7 +124,7 @@ export default function SimuladosPage() {
             <Link
               key={exam.id}
               to={`/simulados/${exam.slug}`}
-              className="group block overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] transition hover:border-teal-400/35 hover:bg-white/[0.06]"
+              className="group block overflow-hidden rounded-xl border border-border bg-surface transition hover:border-teal-400/35 hover:bg-surface"
             >
               <div className="flex h-36 items-center justify-center bg-gradient-to-br from-teal-900/50 to-slate-900">
                 <ClipboardList className="h-10 w-10 text-teal-400/50" />
@@ -143,16 +143,16 @@ export default function SimuladosPage() {
                   )}
                 </div>
 
-                <h3 className="text-base font-bold text-white transition-colors group-hover:text-teal-200">
+                <h3 className="text-base font-bold text-foreground transition-colors group-hover:text-teal-200">
                   {exam.title}
                 </h3>
                 {exam.description && (
-                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-400">
+                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
                     {exam.description}
                   </p>
                 )}
 
-                <div className="mt-4 flex items-center gap-4 text-xs font-medium text-slate-400">
+                <div className="mt-4 flex items-center gap-4 text-xs font-medium text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <ClipboardList className="h-4 w-4 text-teal-300" />
                     {exam.questionCount} questões

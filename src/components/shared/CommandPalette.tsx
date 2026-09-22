@@ -6,8 +6,6 @@ import {
   ClipboardList,
   BarChart3,
   Trophy,
-  MessageCircle,
-  MessageSquare,
   Bell,
   BadgeCheck,
   Radio,
@@ -38,8 +36,6 @@ const COMMANDS: CommandItem[] = [
   { id: 'estatisticas', label: 'Estatísticas', icon: BarChart3, href: '/estatisticas', keywords: ['stats', 'desempenho'] },
   { id: 'ranking', label: 'Ranking', icon: Trophy, href: '/ranking', keywords: ['leaderboard', 'classificacao'] },
   { id: 'live', label: 'Ao vivo', icon: Radio, href: '/live', keywords: ['live', 'sala', 'transmissao'] },
-  { id: 'comunidade', label: 'Comunidade', icon: MessageCircle, href: '/comunidade', keywords: ['forum', 'discussao'] },
-  { id: 'mensagens', label: 'Mensagens', icon: MessageSquare, href: '/mensagens', keywords: ['mensagem', 'conversa', 'chat'] },
   { id: 'notificacoes', label: 'Notificações', icon: Bell, href: '/notificacoes', keywords: ['notificacao', 'aviso', 'alerta'] },
   { id: 'verificar-certificado', label: 'Verificar certificado', icon: BadgeCheck, href: '/certificados/verificar', keywords: ['certificado', 'verificar', 'validar'] },
   { id: 'historico-simulados', label: 'Histórico de simulados', icon: History, href: '/simulados/historico', keywords: ['historico', 'tentativa', 'resultado'] },
@@ -103,30 +99,30 @@ export function CommandPalette({ open, onOpenChange }: {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="top-[15%] max-w-lg translate-y-0 p-0">
         <div className="p-3">
-          <div className="flex items-center gap-2 border-b border-white/5 pb-3">
-            <svg className="h-4 w-4 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+          <div className="flex items-center gap-2 border-b border-border pb-3">
+            <svg className="h-4 w-4 shrink-0 text-muted-foreground" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             <input
               ref={inputRef}
-              className="flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+              className="flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
               placeholder="Digite para navegar..."
               value={query}
               onChange={e => { setQuery(e.target.value); setSelectedIdx(0) }}
             />
-            <kbd className="rounded border border-white/10 px-1.5 py-0.5 text-[10px] text-slate-500">ESC</kbd>
+            <kbd className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">ESC</kbd>
           </div>
         </div>
         <div className="max-h-72 overflow-y-auto px-3 pb-3">
           {filtered.length === 0 ? (
-            <p className="py-4 text-center text-sm text-slate-500">Nenhum resultado</p>
+            <p className="py-4 text-center text-sm text-muted-foreground">Nenhum resultado</p>
           ) : (
             <div className="space-y-0.5">
               {filtered.map((item, idx) => (
                 <button
                   key={item.id}
                   className={`flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition ${
-                    idx === selectedIdx ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-300 hover:bg-white/5'
+                    idx === selectedIdx ? 'bg-cyan-500/20 text-cyan-400' : 'text-muted-foreground hover:bg-surface'
                   }`}
                   onClick={() => execute(item)}
                   onMouseEnter={() => setSelectedIdx(idx)}

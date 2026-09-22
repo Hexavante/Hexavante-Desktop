@@ -1,26 +1,32 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useShopState } from '@/api/shop/queries'
 import { usePurchaseItem, useEquipItem } from '@/api/shop/mutations'
-import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
+import type { ShopItemView } from '@/domain/types/shop.types'
 import {
+  Check,
   Coins,
   Loader2,
-  Rocket,
+  Lock,
   BookOpen,
+  Rocket,
   Trophy,
   Star,
   Frame,
   Palette,
+  PawPrint,
   Sparkles,
+  ShoppingBag,
   Ticket,
   type LucideIcon,
 } from 'lucide-react'
 
+// Rótulos pt-BR para os códigos de categoria vindos da API.
 const CATEGORY_LABELS: Record<string, string> = {
   TITLE: 'Títulos',
   AVATAR_BORDER: 'Bordas de Avatar',
@@ -29,6 +35,8 @@ const CATEGORY_LABELS: Record<string, string> = {
   BOOSTER: 'Boosters',
   PASS: 'Passes',
   REVIEW_PACK: 'Pacotes de Revisão',
+  PET: 'Pets',
+  PET_COSMETIC: 'Acessórios para Pets',
 }
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -39,9 +47,186 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   BOOSTER: Rocket,
   PASS: Ticket,
   REVIEW_PACK: BookOpen,
+  PET: PawPrint,
+  PET_COSMETIC: Sparkles,
 }
 
+// Ordem preferida das seções; categorias desconhecidas vão para o fim.
+const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS)
+
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
+
+function categoryLabel(code: string): string {
+  const mapped = CATEGORY_LABELS[code]
+  if (mapped) return mapped
+  return code
+    .split('_')
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(' ')
+}
+
+function isPurchasable(item: ShopItemView): boolean {
+  return item.ownershipStatus === 'available' || item.ownershipStatus === 'expired_temporary'
+}
+
+function LojaSkeleton() {
+  return (
+    <div className="hx-page">
+      <PageHeader title="Loja" description="Gaste suas moedas com itens exclusivos">
+        <Skeleton className="h-8 w-24 rounded-lg" />
+      </PageHeader>
+      <div className="mb-6 flex flex-wrap gap-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Skeleton key={i} className="h-8 w-24 rounded-full" />
+        ))}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="hx-card space-y-3 p-5">
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-5 w-24 rounded-full" />
+              <Skeleton className="h-5 w-16 rounded-full" />
+            </div>
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+            <div className="flex items-center justify-between pt-1">
+              <Skeleton className="h-5 w-16" />
+              <Skeleton className="h-9 w-24 rounded-lg" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+interface ShopItemCardProps {
+  item: ShopItemView
+  isPremium: boolean
+  isPurchasing: boolean
+  isEquipping: boolean
+  purchaseDisabled: boolean
+  equipDisabled: boolean
+  onPurchase: (id: string) => void
+  onEquip: (inventoryId: string) => void
+}
+
+function ShopItemCard({
+  item,
+  isPremium,
+  isPurchasing,
+  isEquipping,
+  purchaseDisabled,
+  equipDisabled,
+  onPurchase,
+  onEquip,
+}: ShopItemCardProps) {
+  const purchasable = isPurchasable(item)
+  const expired = item.ownershipStatus === 'expired_temporary'
+  const locked = item.isPremiumOnly && !isPremium
+  const equippable = EQUIPPABLE_CATEGORIES.includes(item.category)
+
+  return (
+    <Card className="p-5">
+      <div className="flex h-full flex-col">
+        <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge variant="default">{categoryLabel(item.category)}</Badge>
+            {item.isPremiumOnly ? (
+              <Badge variant="violet">
+                <Star className="h-3 w-3" aria-hidden="true" /> Premium
+              </Badge>
+            ) : null}
+          </div>
+          {item.isEquipped ? (
+            <Badge variant="emerald">
+              <Check className="h-3 w-3" aria-hidden="true" /> Em uso
+            </Badge>
+          ) : purchasable ? (
+            expired ? (
+              <Badge variant="outline">Expirado</Badge>
+            ) : null
+          ) : (
+            <Badge variant="teal">
+              <Check className="h-3 w-3" aria-hidden="true" /> Seu
+            </Badge>
+          )}
+        </div>
+
+        <h4 className="text-base font-bold text-foreground">{item.name}</h4>
+        <p className="mt-1 flex-1 text-sm text-muted-foreground">{item.description}</p>
+
+        {!purchasable && item.expiresAt ? (
+          <p className="mt-2 text-xs text-muted-foreground">
+            Expira em {new Date(item.expiresAt).toLocaleDateString('pt-BR')}
+          </p>
+        ) : null}
+
+        {purchasable ? (
+          <div>
+            <div className="mt-4 flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1 text-sm font-bold text-amber-500">
+                <Coins className="h-4 w-4" aria-hidden="true" />
+                {item.cost}
+              </span>
+              <Button
+                size="sm"
+                disabled={purchaseDisabled || locked}
+                onClick={() => onPurchase(item.id)}
+                title={locked ? 'Exclusivo para assinantes Premium' : undefined}
+                aria-label={locked ? `${item.name} (exclusivo Premium)` : `Comprar ${item.name}`}
+              >
+                {isPurchasing ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                    {expired ? 'Renovando...' : 'Comprando...'}
+                  </>
+                ) : locked ? (
+                  <>
+                    <Lock className="h-3.5 w-3.5" aria-hidden="true" />
+                    Premium
+                  </>
+                ) : expired ? (
+                  'Renovar'
+                ) : (
+                  'Comprar'
+                )}
+              </Button>
+            </div>
+            {locked ? (
+              <p className="mt-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground">
+                <Lock className="h-3 w-3 shrink-0" aria-hidden="true" />
+                Exclusivo para assinantes Premium.
+              </p>
+            ) : null}
+          </div>
+        ) : equippable && item.inventoryId ? (
+          <div className="mt-4 flex justify-end">
+            <Button
+              size="sm"
+              variant={item.isEquipped ? 'outline' : 'default'}
+              disabled={equipDisabled}
+              onClick={() => onEquip(item.inventoryId as string)}
+              aria-label={`${item.isEquipped ? 'Desequipar' : 'Equipar'} ${item.name}`}
+            >
+              {isEquipping ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+                  Aguarde...
+                </>
+              ) : item.isEquipped ? (
+                'Desequipar'
+              ) : (
+                'Equipar'
+              )}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    </Card>
+  )
+}
 
 export default function LojaPage() {
   const { data: shopState, isLoading, isError, refetch } = useShopState()
@@ -49,13 +234,42 @@ export default function LojaPage() {
   const equipItem = useEquipItem()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
-  if (isLoading) return <LoadingScreen />
+  const items = useMemo(() => shopState?.items ?? [], [shopState])
+  const isPremium = shopState?.premium ?? false
+
+  // Categorias presentes de fato na resposta, em ordem amigável.
+  const categories = useMemo(() => {
+    const present = [...new Set(items.map((i) => i.category))]
+    return present.sort((a, b) => {
+      const ia = CATEGORY_ORDER.indexOf(a)
+      const ib = CATEGORY_ORDER.indexOf(b)
+      return (ia === -1 ? CATEGORY_ORDER.length : ia) - (ib === -1 ? CATEGORY_ORDER.length : ib)
+    })
+  }, [items])
+
+  const countByCategory = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const item of items) counts.set(item.category, (counts.get(item.category) ?? 0) + 1)
+    return counts
+  }, [items])
+
+  const visibleCategories = selectedCategory ? [selectedCategory] : categories
+  const visibleCount = visibleCategories.reduce(
+    (acc, category) => acc + (countByCategory.get(category) ?? 0),
+    0,
+  )
+
+  const purchasingId = purchaseItem.isPending ? purchaseItem.variables : undefined
+  const equippingId = equipItem.isPending ? equipItem.variables : undefined
+
+  if (isLoading) return <LojaSkeleton />
 
   if (isError) {
     return (
       <div className="hx-page">
         <PageHeader title="Loja" description="Gaste suas moedas com itens exclusivos" />
         <EmptyState
+          icon={<ShoppingBag className="h-12 w-12" aria-hidden="true" />}
           title="Erro ao carregar a loja"
           description="Verifique sua conexão e tente novamente."
           action={{ label: 'Tentar novamente', onClick: () => refetch() }}
@@ -64,139 +278,105 @@ export default function LojaPage() {
     )
   }
 
-  const categories = selectedCategory
-    ? [selectedCategory]
-    : ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC', 'BOOSTER', 'PASS', 'REVIEW_PACK']
-
   return (
     <div className="hx-page">
       <PageHeader title="Loja" description="Gaste suas moedas com itens exclusivos">
-        <div className="flex items-center gap-2 rounded-lg bg-amber-500/10 px-3 py-1.5">
-          <Coins className="h-4 w-4 text-amber-400" />
-          <span className="text-sm font-bold text-amber-400">{shopState?.coins ?? 0}</span>
+        <div className="flex items-center gap-2">
+          {isPremium ? (
+            <Badge variant="violet">
+              <Star className="h-3 w-3" aria-hidden="true" /> Premium
+            </Badge>
+          ) : null}
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5">
+            <Coins className="h-4 w-4 text-amber-500" aria-hidden="true" />
+            <span className="text-sm font-bold text-foreground">{shopState?.coins ?? 0}</span>
+          </div>
         </div>
       </PageHeader>
 
-      <div className="mb-6 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setSelectedCategory(null)}
-          className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-            !selectedCategory
-              ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-              : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
-          }`}
-        >
-          Todas
-        </button>
-        {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
-          const Icon = CATEGORY_ICONS[key]
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setSelectedCategory(key)}
-              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                selectedCategory === key
-                  ? 'bg-teal-500/20 text-teal-200 ring-1 ring-teal-400/40'
-                  : 'bg-white/[0.04] text-slate-400 hover:bg-white/[0.08]'
-              }`}
-            >
-              <span className="inline-flex items-center gap-1.5">
-                <Icon className="h-4 w-4" /> {label}
-              </span>
-            </button>
-          )
-        })}
-      </div>
+      {categories.length > 0 ? (
+        <div className="mb-6 flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoria">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory(null)}
+            aria-pressed={selectedCategory === null}
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+              selectedCategory === null
+                ? 'border-cyan/40 bg-cyan/10 text-foreground ring-1 ring-cyan/30'
+                : 'border-border bg-surface text-muted-foreground hover:bg-surface-strong hover:text-foreground'
+            }`}
+          >
+            Todas ({items.length})
+          </button>
+          {categories.map((category) => {
+            const Icon = CATEGORY_ICONS[category] ?? Sparkles
+            const active = selectedCategory === category
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setSelectedCategory(active ? null : category)}
+                aria-pressed={active}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  active
+                    ? 'border-cyan/40 bg-cyan/10 text-foreground ring-1 ring-cyan/30'
+                    : 'border-border bg-surface text-muted-foreground hover:bg-surface-strong hover:text-foreground'
+                }`}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <Icon className="h-4 w-4" aria-hidden="true" /> {categoryLabel(category)} (
+                  {countByCategory.get(category) ?? 0})
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      ) : null}
 
-      {(shopState?.items ?? []).length === 0 ? (
+      {items.length === 0 ? (
         <EmptyState
+          icon={<ShoppingBag className="h-12 w-12" aria-hidden="true" />}
           title="Nenhum item na loja"
           description="Novos itens serão adicionados em breve. Volte mais tarde!"
         />
       ) : null}
 
-      {categories.map((category) => {
-        const items = (shopState?.items ?? []).filter((i) => i.category === category)
-        if (items.length === 0) return null
+      {items.length > 0 && visibleCount === 0 && selectedCategory ? (
+        <EmptyState
+          icon={<ShoppingBag className="h-12 w-12" aria-hidden="true" />}
+          title={`Nada em ${categoryLabel(selectedCategory)} por enquanto`}
+          description="Tente outra categoria ou veja todos os itens."
+          action={{ label: 'Limpar filtro', onClick: () => setSelectedCategory(null) }}
+        />
+      ) : null}
+
+      {visibleCategories.map((category) => {
+        const categoryItems = items.filter((i) => i.category === category)
+        if (categoryItems.length === 0) return null
         const Icon = CATEGORY_ICONS[category] ?? Sparkles
 
         return (
-          <div key={category} className="mb-8">
-            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-white">
-              <Icon className="h-5 w-5" />
-              {CATEGORY_LABELS[category]}
+          <section key={category} className="mb-8" aria-label={categoryLabel(category)}>
+            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
+              <Icon className="h-5 w-5" aria-hidden="true" />
+              {categoryLabel(category)}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {items.map((item) => (
-                <Card key={item.id} >
-                  <div className="flex h-full flex-col">
-                    <div className="mb-3 flex items-start justify-between">
-                      <Badge variant={item.isPremiumOnly ? 'violet' : 'default'}>
-                        {item.isPremiumOnly ? (
-                          <>
-                            <Star className="h-3 w-3" /> Premium
-                          </>
-                        ) : (
-                          CATEGORY_LABELS[item.category] ?? item.category
-                        )}
-                      </Badge>
-                      {item.ownershipStatus !== 'available' && (
-                        <Badge variant="emerald">
-                          {item.ownershipStatus === 'owned_permanent'
-                            ? 'Adquirido'
-                            : item.ownershipStatus === 'active_temporary'
-                              ? 'Ativo'
-                              : 'Expirado'}
-                        </Badge>
-                      )}
-                    </div>
-
-                    <h4 className="text-base font-bold text-white">{item.name}</h4>
-                    <p className="mt-1 flex-1 text-sm text-slate-400">{item.description}</p>
-
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1 text-sm font-bold text-amber-400">
-                        <Coins className="h-4 w-4" />
-                        {item.cost}
-                      </span>
-
-                      {item.ownershipStatus === 'available' || item.ownershipStatus === 'expired_temporary' ? (
-                        <Button
-                          size="sm"
-                          disabled={purchaseItem.isPending}
-                          onClick={() => purchaseItem.mutate(item.id)}
-                        >
-                          {purchaseItem.isPending ? (
-                            <>
-                              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
-                              Comprando...
-                            </>
-                          ) : (
-                            'Comprar'
-                          )}
-                        </Button>
-                      ) : item.ownershipStatus === 'owned_permanent' || item.ownershipStatus === 'active_temporary' ? (
-                        EQUIPPABLE_CATEGORIES.includes(item.category) ? (
-                          <Button
-                            size="sm"
-                            variant={item.isEquipped ? 'outline' : 'default'}
-                            disabled={equipItem.isPending}
-                            onClick={() => item.inventoryId && equipItem.mutate(item.inventoryId)}
-                          >
-                            {item.isEquipped ? 'Equipado' : 'Equipar'}
-                          </Button>
-                        ) : (
-                          <Badge variant="emerald">Adquirido</Badge>
-                        )
-                      ) : null}
-                    </div>
-                  </div>
-                </Card>
+              {categoryItems.map((item) => (
+                <ShopItemCard
+                  key={item.id}
+                  item={item}
+                  isPremium={isPremium}
+                  isPurchasing={purchasingId === item.id}
+                  isEquipping={equippingId === item.inventoryId}
+                  purchaseDisabled={purchaseItem.isPending}
+                  equipDisabled={equipItem.isPending}
+                  onPurchase={(id) => purchaseItem.mutate(id)}
+                  onEquip={(inventoryId) => equipItem.mutate(inventoryId)}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )
       })}
     </div>

@@ -33,8 +33,8 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
 function StatCard({ label, value, highlight }: { label: string; value: number | string; highlight?: boolean }) {
   return (
     <div className={`hx-card p-4 ${highlight ? 'ring-1 ring-cyan-500/30' : ''}`}>
-      <div className={`text-2xl font-black ${highlight ? 'text-cyan-400' : 'text-white'}`}>{value}</div>
-      <div className="mt-1 text-xs text-slate-400">{label}</div>
+      <div className={`text-2xl font-black ${highlight ? 'text-cyan-400' : 'text-foreground'}`}>{value}</div>
+      <div className="mt-1 text-xs text-muted-foreground">{label}</div>
     </div>
   )
 }
@@ -74,7 +74,7 @@ function ActionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-white">
+          <DialogTitle className="text-foreground">
             {titles[action]}{user ? ` · @${user.username ?? user.id.slice(0, 8)}` : ''}
           </DialogTitle>
         </DialogHeader>
@@ -156,11 +156,11 @@ export default function ModerationPage() {
           value={search}
           onChange={(e) => handleSearch(e.target.value)}
         />
-        <div className="flex gap-1 rounded-lg bg-white/5 p-1">
+        <div className="flex gap-1 rounded-lg bg-surface p-1">
           {STATUS_OPTIONS.map((opt) => (
             <button
               key={opt.value}
-              className={`flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition ${status === opt.value ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'}`}
+              className={`flex-1 rounded-md px-3 py-1.5 text-xs font-medium transition ${status === opt.value ? 'bg-cyan-500/20 text-cyan-400' : 'text-muted-foreground hover:text-foreground'}`}
               onClick={() => setStatus(opt.value)}
             >
               {opt.label}
@@ -171,14 +171,14 @@ export default function ModerationPage() {
 
       <div className="hx-card overflow-hidden">
         {usersLoading ? (
-          <div className="p-8 text-center text-sm text-slate-400">Carregando usuários...</div>
+          <div className="p-8 text-center text-sm text-muted-foreground">Carregando usuários...</div>
         ) : !users || users.length === 0 ? (
           <div className="p-8">
             <EmptyState title="Nenhum usuário encontrado" description="Ajuste a busca ou o filtro de status." />
           </div>
         ) : (
-          <div className="divide-y divide-white/5">
-            <div className="grid grid-cols-[1.4fr_1fr_0.8fr_0.8fr_1fr] gap-2 px-4 py-3 text-xs font-semibold text-slate-500">
+          <div className="divide-y divide-border">
+            <div className="grid grid-cols-[1.4fr_1fr_0.8fr_0.8fr_1fr] gap-2 px-4 py-3 text-xs font-semibold text-muted-foreground">
               <span>Usuário</span>
               <span>Cargos</span>
               <span>Nível</span>
@@ -188,18 +188,18 @@ export default function ModerationPage() {
             {users.map((u) => (
               <div key={u.id} className="grid grid-cols-[1.4fr_1fr_0.8fr_0.8fr_1fr] items-center gap-2 px-4 py-3 text-sm">
                 <div className="min-w-0">
-                  <div className="truncate font-semibold text-white">
+                  <div className="truncate font-semibold text-foreground">
                     {u.username ? `@${u.username}` : u.email}
                   </div>
-                  <div className="truncate text-xs text-slate-400">{u.fullName ?? u.email}</div>
+                  <div className="truncate text-xs text-muted-foreground">{u.fullName ?? u.email}</div>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {u.roles.slice(0, 2).map((r) => (
                     <Badge key={r} variant="outline" className="text-[10px]">{ROLES_LABELS[r] ?? r}</Badge>
                   ))}
                 </div>
-                <div className="text-sm text-slate-300">
-                  {u.level} <span className="text-xs text-slate-500">({u.xp} XP)</span>
+                <div className="text-sm text-muted-foreground">
+                  {u.level} <span className="text-xs text-muted-foreground">({u.xp} XP)</span>
                 </div>
                 <div>
                   {u.isBanned ? (

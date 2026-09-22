@@ -7,52 +7,54 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#06080f',
-        foreground: '#f8fafc',
+        // Baseadas em variáveis CSS — temas cosméticos trocam os valores em runtime.
+        // Fallbacks mantêm o visual padrão caso a variável não exista.
+        background: 'var(--background, #06080f)',
+        foreground: 'var(--foreground, #f8fafc)',
         primary: {
-          DEFAULT: '#2563eb',
-          hover: '#1d4ed8',
+          DEFAULT: 'var(--primary, #2563eb)',
+          hover: 'var(--primary-hover, #1d4ed8)',
           foreground: '#ffffff'
         },
         accent: {
-          DEFAULT: '#14b8a6',
+          DEFAULT: 'var(--accent, #14b8a6)',
           foreground: '#ffffff'
         },
         secondary: {
-          DEFAULT: '#111827',
-          foreground: '#f8fafc'
+          DEFAULT: 'var(--secondary, #111827)',
+          foreground: 'var(--foreground, #f8fafc)'
         },
         muted: {
-          DEFAULT: '#64748b',
+          DEFAULT: 'var(--muted, #64748b)',
           foreground: '#94a3b8'
         },
         destructive: {
           DEFAULT: '#dc2626',
           foreground: '#ffffff'
         },
-        border: 'rgba(148, 163, 184, 0.18)',
-        surface: 'rgba(15, 23, 42, 0.78)',
-        'surface-strong': 'rgba(15, 23, 42, 0.96)',
+        border: 'var(--border, rgba(148, 163, 184, 0.18))',
+        surface: 'var(--surface, rgba(15, 23, 42, 0.78))',
+        'surface-strong': 'var(--surface-strong, rgba(15, 23, 42, 0.96))',
         cyan: {
-          DEFAULT: '#22d3ee',
-          glow: 'rgba(34, 211, 238, 0.22)'
+          DEFAULT: 'var(--cyan, #22d3ee)',
+          glow: 'var(--cyan-glow, rgba(34, 211, 238, 0.22))'
         },
         sidebar: {
-          DEFAULT: 'hsl(240, 6%, 7%)',
-          foreground: 'hsl(210, 20%, 96%)',
-          accent: 'hsl(217, 25%, 14%)',
-          'accent-foreground': 'hsl(210, 20%, 98%)',
-          border: 'hsl(217, 20%, 16%)',
-          ring: 'hsl(217, 91%, 60%)',
-          highlight: 'hsl(187, 85%, 53%)'
+          DEFAULT: 'hsl(var(--sidebar-background, 240 6% 7%))',
+          foreground: 'hsl(var(--sidebar-foreground, 210 20% 96%))',
+          accent: 'hsl(var(--sidebar-accent, 217 25% 14%))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground, 210 20% 98%))',
+          border: 'hsl(var(--sidebar-border, 217 20% 16%))',
+          ring: 'hsl(var(--sidebar-ring, 217 91% 60%))',
+          highlight: 'hsl(var(--sidebar-highlight, 187 85% 53%))'
         },
         card: {
-          DEFAULT: 'rgba(15, 23, 42, 0.78)',
-          foreground: '#f8fafc'
+          DEFAULT: 'var(--surface, rgba(15, 23, 42, 0.78))',
+          foreground: 'var(--foreground, #f8fafc)'
         },
         popover: {
           DEFAULT: 'hsl(240, 6%, 10%)',
-          foreground: '#f8fafc'
+          foreground: 'var(--foreground, #f8fafc)'
         }
       },
       borderRadius: {

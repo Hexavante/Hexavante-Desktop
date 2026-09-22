@@ -43,7 +43,7 @@ function CreatePermissionDialog({ open, onOpenChange }: { open: boolean; onOpenC
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader><DialogTitle className="text-white">Nova Permissão</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle className="text-foreground">Nova Permissão</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="hx-label">Nome (recurso.acao)</label>
@@ -88,7 +88,7 @@ function CreateRoleDialog({ open, onOpenChange }: { open: boolean; onOpenChange:
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        <DialogHeader><DialogTitle className="text-white">Nova Função</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle className="text-foreground">Nova Função</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="hx-label">Nome</label>
@@ -148,15 +148,15 @@ export default function AdminPage() {
         )}
       </PageHeader>
 
-      <div className="mb-6 flex gap-1 rounded-lg bg-white/5 p-1">
+      <div className="mb-6 flex gap-1 rounded-lg bg-surface p-1">
         <button
-          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${tab === 'permissoes' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'}`}
+          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${tab === 'permissoes' ? 'bg-cyan-500/20 text-cyan-400' : 'text-muted-foreground hover:text-foreground'}`}
           onClick={() => setTab('permissoes')}
         >
           Permissões
         </button>
         <button
-          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${tab === 'funcoes' ? 'bg-cyan-500/20 text-cyan-400' : 'text-slate-400 hover:text-white'}`}
+          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition ${tab === 'funcoes' ? 'bg-cyan-500/20 text-cyan-400' : 'text-muted-foreground hover:text-foreground'}`}
           onClick={() => setTab('funcoes')}
         >
           Funções
@@ -166,18 +166,18 @@ export default function AdminPage() {
       {tab === 'permissoes' && (
         <div className="hx-card overflow-hidden">
           {!permissionsData || permissionsData.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-400">Nenhuma permissão cadastrada</div>
+            <div className="p-8 text-center text-sm text-muted-foreground">Nenhuma permissão cadastrada</div>
           ) : (
-            <div className="divide-y divide-white/5">
-              <div className="grid grid-cols-[1fr_120px_100px] gap-2 px-4 py-3 text-xs font-semibold text-slate-500">
+            <div className="divide-y divide-border">
+              <div className="grid grid-cols-[1fr_120px_100px] gap-2 px-4 py-3 text-xs font-semibold text-muted-foreground">
                 <span>Nome</span>
                 <span>Recurso</span>
                 <span>Ação</span>
               </div>
               {permissionsData.map(p => (
                 <div key={p.id} className="grid grid-cols-[1fr_120px_100px] items-center gap-2 px-4 py-3 text-sm">
-                  <span className="text-white">{p.name}</span>
-                  <span className="text-slate-400">{p.resource}</span>
+                  <span className="text-foreground">{p.name}</span>
+                  <span className="text-muted-foreground">{p.resource}</span>
                   <span><Badge variant="outline" className="text-[10px]">{p.action}</Badge></span>
                 </div>
               ))}
@@ -189,14 +189,14 @@ export default function AdminPage() {
       {tab === 'funcoes' && (
         <div className="space-y-3">
           {!rolesData || rolesData.length === 0 ? (
-            <div className="hx-card p-8 text-center text-sm text-slate-400">Nenhuma função cadastrada</div>
+            <div className="hx-card p-8 text-center text-sm text-muted-foreground">Nenhuma função cadastrada</div>
           ) : (
             rolesData.map(role => (
               <div key={role.id} className="hx-card p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-white">{role.name}</h4>
-                    {role.description && <p className="text-xs text-slate-400">{role.description}</p>}
+                    <h4 className="text-sm font-bold text-foreground">{role.name}</h4>
+                    {role.description && <p className="text-xs text-muted-foreground">{role.description}</p>}
                   </div>
                   <Badge variant="outline">{role.permissions?.length ?? 0} permissões</Badge>
                 </div>
