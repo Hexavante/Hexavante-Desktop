@@ -1,8 +1,9 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { createHashRouter, RouterProvider, useRouteError } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { RequireAuth, RedirectIfAuthenticated } from '@/components/auth/RequireAuth'
+import { useThemeStore } from '@/app/stores/theme.store'
 import {
   LoginPage,
   RegisterPage,
@@ -82,10 +83,33 @@ function LazyPage({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
 }
 
+/**
+ * Telas públicas de auth sempre usam o tema padrão Hexavante.
+ * Restaura o tema do usuário ao sair (login bem-sucedido).
+ */
+function ForceDefaultTheme({ children }: { children: React.ReactNode }) {
+  const setCosmeticTheme = useThemeStore((s) => s.setCosmeticTheme)
+  const previous = useRef<string | null>(null)
+
+  useEffect(() => {
+    previous.current = useThemeStore.getState().cosmeticTheme
+    setCosmeticTheme('default')
+    return () => {
+      if (previous.current && previous.current !== 'default') {
+        setCosmeticTheme(previous.current)
+      }
+    }
+  }, [setCosmeticTheme])
+
+  return <>{children}</>
+}
+
 function AuthPage({ children }: { children: React.ReactNode }) {
   return (
     <RedirectIfAuthenticated>
-      <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+      <ForceDefaultTheme>
+        <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
+      </ForceDefaultTheme>
     </RedirectIfAuthenticated>
   )
 }

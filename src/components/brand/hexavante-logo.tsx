@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import logoUrl from '@/assets/brand/hexavante-logo.png'
 
 type Props = {
   showWordmark?: boolean
@@ -27,7 +28,7 @@ export function HexavanteLogo({
   return (
     <span className={cn('flex items-center gap-2.5', className)}>
       <img
-        src="/brand/hexavante-logo.png"
+        src={logoUrl}
         alt="Hexavante"
         width={dimensions.image}
         height={dimensions.image}
