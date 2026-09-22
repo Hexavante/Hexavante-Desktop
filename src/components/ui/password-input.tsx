@@ -1,4 +1,4 @@
-import { useState, type InputHTMLAttributes } from 'react'
+import { forwardRef, useState, type InputHTMLAttributes } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -6,13 +6,18 @@ type Props = InputHTMLAttributes<HTMLInputElement>
 
 /**
  * Campo de senha com botão "olhinho" para mostrar/ocultar.
+ * Usa forwardRef para o react-hook-form enxergar o valor (React 18).
  */
-export function PasswordInput({ className, ...props }: Props) {
+export const PasswordInput = forwardRef<HTMLInputElement, Props>(function PasswordInput(
+  { className, ...props },
+  ref,
+) {
   const [visible, setVisible] = useState(false)
 
   return (
     <div className="relative">
       <input
+        ref={ref}
         type={visible ? 'text' : 'password'}
         className={cn('hx-input h-11 pr-10', className)}
         {...props}
@@ -32,4 +37,4 @@ export function PasswordInput({ className, ...props }: Props) {
       </button>
     </div>
   )
-}
+})
