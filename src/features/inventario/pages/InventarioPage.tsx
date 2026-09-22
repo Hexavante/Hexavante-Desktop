@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,10 @@ import {
   Gem,
   Shield,
   Zap,
+  Medal,
+  Image,
+  Smile,
+  PawPrint,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -34,6 +38,11 @@ const CATEGORY_LABELS: Record<string, string> = {
   BOOSTER: 'Boosters',
   PASS: 'Passes',
   REVIEW_PACK: 'Pacotes de Revisão',
+  BADGE: 'Distintivos',
+  FRAME: 'Molduras',
+  PROFILE_BACKGROUND: 'Fundos',
+  EMOJI_PACK: 'Emojis',
+  PET: 'Pets',
 }
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -44,6 +53,26 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   BOOSTER: Rocket,
   PASS: Ticket,
   REVIEW_PACK: BookOpen,
+  BADGE: Medal,
+  FRAME: Frame,
+  PROFILE_BACKGROUND: Image,
+  EMOJI_PACK: Smile,
+  PET: PawPrint,
+}
+
+// Ordem amigável das seções; categorias novas entram no fim.
+const CATEGORY_ORDER = [
+  'THEME', 'TITLE', 'AVATAR_BORDER', 'FRAME', 'BADGE', 'PROFILE_BACKGROUND',
+  'COSMETIC', 'EMOJI_PACK', 'PET', 'BOOSTER', 'PASS', 'REVIEW_PACK',
+]
+
+function categoryLabel(category: string): string {
+  if (CATEGORY_LABELS[category]) return CATEGORY_LABELS[category]
+  return category
+    .toLowerCase()
+    .split('_')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
 }
 
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC', 'BADGE', 'FRAME', 'PROFILE_BACKGROUND', 'EMOJI_PACK']
@@ -148,9 +177,17 @@ export default function InventarioPage() {
 
   const inventory = data?.items ?? []
 
-  const categories = tab === 'all'
-    ? ['COSMETIC', 'AVATAR_BORDER', 'TITLE', 'THEME', 'BOOSTER', 'PASS', 'REVIEW_PACK']
-    : [tab]
+  // Categorias derivadas do que o usuário realmente possui (nada fica invisível).
+  const presentCategories = useMemo(() => {
+    const present = [...new Set(inventory.map((i) => i.item.category))]
+    return present.sort((a, b) => {
+      const ia = CATEGORY_ORDER.indexOf(a)
+      const ib = CATEGORY_ORDER.indexOf(b)
+      return (ia === -1 ? CATEGORY_ORDER.length : ia) - (ib === -1 ? CATEGORY_ORDER.length : ib)
+    })
+  }, [inventory])
+
+  const categories = tab === 'all' ? presentCategories : [tab]
 
   return (
     <div className="hx-page">
@@ -168,10 +205,11 @@ export default function InventarioPage() {
         >
           Todos ({inventory.length})
         </button>
-        {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
+        {presentCategories.map((key) => {
           const count = inventory.filter((i) => i.item.category === key).length
           if (count === 0) return null
-          const Icon = CATEGORY_ICONS[key]
+          const Icon = CATEGORY_ICONS[key] ?? Shield
+          const label = categoryLabel(key)
           return (
             <button
               key={key}
@@ -194,13 +232,13 @@ export default function InventarioPage() {
       {categories.map((category) => {
         const items = inventory.filter((i) => i.item.category === category)
         if (items.length === 0) return null
-        const Icon = CATEGORY_ICONS[category]
+        const Icon = CATEGORY_ICONS[category] ?? Shield
 
         return (
           <div key={category} className="mb-8">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-foreground">
               <Icon className="h-5 w-5" />
-              {CATEGORY_LABELS[category]}
+              {categoryLabel(category)}
             </h3>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((entry) => (
@@ -208,7 +246,7 @@ export default function InventarioPage() {
                   <div className="flex h-full flex-col">
                     <div className="mb-3 flex items-start justify-between">
                       <Badge variant={entry.item.isPremiumOnly ? 'violet' : 'default'}>
-                        {CATEGORY_LABELS[entry.item.category] ?? entry.item.category}
+                        {categoryLabel(entry.item.category)}
                       </Badge>
                       {entry.isEquipped && (
                         <Badge variant="emerald">Equipado</Badge>
