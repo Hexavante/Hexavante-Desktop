@@ -4,14 +4,32 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useProfile } from '@/api/users/queries'
 import { useUpdateProfile } from '@/api/users/mutations'
+import { useMyAchievements } from '@/api/gamification/queries'
 import { useAuth } from '@/app/hooks/use-auth'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Star, Trophy, Award } from 'lucide-react'
+import {
+  Star,
+  Trophy,
+  Award,
+  Flame,
+  Brain,
+  Rocket,
+  Gem,
+  Shield,
+  BookOpen,
+  Medal,
+  type LucideIcon,
+} from 'lucide-react'
 import { toast } from 'sonner'
 import { shopService } from '@/services/shop.service'
+import {
+  resolveProfileBackground,
+  resolveProfileFrame,
+  resolveProfileIcon,
+} from '@/lib/cosmetics'
 
 const profileFormSchema = z.object({
   fullName: z.string().min(2, 'Mínimo de 2 caracteres'),
@@ -32,27 +50,59 @@ const BORDER_COLORS: Record<string, string> = {
   'border-crystal': '#bae6fd',
 }
 
+// Metadados dos itens da loja (unknown na API — cast local).
+type CosmeticMetadata = {
+  frameId?: unknown
+  backgroundId?: unknown
+  iconId?: unknown
+  titleText?: unknown
+  borderId?: unknown
+  badgeId?: unknown
+  cosmeticType?: unknown
+}
+
+function metadataOf(item: { metadata?: unknown }): CosmeticMetadata {
+  const meta = item.metadata
+  return (meta && typeof meta === 'object' ? meta : {}) as CosmeticMetadata
+}
+
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null
+}
+
 function getTitleTextOf(item: { metadata?: unknown }, fallback: string): string {
-  const meta = item.metadata as { titleText?: unknown } | null | undefined
-  if (meta && typeof meta.titleText === 'string' && meta.titleText.trim().length > 0) {
-    return meta.titleText
-  }
-  return fallback
+  const text = asString(metadataOf(item).titleText)
+  return text && text.trim().length > 0 ? text : fallback
 }
 
 function getBorderIdOf(item: { metadata?: unknown }): string | null {
-  const meta = item.metadata as { borderId?: unknown } | null | undefined
-  return typeof meta?.borderId === 'string' && meta.borderId.length > 0 ? meta.borderId : null
+  return asString(metadataOf(item).borderId)
+}
+
+// Ícones lucide disponíveis para cosmeticType === 'profile_icon'.
+const PROFILE_ICON_COMPONENTS: Record<string, LucideIcon> = {
+  Flame,
+  Brain,
+  Trophy,
+  Star,
+  Rocket,
+  Gem,
+  Shield,
+  BookOpen,
 }
 
 export default function PerfilPage() {
   const { user } = useAuth()
   const { data: profile, isLoading, isError, refetch } = useProfile()
+  const { data: achievementsData } = useMyAchievements()
   const updateProfile = useUpdateProfile()
   const [editing, setEditing] = useState(false)
   const [equippedTitle, setEquippedTitle] = useState<string | null>(null)
   const [equippedBadge, setEquippedBadge] = useState<string | null>(null)
   const [equippedBorderId, setEquippedBorderId] = useState<string | null>(null)
+  const [equippedFrameId, setEquippedFrameId] = useState<string | null>(null)
+  const [equippedBackgroundId, setEquippedBackgroundId] = useState<string | null>(null)
+  const [equippedIconId, setEquippedIconId] = useState<string | null>(null)
 
   useEffect(() => {
     shopService
@@ -71,6 +121,39 @@ export default function PerfilPage() {
         if (borderEntry) {
           const borderId = getBorderIdOf(borderEntry.item)
           if (borderId) setEquippedBorderId(borderId)
+        }
+        const frameEntry = items.find(
+          (e) => e.isEquipped && resolveProfileFrame(asString(metadataOf(e.item).frameId)) !== null,
+        )
+        if (frameEntry) {
+          const frameId = asString(metadataOf(frameEntry.item).frameId)
+          if (frameId) setEquippedFrameId(frameId)
+        }
+        const backgroundEntry = items.find(
+          (e) =>
+            e.isEquipped &&
+            resolveProfileBackground(asString(metadataOf(e.item).backgroundId)) !== null,
+        )
+        if (backgroundEntry) {
+          const backgroundId = asString(metadataOf(backgroundEntry.item).backgroundId)
+          if (backgroundId) setEquippedBackgroundId(backgroundId)
+        }
+        const iconEntry =
+          items.find(
+            (e) =>
+              e.isEquipped &&
+              e.item.category === 'COSMETIC' &&
+              metadataOf(e.item).cosmeticType === 'profile_icon' &&
+              resolveProfileIcon(asString(metadataOf(e.item).iconId)) !== null,
+          ) ??
+          items.find(
+            (e) =>
+              e.isEquipped &&
+              resolveProfileIcon(asString(metadataOf(e.item).iconId)) !== null,
+          )
+        if (iconEntry) {
+          const iconId = asString(metadataOf(iconEntry.item).iconId)
+          if (iconId) setEquippedIconId(iconId)
         }
       })
       .catch(() => {})
@@ -135,6 +218,16 @@ export default function PerfilPage() {
     ? (BORDER_COLORS[equippedBorderId] ?? 'hsl(var(--sidebar-highlight))')
     : undefined
 
+  const equippedFrame = resolveProfileFrame(equippedFrameId)
+  const equippedBackground = resolveProfileBackground(equippedBackgroundId)
+  const equippedIcon = resolveProfileIcon(equippedIconId)
+  const EquippedIconComponent = equippedIcon ? PROFILE_ICON_COMPONENTS[equippedIcon.lucideName] : undefined
+
+  const recentAchievements = (achievementsData ?? [])
+    .filter((a) => a.unlocked && a.unlockedAt)
+    .sort((a, b) => +new Date(b.unlockedAt as string) - +new Date(a.unlockedAt as string))
+    .slice(0, 5)
+
   return (
     <div className="hx-page">
       <PageHeader
@@ -150,14 +243,29 @@ export default function PerfilPage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-1">
-          <div className="hx-card flex flex-col items-center p-6">
+          <div
+            className={`hx-card flex flex-col items-center p-6 ${equippedBackground?.animationClass ?? ''}`}
+            style={equippedBackground ? { ...equippedBackground.style } : undefined}
+          >
             <div
-              className={`flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400 ${borderColor ? 'border-2 border-solid' : ''}`}
-              style={borderColor ? { borderColor } : undefined}
+              className={
+                equippedFrame
+                  ? `flex h-24 w-24 items-center justify-center bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400 ${equippedFrame.animationClass ?? ''}`
+                  : `flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-3xl font-black text-cyan-400 ${borderColor ? 'border-2 border-solid' : ''}`
+              }
+              style={equippedFrame ? { ...equippedFrame.style } : borderColor ? { borderColor } : undefined}
             >
               {user?.name?.charAt(0).toUpperCase()}
             </div>
-            <h2 className="mt-4 text-lg font-bold text-foreground">{userProfile.fullName}</h2>
+            <h2 className="mt-4 inline-flex items-center gap-2 text-lg font-bold text-foreground">
+              {userProfile.fullName}
+              {EquippedIconComponent && equippedIcon ? (
+                <EquippedIconComponent
+                  className={`h-5 w-5 ${equippedIcon.className}`}
+                  aria-label={equippedIcon.label}
+                />
+              ) : null}
+            </h2>
             <p className="text-sm text-muted-foreground">@{userProfile.username}</p>
 
             {equippedTitle || equippedBadge ? (
@@ -286,6 +394,32 @@ export default function PerfilPage() {
               </div>
             )}
           </div>
+
+          {recentAchievements.length > 0 ? (
+            <div className="hx-card mt-6 p-6">
+              <h3 className="mb-4 text-sm font-bold text-foreground">Atividade recente</h3>
+              <ul className="space-y-3">
+                {recentAchievements.map((achievement) => (
+                  <li key={achievement.key} className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-amber-500/30 bg-amber-500/10">
+                      <Medal className="h-4 w-4 text-amber-500" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-foreground">
+                        Conquista desbloqueada: {achievement.name}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">{achievement.description}</p>
+                    </div>
+                    {achievement.unlockedAt ? (
+                      <span className="shrink-0 text-xs text-muted-foreground">
+                        {new Date(achievement.unlockedAt).toLocaleDateString('pt-BR')}
+                      </span>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

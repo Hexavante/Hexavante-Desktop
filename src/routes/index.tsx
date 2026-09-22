@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef } from 'react'
-import { createHashRouter, RouterProvider, useRouteError } from 'react-router-dom'
+import { createHashRouter, RouterProvider, useLocation, useRouteError } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { RequireAuth, RedirectIfAuthenticated } from '@/components/auth/RequireAuth'
@@ -112,9 +112,16 @@ function AuthPage({ children }: { children: React.ReactNode }) {
 }
 
 function AppPage({ children }: { children: React.ReactNode }) {
+  const { pathname } = useLocation()
   return (
     <RequireAuth>
-      <AppShell><Suspense fallback={<LoadingScreen />}>{children}</Suspense></AppShell>
+      <AppShell>
+        <Suspense fallback={<LoadingScreen />}>
+          <div key={pathname} className="animate-fade-in">
+            {children}
+          </div>
+        </Suspense>
+      </AppShell>
     </RequireAuth>
   )
 }

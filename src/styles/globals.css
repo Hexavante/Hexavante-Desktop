@@ -832,3 +832,25 @@ html[data-theme-mode="light"] .hx-sidebar-brand:hover {
 .booster-indicator {
   animation: booster-glow 2.4s ease-in-out infinite;
 }
+
+/* Animações de molduras/fundos do perfil (espelham o web) */
+@keyframes frame-neon { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.25); } }
+@keyframes frame-shimmer { 0% { filter: brightness(1); } 50% { filter: brightness(1.2) saturate(1.2); } 100% { filter: brightness(1); } }
+@keyframes frame-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.85; } }
+@keyframes frame-rotate { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+@keyframes bg-glow { 0%,100% { opacity: 1; } 50% { opacity: 0.8; } }
+@keyframes bg-breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes bg-shift { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 0%; } }
+@keyframes bg-aurora { 0%,100% { filter: hue-rotate(0deg) brightness(1); } 50% { filter: hue-rotate(20deg) brightness(1.1); } }
+.animate-frame-neon { animation: frame-neon 2.4s ease-in-out infinite; }
+.animate-frame-shimmer { animation: frame-shimmer 3s ease-in-out infinite; }
+.animate-frame-pulse { animation: frame-pulse 2s ease-in-out infinite; }
+.animate-frame-rotate { animation: frame-rotate 8s linear infinite; }
+.animate-bg-glow { animation: bg-glow 4s ease-in-out infinite; }
+.animate-bg-breathe { animation: bg-breathe 6s ease-in-out infinite; }
+.animate-bg-shift { animation: bg-shift 10s ease-in-out infinite; }
+.animate-bg-aurora { animation: bg-aurora 7s ease-in-out infinite; }
+@keyframes frame-rain { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15) saturate(1.3); } }
+@keyframes frame-forest { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.12); } }
+.animate-frame-rain { animation: frame-rain 3s ease-in-out infinite; }
+.animate-frame-forest { animation: frame-forest 4s ease-in-out infinite; }

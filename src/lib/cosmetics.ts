@@ -438,3 +438,218 @@ export const APP_THEMES: Record<string, AppThemeDef> = {
     },
   },
 }
+
+export type ProfileIconDef = { id: string; label: string; lucideName: string; className: string };
+export type ProfileFrameDef = { id: string; label: string; rarity: string; style: Record<string, string>; animationClass?: string };
+export type ProfileBackgroundDef = { id: string; label: string; rarity: string; style: Record<string, string>; animationClass?: string };
+
+export const PROFILE_ICONS: Record<string, ProfileIconDef> = {
+  "icon-flame": {
+    id: "icon-flame",
+    label: "Chama",
+    lucideName: "Flame",
+    className: "text-orange-400",
+  },
+  "icon-brain": {
+    id: "icon-brain",
+    label: "Mente Brilhante",
+    lucideName: "Brain",
+    className: "text-violet-400",
+  },
+  "icon-trophy": {
+    id: "icon-trophy",
+    label: "Troféu",
+    lucideName: "Trophy",
+    className: "text-amber-400",
+  },
+  "icon-star": {
+    id: "icon-star",
+    label: "Estrela",
+    lucideName: "Star",
+    className: "text-yellow-400",
+  },
+  "icon-rocket": {
+    id: "icon-rocket",
+    label: "Foguete",
+    lucideName: "Rocket",
+    className: "text-cyan-400",
+  },
+  "icon-gem": {
+    id: "icon-gem",
+    label: "Gema",
+    lucideName: "Gem",
+    className: "text-pink-400",
+  },
+  "icon-shield": {
+    id: "icon-shield",
+    label: "Escudo",
+    lucideName: "Shield",
+    className: "text-emerald-400",
+  },
+  "icon-book": {
+    id: "icon-book",
+    label: "Livro",
+    lucideName: "BookOpen",
+    className: "text-blue-400",
+  },
+};
+export const PROFILE_FRAMES: Record<string, ProfileFrameDef> = {
+  "frame-neon": {
+    id: "frame-neon", label: "Moldura Neon", rarity: "rare",
+    style: { border: "2px solid #22d3ee", borderRadius: "1rem", boxShadow: "0 0 14px rgba(34,211,238,0.45)", "--frame-glow": "rgba(34,211,238,0.45)" } as Record<string, string>,
+    animationClass: "animate-frame-neon",
+  },
+  "frame-geometria": {
+    id: "frame-geometria", label: "Moldura Geometria", rarity: "common",
+    style: { border: "2px dashed rgba(148,163,184,0.6)", borderRadius: "1rem", outline: "2px dashed rgba(148,163,184,0.25)", outlineOffset: "3px" },
+  },
+  "frame-madeira": {
+    id: "frame-madeira", label: "Moldura Madeira", rarity: "common",
+    style: { border: "3px solid #b45309", borderRadius: "1rem", boxShadow: "inset 0 0 0 1px rgba(251,191,36,0.35)" },
+  },
+  "frame-fire": {
+    id: "frame-fire", label: "Moldura Fogo", rarity: "rare",
+    style: { border: "2px solid #f97316", borderRadius: "1rem", boxShadow: "0 0 16px rgba(249,115,22,0.5)", "--frame-glow": "rgba(249,115,22,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-pulse",
+  },
+  "frame-ice": {
+    id: "frame-ice", label: "Moldura Gelo", rarity: "rare",
+    style: { border: "2px solid #93c5fd", borderRadius: "1rem", boxShadow: "0 0 12px rgba(147,197,253,0.5)", "--frame-glow": "rgba(147,197,253,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-pulse",
+  },
+  "frame-cyber": {
+    id: "frame-cyber", label: "Moldura Cyber", rarity: "legendary",
+    style: { border: "2px solid #a855f7", borderRadius: "1rem", boxShadow: "0 0 18px rgba(168,85,247,0.55)", "--frame-glow": "rgba(168,85,247,0.55)" } as Record<string, string>,
+    animationClass: "animate-frame-neon",
+  },
+  "frame-crystal": {
+    id: "frame-crystal", label: "Moldura Cristal", rarity: "rare",
+    style: { border: "2px solid rgba(255,255,255,0.4)", borderRadius: "1rem", boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 12px rgba(255,255,255,0.15)", "--frame-glow": "rgba(255,255,255,0.2)" } as Record<string, string>,
+    animationClass: "animate-frame-shimmer",
+  },
+  "frame-flower": {
+    id: "frame-flower", label: "Moldura Flores", rarity: "common",
+    style: { border: "2px solid #f472b6", borderRadius: "1rem", boxShadow: "0 0 10px rgba(244,114,182,0.4)" },
+  },
+  "frame-shadow": {
+    id: "frame-shadow", label: "Moldura Sombra", rarity: "common",
+    style: { border: "2px solid #334155", borderRadius: "1rem", boxShadow: "inset 0 0 0 1px rgba(51,65,85,0.5), 0 0 14px rgba(0,0,0,0.6)" },
+  },
+  "frame-gold": {
+    id: "frame-gold", label: "Moldura Ouro", rarity: "legendary",
+    style: { border: "2px solid #eab308", borderRadius: "1rem", boxShadow: "0 0 18px rgba(234,179,8,0.5)", "--frame-glow": "rgba(234,179,8,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-rotate",
+  },
+  "frame-rainbow": {
+    id: "frame-rainbow", label: "Moldura Arco-Íris", rarity: "rare",
+    style: { border: "2px solid #a78bfa", borderRadius: "1rem", boxShadow: "0 0 12px rgba(167,139,250,0.4)", "--frame-glow": "rgba(167,139,250,0.4)" } as Record<string, string>,
+    animationClass: "animate-frame-shimmer",
+  },
+  "frame-dark": {
+    id: "frame-dark", label: "Moldura Dark", rarity: "common",
+    style: { border: "2px solid #1e293b", borderRadius: "1rem", boxShadow: "inset 0 0 0 1px rgba(30,41,59,0.6)" },
+  },
+  "frame-light": {
+    id: "frame-light", label: "Moldura Luz", rarity: "common",
+    style: { border: "2px solid #e2e8f0", borderRadius: "1rem", boxShadow: "0 0 14px rgba(226,232,240,0.3)" },
+  },
+  "frame-volcanic": {
+    id: "frame-volcanic", label: "Moldura Vulcânica", rarity: "rare",
+    style: { border: "2px solid #dc2626", borderRadius: "1rem", boxShadow: "0 0 16px rgba(220,38,38,0.5)", "--frame-glow": "rgba(220,38,38,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-pulse",
+  },
+  "frame-neon-purple": {
+    id: "frame-neon-purple", label: "Moldura Neon Roxo", rarity: "rare",
+    style: { border: "2px solid #a855f7", borderRadius: "1rem", boxShadow: "0 0 16px rgba(168,85,247,0.5)", "--frame-glow": "rgba(168,85,247,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-neon",
+  },
+  "frame-electric-blue": {
+    id: "frame-electric-blue", label: "Moldura Elétrica Azul", rarity: "rare",
+    style: { border: "2px solid #3b82f6", borderRadius: "1rem", boxShadow: "0 0 16px rgba(59,130,246,0.5)", "--frame-glow": "rgba(59,130,246,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-pulse",
+  },
+  "frame-royal": {
+    id: "frame-royal", label: "Moldura Real", rarity: "legendary",
+    style: { border: "2px solid #d97706", borderRadius: "1rem", boxShadow: "0 0 20px rgba(217,119,6,0.5)", "--frame-glow": "rgba(217,119,6,0.5)" } as Record<string, string>,
+    animationClass: "animate-frame-rotate",
+  },
+  "frame-mint": {
+    id: "frame-mint", label: "Moldura Menta", rarity: "common",
+    style: { border: "2px solid #34d399", borderRadius: "1rem", boxShadow: "0 0 10px rgba(52,211,153,0.35)" },
+  },
+  "frame-rain": {
+    id: "frame-rain", label: "Moldura Chuva", rarity: "rare",
+    style: { border: "2px solid #60a5fa", borderRadius: "1rem", boxShadow: "0 0 14px rgba(96,165,250,0.4)", "--frame-glow": "rgba(96,165,250,0.4)" } as Record<string, string>,
+    animationClass: "animate-frame-rain",
+  },
+  "frame-forest": {
+    id: "frame-forest", label: "Moldura Floresta", rarity: "rare",
+    style: { border: "2px solid #22c55e", borderRadius: "1rem", boxShadow: "0 0 14px rgba(34,197,94,0.4)", "--frame-glow": "rgba(34,197,94,0.4)" } as Record<string, string>,
+    animationClass: "animate-frame-forest",
+  },
+};
+export const PROFILE_BACKGROUNDS: Record<string, ProfileBackgroundDef> = {
+  "bg-galaxy": {
+    id: "bg-galaxy", label: "Fundo Galaxy", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 20% 0%, rgba(88,101,242,0.3) 0%, rgba(88,101,242,0.05) 50%, #1a1b1e 80%)" },
+    animationClass: "animate-bg-glow",
+  },
+  "bg-sunset-gradient": {
+    id: "bg-sunset-gradient", label: "Fundo Sunset", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 30% 10%, rgba(235,69,158,0.25) 0%, rgba(254,231,92,0.08) 50%, #1a1b1e 80%)" },
+  },
+  "bg-matrix": {
+    id: "bg-matrix", label: "Fundo Matrix", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 50% 0%, rgba(87,242,135,0.15) 0%, rgba(87,242,135,0.03) 50%, #1a1b1e 80%)" },
+    animationClass: "animate-bg-glow",
+  },
+  "bg-aurora": {
+    id: "bg-aurora", label: "Fundo Aurora", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 25% 0%, rgba(87,242,135,0.2) 0%, rgba(88,101,242,0.15) 40%, #1a1b1e 75%)" },
+    animationClass: "animate-bg-aurora",
+  },
+  "bg-rain": {
+    id: "bg-rain", label: "Fundo Chuva", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 60% 10%, rgba(88,101,242,0.12) 0%, rgba(88,101,242,0.02) 60%, #1a1b1e 90%)" },
+  },
+  "bg-beach": {
+    id: "bg-beach", label: "Fundo Praia", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 40% 0%, rgba(254,231,92,0.15) 0%, rgba(87,242,135,0.05) 50%, #1a1b1e 80%)" },
+  },
+  "bg-mountain": {
+    id: "bg-mountain", label: "Fundo Montanha", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 50% 0%, rgba(139,145,160,0.2) 0%, rgba(88,101,242,0.08) 50%, #1a1b1e 80%)" },
+    animationClass: "animate-bg-breathe",
+  },
+  "bg-city": {
+    id: "bg-city", label: "Fundo Cidade", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 50% 100%, rgba(88,101,242,0.15) 0%, rgba(30,31,34,0.5) 50%, #1a1b1e 90%)" },
+  },
+  "bg-forest": {
+    id: "bg-forest", label: "Fundo Floresta", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 30% 0%, rgba(87,242,135,0.15) 0%, rgba(34,197,94,0.05) 50%, #1a1b1e 80%)" },
+  },
+  "bg-space": {
+    id: "bg-space", label: "Fundo Espaço", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 40% 20%, rgba(88,101,242,0.25) 0%, rgba(139,92,246,0.1) 40%, #1a1b1e 75%)" },
+    animationClass: "animate-bg-shift",
+  },
+  "bg-electric": {
+    id: "bg-electric", label: "Fundo Elétrico", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 35% 10%, rgba(88,101,242,0.3) 0%, rgba(59,130,246,0.08) 50%, #1a1b1e 80%)" },
+    animationClass: "animate-bg-glow",
+  },
+  "bg-desert": {
+    id: "bg-desert", label: "Fundo Deserto", rarity: "common",
+    style: { background: "radial-gradient(ellipse at 50% 10%, rgba(254,231,92,0.12) 0%, rgba(245,158,11,0.05) 50%, #1a1b1e 80%)" },
+  },
+  "bg-underwater": {
+    id: "bg-underwater", label: "Fundo Subaquático", rarity: "rare",
+    style: { background: "radial-gradient(ellipse at 45% 0%, rgba(6,182,212,0.2) 0%, rgba(88,101,242,0.08) 50%, #1a1b1e 80%)" },
+    animationClass: "animate-bg-breathe",
+  },
+};
+
+export function resolveProfileIcon(iconId: string | null | undefined) { if (!iconId) return null; return PROFILE_ICONS[iconId] ?? null; }
+export function resolveProfileFrame(frameId: string | null | undefined) { if (!frameId) return null; return PROFILE_FRAMES[frameId] ?? null; }
+export function resolveProfileBackground(backgroundId: string | null | undefined) { if (!backgroundId) return null; return PROFILE_BACKGROUNDS[backgroundId] ?? null; }

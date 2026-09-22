@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'isomorphic-dompurify'
 import { useThemeStore } from '@/app/stores/theme.store'
 import { APP_THEMES } from '@/lib/cosmetics'
@@ -25,6 +25,19 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const { mode, resolvedTheme, cosmeticTheme, setResolvedTheme } = useThemeStore()
 
   const themeCss = useMemo(() => buildThemeVarsStyle(cosmeticTheme), [cosmeticTheme])
+
+  // Flash de transição ao trocar de tema cosmético: overlay opaco com a cor
+  // de fundo que desvanece (animate-fade-out já existe no tailwind config).
+  const [showFlash, setShowFlash] = useState(false)
+  const previousCosmeticTheme = useRef(cosmeticTheme)
+
+  useEffect(() => {
+    if (previousCosmeticTheme.current === cosmeticTheme) return
+    previousCosmeticTheme.current = cosmeticTheme
+    setShowFlash(true)
+    const timer = setTimeout(() => setShowFlash(false), 450)
+    return () => clearTimeout(timer)
+  }, [cosmeticTheme])
 
   useEffect(() => {
     const root = document.documentElement
@@ -60,6 +73,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <>
       {themeCss && <style id="hexavante-theme-vars" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(themeCss, { USE_PROFILES: { html: false } }) }} />}
+      {showFlash && (
+        <div
+          aria-hidden="true"
+          className="animate-fade-out pointer-events-none fixed inset-0 z-[100]"
+          style={{
+            background: 'var(--background)',
+            animationDuration: '450ms',
+            animationFillMode: 'forwards',
+          }}
+        />
+      )}
       {children}
     </>
   )

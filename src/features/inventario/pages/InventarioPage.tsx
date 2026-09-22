@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useInventory } from '@/api/shop/queries'
 import { useEquipItem } from '@/api/shop/mutations'
-import { getThemeIdOf } from '@/lib/cosmetics'
+import { getThemeIdOf, resolveProfileBackground, resolveProfileFrame, resolveProfileIcon } from '@/lib/cosmetics'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import {
@@ -17,6 +17,11 @@ import {
   Palette,
   Sparkles,
   Ticket,
+  Flame,
+  Brain,
+  Star,
+  Gem,
+  Shield,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -41,6 +46,82 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 }
 
 const EQUIPPABLE_CATEGORIES = ['TITLE', 'AVATAR_BORDER', 'THEME', 'COSMETIC']
+
+// Metadados dos itens do inventário (unknown na API — cast local).
+type CosmeticMetadata = {
+  frameId?: unknown
+  backgroundId?: unknown
+  iconId?: unknown
+  cosmeticType?: unknown
+}
+
+function metadataOf(item: { metadata?: unknown }): CosmeticMetadata {
+  const meta = item.metadata
+  return (meta && typeof meta === 'object' ? meta : {}) as CosmeticMetadata
+}
+
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null
+}
+
+const COSMETIC_ICON_COMPONENTS: Record<string, LucideIcon> = {
+  Flame,
+  Brain,
+  Trophy,
+  Star,
+  Rocket,
+  Gem,
+  Shield,
+  BookOpen,
+}
+
+// Preview silencioso do cosmético (moldura, fundo ou ícone). Sem o mapa = nada.
+function CosmeticPreview({ item }: { item: { category: string; metadata?: unknown } }) {
+  const meta = metadataOf(item)
+
+  const frame = resolveProfileFrame(asString(meta.frameId))
+  if (frame) {
+    return (
+      <div className="mt-3 flex items-center gap-2">
+        <div
+          aria-hidden="true"
+          className={frame.animationClass ?? ''}
+          style={{ width: 40, height: 40, ...frame.style }}
+        />
+        <span className="text-xs text-muted-foreground">{frame.label}</span>
+      </div>
+    )
+  }
+
+  const background = resolveProfileBackground(asString(meta.backgroundId))
+  if (background) {
+    return (
+      <div className="mt-3 flex items-center gap-2">
+        <span
+          aria-hidden="true"
+          className={`inline-block h-6 w-6 shrink-0 rounded-full ${background.animationClass ?? ''}`}
+          style={{ ...background.style }}
+        />
+        <span className="text-xs text-muted-foreground">{background.label}</span>
+      </div>
+    )
+  }
+
+  if (item.category === 'COSMETIC' && meta.cosmeticType === 'profile_icon') {
+    const icon = resolveProfileIcon(asString(meta.iconId))
+    const Icon = icon ? COSMETIC_ICON_COMPONENTS[icon.lucideName] : undefined
+    if (icon && Icon) {
+      return (
+        <div className="mt-3 flex items-center gap-2">
+          <Icon className={`h-6 w-6 ${icon.className}`} aria-hidden="true" />
+          <span className="text-xs text-muted-foreground">{icon.label}</span>
+        </div>
+      )
+    }
+  }
+
+  return null
+}
 
 export default function InventarioPage() {
   const { data, isLoading, isError, refetch } = useInventory()
@@ -133,6 +214,8 @@ export default function InventarioPage() {
 
                     <h4 className="text-base font-bold text-foreground">{entry.item.name}</h4>
                     <p className="mt-1 flex-1 text-sm text-muted-foreground">{entry.item.description}</p>
+
+                    <CosmeticPreview item={entry.item} />
 
                     {entry.expiresAt && (
                       <p className="mt-2 text-xs text-amber-400">
