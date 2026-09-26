@@ -854,3 +854,71 @@ html[data-theme-mode="light"] .hx-sidebar-brand:hover {
 @keyframes frame-forest { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.12); } }
 .animate-frame-rain { animation: frame-rain 3s ease-in-out infinite; }
 .animate-frame-forest { animation: frame-forest 4s ease-in-out infinite; }
+
+/* ——— Efeitos especiais por tema (fx) ——— */
+@keyframes fx-glow-pulse-anim {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--primary) 0%, transparent),
+      0 10px 30px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 22px 2px color-mix(in srgb, var(--primary) 45%, transparent),
+      0 10px 30px color-mix(in srgb, var(--primary) 28%, transparent);
+  }
+}
+
+.fx-glow-pulse .hx-btn-primary {
+  animation: fx-glow-pulse-anim 2.8s ease-in-out infinite;
+}
+
+@keyframes fx-shimmer-sweep {
+  0% { transform: translateX(-130%) skewX(-12deg); }
+  55%, 100% { transform: translateX(130%) skewX(-12deg); }
+}
+
+.fx-shimmer .hx-btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.fx-shimmer .hx-btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.45) 50%, transparent 58%);
+  transform: translateX(-130%) skewX(-12deg);
+  animation: fx-shimmer-sweep 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes fx-aurora-move {
+  0%, 100% { background-position: 0% 20%; opacity: 0.7; }
+  50% { background-position: 100% 80%; opacity: 1; }
+}
+
+html.fx-aurora-bg body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(36rem 22rem at 15% 0%, var(--theme-glow-1, rgba(148, 163, 184, 0.12)), transparent 70%),
+    radial-gradient(32rem 20rem at 85% 15%, var(--theme-glow-2, rgba(148, 163, 184, 0.08)), transparent 70%);
+  background-size: 200% 200%;
+  animation: fx-aurora-move 14s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-glow-pulse .hx-btn-primary,
+  .fx-shimmer .hx-btn-primary::after,
+  html.fx-aurora-bg body::before {
+    animation: none !important;
+  }
+  .fx-shimmer .hx-btn-primary::after {
+    display: none;
+  }
+}

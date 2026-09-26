@@ -439,6 +439,21 @@ export const APP_THEMES: Record<string, AppThemeDef> = {
   },
 }
 
+export const THEME_FX: Record<string, string[]> = {
+  cyberpunk: ['fx-glow-pulse', 'fx-shimmer', 'fx-aurora-bg'],
+  hacker: ['fx-glow-pulse'],
+  obsidian: ['fx-glow-pulse', 'fx-shimmer'],
+  sunset: ['fx-glow-pulse'],
+  ocean: ['fx-glow-pulse', 'fx-aurora-bg'],
+  sakura: ['fx-glow-pulse', 'fx-shimmer', 'fx-aurora-bg'],
+  midnight: ['fx-glow-pulse', 'fx-shimmer'],
+  amber: ['fx-glow-pulse'],
+}
+
+export function themeFxClasses(themeId: string): string {
+  return (THEME_FX[themeId] ?? []).join(' ')
+}
+
 export type ProfileIconDef = { id: string; label: string; lucideName: string; className: string };
 export type ProfileFrameDef = { id: string; label: string; rarity: string; style: Record<string, string>; animationClass?: string };
 export type ProfileBackgroundDef = { id: string; label: string; rarity: string; style: Record<string, string>; animationClass?: string };

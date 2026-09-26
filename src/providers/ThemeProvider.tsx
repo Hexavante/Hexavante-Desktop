@@ -2,9 +2,10 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import DOMPurify from 'isomorphic-dompurify'
 import { useThemeStore } from '@/app/stores/theme.store'
-import { APP_THEMES } from '@/lib/cosmetics'
+import { APP_THEMES, THEME_FX, themeFxClasses } from '@/lib/cosmetics'
 
 const ALL_THEME_CLASSES = Object.values(APP_THEMES).map(t => t.className)
+const ALL_FX_CLASSES = [...new Set(Object.values(THEME_FX).flat())]
 
 function buildThemeVarsStyle(themeId: string): string | null {
   const theme = APP_THEMES[themeId]
@@ -46,7 +47,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       : null
 
     ALL_THEME_CLASSES.forEach(cls => root.classList.remove(cls))
+    ALL_FX_CLASSES.forEach(cls => root.classList.remove(cls))
     if (activeClass) root.classList.add(activeClass)
+    themeFxClasses(cosmeticTheme).split(' ').filter(Boolean).forEach(cls => root.classList.add(cls))
 
     const effectiveTheme: 'light' | 'dark' = (() => {
       if (mode === 'system') {
