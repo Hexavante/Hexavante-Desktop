@@ -6,6 +6,7 @@ import { SidebarInset } from '@/components/ui/sidebar'
 import { Header } from '@/components/layout/Header'
 import { CommandPalette } from '@/components/shared/CommandPalette'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
+import { useServerThemeSync } from '@/app/hooks/use-server-theme-sync'
 import type { ReactNode } from 'react'
 
 const BARE_LAYOUT_PREFIXES = ['/login', '/register', '/forgot-password', '/reset-password']
@@ -22,6 +23,7 @@ function ShellContent({ children, onCtrlK }: { children: ReactNode; onCtrlK: () 
 export function AppShell({ children }: AppShellProps) {
   const { pathname } = useLocation()
   const [paletteOpen, setPaletteOpen] = useState(false)
+  useServerThemeSync()
   const useBareLayout = BARE_LAYOUT_PREFIXES.some(prefix => pathname.startsWith(prefix))
 
   const handleCtrlK = useCallback(() => setPaletteOpen(true), [])
