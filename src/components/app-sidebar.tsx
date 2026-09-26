@@ -77,7 +77,6 @@ const NAV_SECTIONS = [
       { icon: Settings, label: 'Configurações', href: '/configuracoes' },
       { icon: GraduationCap, label: 'Instrutor', href: '/instrutor' },
       { icon: Shield, label: 'Moderação', href: '/moderacao' },
-      { icon: Shield, label: 'Administração', href: '/admin' },
     ],
   },
 ]

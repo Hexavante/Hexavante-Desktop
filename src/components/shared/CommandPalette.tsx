@@ -14,7 +14,6 @@ import {
   Backpack,
   User,
   Settings,
-  ShieldCheck,
   LayoutDashboard,
   CornerDownLeft,
   type LucideIcon,
@@ -43,7 +42,6 @@ const COMMANDS: CommandItem[] = [
   { id: 'inventario', label: 'Inventário', icon: Backpack, href: '/inventario', keywords: ['itens', 'mochila'] },
   { id: 'perfil', label: 'Perfil', icon: User, href: '/perfil', keywords: ['profile', 'conta', 'usuario'] },
   { id: 'config', label: 'Configurações', icon: Settings, href: '/configuracoes', keywords: ['settings', 'preferencias'] },
-  { id: 'admin', label: 'Administração', icon: ShieldCheck, href: '/admin', keywords: ['admin', 'permissoes', 'roles'] },
 ]
 
 export function CommandPalette({ open, onOpenChange }: {

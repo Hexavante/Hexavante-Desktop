@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useCourse, useCourseProgress } from '@/api/courses/queries'
 import { useEnrollCourse } from '@/api/courses/mutations'
@@ -8,43 +7,8 @@ import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Clapperboard, ClipboardList, CheckCircle2 } from 'lucide-react'
+import { ClipboardList, CheckCircle2 } from 'lucide-react'
 import type { LessonDto } from '@/domain/types/course.types'
-
-function LessonDialog({ lesson, open, onOpenChange }: {
-  lesson: LessonDto | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}) {
-  if (!lesson) return null
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-foreground">{lesson.title}</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="flex aspect-video items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
-            <div className="text-center">
-              <Clapperboard className="mx-auto h-12 w-12" />
-              <p className="mt-2 text-sm text-muted-foreground">Player de vídeo</p>
-            </div>
-          </div>
-          {lesson.description && (
-            <div>
-              <h4 className="mb-1 text-sm font-semibold text-foreground">Descrição</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">{lesson.description}</p>
-            </div>
-          )}
-          {lesson.duration && (
-            <p className="text-xs text-muted-foreground">Duração: {Math.floor(lesson.duration / 60)}min {lesson.duration % 60}s</p>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  )
-}
 
 function ModuleItem({ title, description, orderNumber, lessons, onLessonClick }: {
   title: string
@@ -91,7 +55,6 @@ export default function CursoDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const [selectedLesson, setSelectedLesson] = useState<LessonDto | null>(null)
 
   const { data: course, isLoading, isError } = useCourse(id!)
   const { data: progress } = useCourseProgress(id!)
@@ -216,16 +179,10 @@ export default function CursoDetailPage() {
             description={m.description}
             orderNumber={m.orderNumber}
             lessons={m.lessons}
-            onLessonClick={setSelectedLesson}
+            onLessonClick={(lesson) => navigate(`/cursos/${id}/learn/${lesson.id}`)}
           />
         ))}
       </div>
-
-      <LessonDialog
-        lesson={selectedLesson}
-        open={!!selectedLesson}
-        onOpenChange={(open) => { if (!open) setSelectedLesson(null) }}
-      />
     </div>
   )
 }
