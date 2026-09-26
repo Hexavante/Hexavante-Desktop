@@ -8,7 +8,6 @@ import type {
   ExamStats,
   StartAttemptResponse,
   SubmitAttemptResponse,
-  AttemptResult,
   SubmitAttemptRequest,
 } from '@/domain/types/exam.types'
 
@@ -18,9 +17,10 @@ export const examService = {
     return data
   },
 
+  // GET /api/v1/exams/:slugOrId -> { exam: {...} } (sem questions)
   async getDetail(slug: string): Promise<ExamDetail> {
-    const { data } = await api.get<ExamDetail>(ENDPOINTS.EXAMS.DETAIL(slug))
-    return data
+    const { data } = await api.get<{ exam: ExamDetail }>(ENDPOINTS.EXAMS.DETAIL(slug))
+    return data.exam
   },
 
   async getHistory(filters?: ExamFilters & { page?: number }): Promise<PaginatedAttempts> {
@@ -43,18 +43,17 @@ export const examService = {
     return data
   },
 
+  // POST /api/v1/exams/:slugOrId/start -> flat { attemptId, examId, title, timeLimit, startedAt, questions }
+  // 403 { success: false, error: 'Conteúdo Premium' } quando premium sem acesso.
   async startAttempt(slug: string): Promise<StartAttemptResponse> {
     const { data } = await api.post<StartAttemptResponse>(ENDPOINTS.EXAMS.START(slug))
     return data
   },
 
-  async submitAttempt(slug: string, attemptId: string, answers: SubmitAttemptRequest): Promise<SubmitAttemptResponse> {
-    const { data } = await api.post<SubmitAttemptResponse>(ENDPOINTS.EXAMS.SUBMIT(slug, attemptId), answers)
-    return data
-  },
-
-  async getResult(slug: string, attemptId: string): Promise<AttemptResult> {
-    const { data } = await api.get<AttemptResult>(ENDPOINTS.EXAMS.RESULT(slug, attemptId))
+  // POST /api/v1/exams/submit body { attemptId, answers: [{ questionId, alternativeId? }] }
+  // -> resultado final (não há endpoint de resultado separado).
+  async submitAttempt(payload: SubmitAttemptRequest): Promise<SubmitAttemptResponse> {
+    const { data } = await api.post<SubmitAttemptResponse>(ENDPOINTS.EXAMS.SUBMIT, payload)
     return data
   },
 }

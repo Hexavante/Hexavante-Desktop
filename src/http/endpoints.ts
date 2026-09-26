@@ -110,9 +110,8 @@ export const ENDPOINTS = {
     STATS: '/api/v1/exams/stats',
     EVOLUTION: '/api/v1/exams/evolution',
     SUBJECT_STATS: '/api/v1/exams/subject-stats',
-    START: (slug: string) => `/api/v1/exams/${slug}/attempts`,
-    SUBMIT: (slug: string, id: string) => `/api/v1/exams/${slug}/attempts/${id}`,
-    RESULT: (slug: string, id: string) => `/api/v1/exams/${slug}/attempts/${id}/result`,
+    START: (slug: string) => `/api/v1/exams/${slug}/start`,
+    SUBMIT: '/api/v1/exams/submit',
   },
 
   CERTIFICATES: {

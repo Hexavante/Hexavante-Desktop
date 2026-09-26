@@ -1,13 +1,17 @@
+import { useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
+import { EmptyState } from '@/components/shared/EmptyState'
 import { useExamDetail } from '@/api/exams/queries'
 import { useStartAttempt } from '@/api/exams/queries'
 import { useAuth } from '@/app/hooks/use-auth'
+import { AppError } from '@/adapters/error/app-error'
 import { Clock3, ClipboardList, Crown, Play, ArrowLeft, Shield } from 'lucide-react'
+import { toast } from 'sonner'
 
 const EXAM_TYPE_LABELS: Record<string, string> = {
   ENEM: 'ENEM',
@@ -27,6 +31,7 @@ export default function SimuladoDetailPage() {
   const { user } = useAuth()
   const { data: exam, isLoading, error } = useExamDetail(slug || '')
   const startAttempt = useStartAttempt()
+  const [premiumBlocked, setPremiumBlocked] = useState(false)
 
   const handleStart = async () => {
     if (!user) {
@@ -34,10 +39,15 @@ export default function SimuladoDetailPage() {
       return
     }
     try {
-      const result = await startAttempt.mutateAsync(slug!)
-      navigate(`/simulados/${slug}/fazer/${result.attemptId}`)
-    } catch (error) {
-      // Error handled by mutation
+      const attempt = await startAttempt.mutateAsync(slug!)
+      setPremiumBlocked(false)
+      navigate(`/simulados/${slug}/fazer/${attempt.attemptId}`, { state: { attempt } })
+    } catch (err) {
+      // Erro genérico já tem toast via mutation; 403 premium ganha CTA para a loja.
+      if (err instanceof AppError && err.status === 403) {
+        setPremiumBlocked(true)
+        toast.error('Conteúdo Premium — ative o trial na loja')
+      }
     }
   }
 
@@ -61,8 +71,9 @@ export default function SimuladoDetailPage() {
     )
   }
 
-  const canStart = exam.questions.length > 0
-  const isPremiumLocked = exam.isPremiumOnly && !user?.isPremium
+  // O detalhe NÃO traz questions — usa questionCount.
+  const canStart = exam.questionCount > 0
+  const isPremiumLocked = (exam.isPremiumOnly && !user?.isPremium) || premiumBlocked
 
   return (
     <div className="hx-page max-w-3xl mx-auto">
@@ -74,6 +85,17 @@ export default function SimuladoDetailPage() {
           <ArrowLeft className="h-4 w-4" /> Voltar
         </Link>
       </PageHeader>
+
+      {isPremiumLocked && (
+        <div className="mb-6">
+          <EmptyState
+            icon={<Crown className="h-10 w-10 text-amber-400" />}
+            title="Conteúdo Premium — ative o trial na loja"
+            description="Este simulado é exclusivo para assinantes. Ative seu trial na loja para desbloquear."
+            action={{ label: 'Ir para a loja', onClick: () => navigate('/loja') }}
+          />
+        </div>
+      )}
 
       <Card className="mb-6">
         <div className="aspect-video relative overflow-hidden rounded-t-xl">

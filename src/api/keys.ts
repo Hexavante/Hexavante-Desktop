@@ -49,7 +49,6 @@ export const queryKeys = {
     stats: ['exams', 'stats'] as const,
     evolution: ['exams', 'evolution'] as const,
     subjectStats: ['exams', 'subjectStats'] as const,
-    result: (slug: string, attemptId: string) => ['exams', 'result', slug, attemptId] as const,
   },
   health: {
     check: ['health'] as const,

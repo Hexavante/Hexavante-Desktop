@@ -114,6 +114,18 @@ export default function SimuladosHistoricoPage() {
             <Link
               key={attempt.id}
               to={`/simulados/${attempt.examSlug}/resultado/${attempt.id}`}
+              state={{
+                result: {
+                  attemptId: attempt.id,
+                  score: attempt.score,
+                  correctAnswers: attempt.correctAnswers,
+                  totalQuestions: attempt.totalQuestions,
+                  percentage: attempt.score,
+                  finishedAt: attempt.finishedAt ?? new Date().toISOString(),
+                },
+                examTitle: attempt.examTitle,
+                examSlug: attempt.examSlug,
+              }}
               className="flex items-center justify-between rounded-xl border border-border bg-surface p-4 transition hover:border-sky-400/35"
             >
               <div>

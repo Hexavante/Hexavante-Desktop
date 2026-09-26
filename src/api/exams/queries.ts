@@ -1,9 +1,17 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation } from '@tanstack/react-query'
 import { queryKeys } from '@/api/keys'
 import { examService } from '@/services/exam.service'
 import { staleTimes } from '@/app/queries/options'
 import type { ExamFilters, SubmitAttemptRequest } from '@/domain/types/exam.types'
+import { AppError } from '@/adapters/error/app-error'
 import { toast } from 'sonner'
+
+function isPremiumForbidden(error: unknown): boolean {
+  if (error instanceof AppError) {
+    return error.status === 403
+  }
+  return false
+}
 
 export function useExams(filters?: ExamFilters) {
   return useQuery({
@@ -58,26 +66,20 @@ export function useStartAttempt() {
   return useMutation({
     mutationFn: (slug: string) => examService.startAttempt(slug),
     onError: (error: Error) => {
-      toast.error(error.message || 'Erro ao iniciar simulado')
+      if (isPremiumForbidden(error)) {
+        toast.error('Conteúdo Premium — ative o trial na loja')
+      } else {
+        toast.error(error.message || 'Erro ao iniciar simulado')
+      }
     },
   })
 }
 
 export function useSubmitAttempt() {
   return useMutation({
-    mutationFn: ({ slug, attemptId, answers }: { slug: string; attemptId: string; answers: SubmitAttemptRequest }) =>
-      examService.submitAttempt(slug, attemptId, answers),
+    mutationFn: (payload: SubmitAttemptRequest) => examService.submitAttempt(payload),
     onError: (error: Error) => {
       toast.error(error.message || 'Erro ao enviar simulado')
     },
-  })
-}
-
-export function useAttemptResult(slug: string, attemptId: string) {
-  return useQuery({
-    queryKey: queryKeys.exams.result(slug, attemptId),
-    queryFn: () => examService.getResult(slug, attemptId),
-    enabled: !!slug && !!attemptId,
-    staleTime: staleTimes.NORMAL,
   })
 }
