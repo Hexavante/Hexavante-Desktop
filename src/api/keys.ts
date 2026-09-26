@@ -50,6 +50,14 @@ export const queryKeys = {
     evolution: ['exams', 'evolution'] as const,
     subjectStats: ['exams', 'subjectStats'] as const,
   },
+  tutorials: {
+    all: ['tutorials'] as const,
+    lists: () => [...queryKeys.tutorials.all, 'list'] as const,
+    list: (filters?: Record<string, unknown>) =>
+      [...queryKeys.tutorials.lists(), filters].filter(Boolean) as readonly unknown[],
+    details: () => [...queryKeys.tutorials.all, 'detail'] as const,
+    detail: (id: string) => [...queryKeys.tutorials.details(), id] as const,
+  },
   health: {
     check: ['health'] as const,
   },

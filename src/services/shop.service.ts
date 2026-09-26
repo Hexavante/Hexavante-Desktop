@@ -20,4 +20,11 @@ export const shopService = {
     const { data } = await api.get<{ items: InventoryEntry[] }>(ENDPOINTS.INVENTORY.LIST)
     return data
   },
+
+  async activateTrial(): Promise<{ premium: boolean; premiumExpiresAt: string | null }> {
+    const { data } = await api.post<{ premium: boolean; premiumExpiresAt: string | null }>(
+      ENDPOINTS.SHOP.TRIAL,
+    )
+    return data
+  },
 }

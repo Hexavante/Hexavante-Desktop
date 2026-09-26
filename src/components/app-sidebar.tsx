@@ -26,6 +26,7 @@ import {
   History,
   LogOut,
   Radio,
+  MonitorPlay,
   Settings,
   Shield,
   ShoppingBag,
@@ -49,6 +50,7 @@ const NAV_SECTIONS = [
     label: 'Estudos',
     items: [
       { icon: BookOpen, label: 'Cursos', href: '/cursos' },
+      { icon: MonitorPlay, label: 'Tutoriais', href: '/tutoriais' },
       { icon: Target, label: 'Simulados', href: '/simulados' },
       { icon: BarChart3, label: 'Estatísticas', href: '/estatisticas' },
       { icon: ShoppingBag, label: 'Loja', href: '/loja' },

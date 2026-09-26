@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useShopState } from '@/api/shop/queries'
-import { usePurchaseItem, useEquipItem } from '@/api/shop/mutations'
+import { usePurchaseItem, useEquipItem, useActivateTrial } from '@/api/shop/mutations'
 import { getThemeIdOf, resolveProfileBackground, resolveProfileFrame, resolveProfileIcon } from '@/lib/cosmetics'
 import { EmptyState } from '@/components/shared/EmptyState'
 import type { ShopItemView } from '@/domain/types/shop.types'
 import {
   Check,
   Coins,
+  Crown,
   Loader2,
   Lock,
   BookOpen,
@@ -338,10 +339,18 @@ export default function LojaPage() {
   const { data: shopState, isLoading, isError, refetch } = useShopState()
   const purchaseItem = usePurchaseItem()
   const equipItem = useEquipItem()
+  const activateTrial = useActivateTrial()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const items = useMemo(() => shopState?.items ?? [], [shopState])
   const isPremium = shopState?.premium ?? false
+  const premiumExpiresLabel = useMemo(() => {
+    const raw = shopState?.premiumExpiresAt ?? null
+    if (!raw) return null
+    const date = new Date(raw)
+    if (Number.isNaN(date.getTime())) return null
+    return date.toLocaleDateString('pt-BR')
+  }, [shopState])
   const booster = shopState?.booster
   const boosterExpiryLabel = booster?.expiresAt ? formatBoosterExpiry(booster.expiresAt) : null
 
@@ -401,6 +410,45 @@ export default function LojaPage() {
           </div>
         </div>
       </PageHeader>
+
+      {isPremium ? (
+        <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-surface px-4 py-3">
+          <Crown className="h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
+          <span className="text-sm font-bold text-foreground">Premium ativo</span>
+          {premiumExpiresLabel ? (
+            <span className="text-xs text-muted-foreground">até {premiumExpiresLabel}</span>
+          ) : null}
+        </div>
+      ) : (
+        <div className="mb-6 flex flex-col gap-3 rounded-lg border border-border bg-surface px-4 py-4 sm:flex-row sm:items-center">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Crown className="h-5 w-5 shrink-0 text-amber-500" aria-hidden="true" />
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-foreground">Experimente o Premium grátis</p>
+              <p className="text-xs text-muted-foreground">
+                Ative o trial de 30 dias e desbloquee itens exclusivos.
+              </p>
+            </div>
+          </div>
+          <Button
+            onClick={() => activateTrial.mutate()}
+            disabled={activateTrial.isPending}
+            aria-label="Ativar trial Premium (30 dias)"
+          >
+            {activateTrial.isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                Ativando...
+              </>
+            ) : (
+              <>
+                <Crown className="h-4 w-4" aria-hidden="true" />
+                Ativar trial Premium (30 dias)
+              </>
+            )}
+          </Button>
+        </div>
+      )}
 
       {booster?.active ? (
         <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-surface px-4 py-3">

@@ -32,3 +32,5 @@ export const CertificadosPage = lazy(() => import('@/features/certificados/pages
 export const VerificarCertificadoPage = lazy(() => import('@/features/certificados/pages/VerificarCertificadoPage'))
 export const CertificadoDetailPage = lazy(() => import('@/features/certificados/pages/CertificadoDetailPage'))
 export const NotificacoesPage = lazy(() => import('@/features/notificacoes/pages/NotificacoesPage'))
+export const TutoriaisPage = lazy(() => import('@/features/tutoriais/pages/TutoriaisPage'))
+export const TutorialDetailPage = lazy(() => import('@/features/tutoriais/pages/TutorialDetailPage'))

@@ -37,6 +37,8 @@ import {
   VerificarCertificadoPage,
   CertificadoDetailPage,
   NotificacoesPage,
+  TutoriaisPage,
+  TutorialDetailPage,
 } from './lazy'
 
 function RootErrorElement() {
@@ -158,6 +160,8 @@ const router = createHashRouter([
       { path: 'certificados/verificar', element: <AppPage><VerificarCertificadoPage /></AppPage> },
       { path: 'certificados/c/:code', element: <AppPage><CertificadoDetailPage /></AppPage> },
       { path: 'notificacoes', element: <AppPage><NotificacoesPage /></AppPage> },
+      { path: 'tutoriais', element: <AppPage><TutoriaisPage /></AppPage> },
+      { path: 'tutoriais/:id', element: <AppPage><TutorialDetailPage /></AppPage> },
       { path: 'login', element: <AuthPage><LoginPage /></AuthPage> },
       { path: 'register', element: <AuthPage><RegisterPage /></AuthPage> },
       { path: 'forgot-password', element: <AuthPage><ForgotPasswordPage /></AuthPage> },

@@ -97,6 +97,13 @@ export const ENDPOINTS = {
     STATE: '/api/v1/shop',
     PURCHASE: '/api/v1/shop/purchase',
     EQUIP: '/api/v1/shop/equip',
+    TRIAL: '/api/v1/shop/premium/trial',
+  },
+
+  TUTORIALS: {
+    LIST: '/api/v1/tutorials',
+    DETAIL: (id: string) => `/api/v1/tutorials/${id}`,
+    VIEW: (id: string) => `/api/v1/tutorials/${id}/view`,
   },
 
   INVENTORY: {

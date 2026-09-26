@@ -21,6 +21,21 @@ export function usePurchaseItem() {
   })
 }
 
+export function useActivateTrial() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => shopService.activateTrial(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.shop.state })
+      toast.success('Trial Premium ativado! Aproveite os 30 dias.')
+    },
+    onError: (error) => {
+      toast.error(normalizeError(error).message)
+    },
+  })
+}
+
 export function useEquipItem() {
   const queryClient = useQueryClient()
 
