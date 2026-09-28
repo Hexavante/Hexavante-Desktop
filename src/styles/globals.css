@@ -922,3 +922,14 @@ html.fx-aurora-bg body::before {
     display: none;
   }
 }
+
+/* Logo clara nos temas claros */
+.hx-logo-light {
+  display: none;
+}
+[data-theme-mode="light"] .hx-logo-dark {
+  display: none;
+}
+[data-theme-mode="light"] .hx-logo-light {
+  display: block;
+}

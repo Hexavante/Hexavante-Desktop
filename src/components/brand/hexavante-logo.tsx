@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import logoUrl from '@/assets/brand/hexavante-logo.webp'
+import logoLightUrl from '@/assets/brand/hexavante-logo-light.webp'
 
 type Props = {
   showWordmark?: boolean
@@ -33,7 +34,19 @@ export function HexavanteLogo({
         width={dimensions.image}
         height={dimensions.image}
         className={cn(
-          'hx-header-logo-glow shrink-0 object-contain',
+          'hx-header-logo-glow hx-logo-dark shrink-0 object-contain',
+          imageClassName,
+        )}
+        draggable={false}
+      />
+      <img
+        src={logoLightUrl}
+        alt=""
+        aria-hidden="true"
+        width={dimensions.image}
+        height={dimensions.image}
+        className={cn(
+          'hx-header-logo-glow hx-logo-light shrink-0 object-contain',
           imageClassName,
         )}
         draggable={false}
