@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import logoUrl from '@/assets/brand/hexavante-logo.png'
+import logoUrl from '@/assets/brand/hexavante-logo.webp'
 
 type Props = {
   showWordmark?: boolean
