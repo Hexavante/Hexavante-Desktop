@@ -25,9 +25,9 @@ export const PasswordInput = forwardRef<HTMLInputElement, Props>(function Passwo
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-muted-foreground"
+        className="absolute right-3 top-1/2 -translate-y-1/2 rounded text-muted-foreground transition hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--focus-ring)]"
         aria-label={visible ? 'Ocultar senha' : 'Mostrar senha'}
-        tabIndex={-1}
+        aria-pressed={visible}
       >
         {visible ? (
           <EyeOff className="h-4 w-4" aria-hidden="true" />

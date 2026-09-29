@@ -20,9 +20,9 @@ export const ENDPOINTS = {
     RESEND_CODE: '/api/v1/auth/resend-device-code',
     FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
     RESET_PASSWORD: '/api/v1/auth/reset-password',
-    OAUTH_GOOGLE: '/api/v1/auth/oauth/google',
-    OAUTH_GITHUB: '/api/v1/auth/oauth/github',
-    OAUTH_CALLBACK: (provider: string) => `/api/v1/auth/oauth/${provider}/callback`,
+    // Sem rotas OAuth aqui: o fluxo social abre
+    // `https://api.hexavante.com.br/oauth/{provider}` pelo main process
+    // (canal IPC AUTH_OAUTH) e devolve o cookie de sessão ao renderer.
   },
 
   USERS: {

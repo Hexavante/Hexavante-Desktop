@@ -1,5 +1,11 @@
 import { Suspense, useEffect, useRef } from 'react'
-import { createHashRouter, RouterProvider, useLocation, useRouteError } from 'react-router-dom'
+import {
+  createHashRouter,
+  Navigate,
+  RouterProvider,
+  useLocation,
+  useRouteError,
+} from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { LoadingScreen } from '@/components/shared/LoadingScreen'
 import { RequireAuth, RedirectIfAuthenticated } from '@/components/auth/RequireAuth'
@@ -74,10 +80,6 @@ function RootErrorElement() {
       </div>
     </div>
   )
-}
-
-function LazyPage({ children }: { children: React.ReactNode }) {
-  return <Suspense fallback={<LoadingScreen />}>{children}</Suspense>
 }
 
 /**
@@ -162,6 +164,9 @@ const router = createHashRouter([
       { path: 'register', element: <AuthPage><RegisterPage /></AuthPage> },
       { path: 'forgot-password', element: <AuthPage><ForgotPasswordPage /></AuthPage> },
       { path: 'reset-password', element: <AuthPage><ResetPasswordPage /></AuthPage> },
+      // Rota desconhecida: volta para a raiz, que passa pelo RequireAuth
+      // (nenhuma URL cai fora do gate de sessão).
+      { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
 ])
