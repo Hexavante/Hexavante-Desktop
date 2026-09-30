@@ -5,6 +5,7 @@ import { AppSidebar } from '@/components/app-sidebar'
 import { SidebarInset } from '@/components/ui/sidebar'
 import { Header } from '@/components/layout/Header'
 import { CommandPalette } from '@/components/shared/CommandPalette'
+import { FloatingMusicPlayer } from '@/components/layout/FloatingMusicPlayer'
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts'
 import { useServerThemeSync } from '@/app/hooks/use-server-theme-sync'
 import type { ReactNode } from 'react'
@@ -48,6 +49,7 @@ export function AppShell({ children }: AppShellProps) {
         </div>
       </SidebarInset>
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+      <FloatingMusicPlayer />
     </SidebarProvider>
   )
 }

@@ -218,6 +218,39 @@ body {
     box-shadow: 0 0 0 2px hsl(var(--sidebar-highlight) / 0.12);
   }
 
+  /* Slider de volume (player de música de fundo) — resolve pelas vars de tema */
+  .hx-range {
+    @apply h-1.5 w-full cursor-pointer appearance-none rounded-full;
+    background: hsl(var(--sidebar-foreground) / 0.18);
+    outline: none;
+  }
+
+  .hx-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--sidebar-background));
+    background: hsl(var(--sidebar-highlight));
+    box-shadow: 0 0 0 1px hsl(var(--sidebar-highlight) / 0.5);
+    cursor: pointer;
+  }
+
+  .hx-range::-moz-range-thumb {
+    height: 1rem;
+    width: 1rem;
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--sidebar-background));
+    background: hsl(var(--sidebar-highlight));
+    box-shadow: 0 0 0 1px hsl(var(--sidebar-highlight) / 0.5);
+    cursor: pointer;
+  }
+
+  .hx-range:focus-visible {
+    box-shadow: 0 0 0 2px var(--focus-ring);
+  }
+
   .hx-link {
     @apply font-medium transition hover:underline;
     color: hsl(var(--sidebar-highlight) / 0.9);
